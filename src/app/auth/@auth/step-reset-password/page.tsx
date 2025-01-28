@@ -1,7 +1,7 @@
 
 import { CONFIG } from 'src/global-config';
 
-import StepResetPassword from "../../../../../auth/view/step-reset-password";
+import StepResetPassword from "src/auth/view/step-reset-password";
 
 // ----------------------------------------------------------------------
 

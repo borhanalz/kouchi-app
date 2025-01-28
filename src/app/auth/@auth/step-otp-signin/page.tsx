@@ -1,13 +1,11 @@
-import Typography from "@mui/material/Typography";
-
 import { CONFIG } from 'src/global-config';
 
-import StepPassword from "../../../../../auth/view/step-password";
+import OtpSignInStep from "src/auth/view/step-otp-sign-in";
 
 // ----------------------------------------------------------------------
 
 export const metadata = { title: `Sign up | Jwt - ${CONFIG.appName}` };
 
 export default function Page() {
-  return <StepPassword/>;
+  return <OtpSignInStep/>;
 }

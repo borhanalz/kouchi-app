@@ -22,7 +22,7 @@ const OtpSignInStep = () => {
 
   const HandleSubmit = handleSubmit((data) => {
     console.log(data);
-    router.push(paths.auth.newjwt.password);
+    router.push(paths.auth.password);
   });
 
   const handleTimeReset = () => {
@@ -42,7 +42,7 @@ const OtpSignInStep = () => {
         <LoadingButton fullWidth color="inherit" size="large" type="submit" variant="contained">
           ورود
         </LoadingButton>
-        <FormReturnLink href={paths.auth.newjwt.password} />
+        <FormReturnLink href={paths.auth.password} />
       </Stack>
     </Form>
   );

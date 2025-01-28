@@ -33,7 +33,7 @@ const AuthView = () => {
 
   const HandleSubmit = handleSubmit((data)=>{
     console.log(data);
-    router.push(paths.auth.newjwt.resetPassword);
+    router.push(paths.auth.resetPassword);
   });
 
   const handleTimeReset = ()=>{
@@ -87,7 +87,7 @@ const AuthView = () => {
         >
           تغییر رمز عبور
         </LoadingButton>
-        <FormReturnLink href={paths.auth.newjwt.password}/>
+        <FormReturnLink href={paths.auth.password}/>
       </Stack>
     </Form>
   );

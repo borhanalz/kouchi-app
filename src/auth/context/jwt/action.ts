@@ -33,7 +33,6 @@ export const signInWithPassword = async ({ email, password }: SignInParams): Pro
     if (!accessToken) {
       throw new Error('Access token not found in response');
     }
-
     setSession(accessToken);
   } catch (error) {
     console.error('Error during sign in:', error);

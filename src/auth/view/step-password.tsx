@@ -90,8 +90,8 @@ const PasswordStep = () => {
         />
         <Typography>رمز عبور خود را فراموش کردید؟</Typography>
         <Stack direction='row' justifyContent='space-between'>
-          <Box sx={{p:1,fontSize:10,border:1,borderRadius:2,cursor:'pointer'}} onClick={()=>router.push(paths.auth.newjwt.otpSignIn)}>ورود با کد یکبار مصرف</Box>
-          <Box sx={{p:1,fontSize:10,border:1,borderRadius:2,cursor:'pointer'}} onClick={()=>router.push(paths.auth.newjwt.resetPassword)}>بازیابی رمز عبور</Box>
+          <Box sx={{p:1,fontSize:10,border:1,borderRadius:2,cursor:'pointer'}} onClick={()=>router.push(paths.auth.otpSignIn)}>ورود با کد یکبار مصرف</Box>
+          <Box sx={{p:1,fontSize:10,border:1,borderRadius:2,cursor:'pointer'}} onClick={()=>router.push(paths.auth.resetPassword)}>بازیابی رمز عبور</Box>
         </Stack>
         <LoadingButton
           fullWidth
@@ -103,7 +103,7 @@ const PasswordStep = () => {
         >
           ورود
         </LoadingButton>
-        <FormReturnLink href={paths.auth.newjwt.signIn}/>
+        <FormReturnLink href={paths.auth.signIn}/>
       </Stack>
     </Form>
   );

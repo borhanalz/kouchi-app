@@ -21,7 +21,7 @@ const PhoneNumberStep = () => {
 
   const HandleSubmit = handleSubmit((data) => {
     console.log(data);
-    router.push(paths.auth.newjwt.password);
+    router.push(paths.auth.password);
   });
 
   return (
