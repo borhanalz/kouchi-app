@@ -35,13 +35,13 @@ export const navData: NavSectionProps['data'] = [
     items: [
       {
         title: 'گفت و گو با کوچی',
-        path: '',
+        path: paths.dashboard.root,
         icon: ICONS.send,
         info: <Label>دستیار</Label>,
       },
       {
         title: 'نقشه راه',
-        path: '',
+        path: paths.dashboard.roadMap.root,
         icon: ICONS.map,
       },
       {

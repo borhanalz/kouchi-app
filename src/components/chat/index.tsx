@@ -65,16 +65,7 @@ export function Chat() {
 
   const hasConversation = selectedConversationId && conversation;
 
-  return (
-    <DashboardContent
-      maxWidth={false}
-      sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column' }}
-    >
-      <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
-        گفت و گو با دستیار کوچی
-      </Typography>
-
-      <ChatLayout
+  return ( <ChatLayout
         slots={{
           header: hasConversation ? (
             <ChatHeaderDetail
@@ -122,6 +113,5 @@ export function Chat() {
           ),
         }}
       />
-    </DashboardContent>
   );
 }

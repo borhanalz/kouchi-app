@@ -1,33 +1,38 @@
 'use client';
 
-import type { Breakpoint } from '@mui/material/styles';
-import type { ContainerProps } from '@mui/material/Container';
+import type {Breakpoint} from '@mui/material/styles';
+import type {ContainerProps} from '@mui/material/Container';
 
-import { mergeClasses } from 'minimal-shared/utils';
+import {mergeClasses} from 'minimal-shared/utils';
 
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import Container from '@mui/material/Container';
 
-import { useSettingsContext } from 'src/components/settings';
+import {useSettingsContext} from 'src/components/settings';
 
-import { layoutClasses } from '../core/classes';
+import {layoutClasses} from '../core/classes';
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import {grey} from "../../theme";
 
 // ----------------------------------------------------------------------
 
 export type DashboardContentProps = ContainerProps & {
   layoutQuery?: Breakpoint;
   disablePadding?: boolean;
+  title?: string
 };
 
 export function DashboardContent({
-  sx,
-  children,
-  className,
-  disablePadding,
-  maxWidth = 'lg',
-  layoutQuery = 'lg',
-  ...other
-}: DashboardContentProps) {
+                                   sx,
+                                   children,
+                                   title,
+                                   className,
+                                   disablePadding,
+                                   maxWidth = 'lg',
+                                   layoutQuery = 'lg',
+                                   ...other
+                                 }: DashboardContentProps) {
   const settings = useSettingsContext();
 
   const isNavHorizontal = settings.state.navLayout === 'horizontal';
@@ -45,7 +50,7 @@ export function DashboardContent({
           pb: 'var(--layout-dashboard-content-pb)',
           [theme.breakpoints.up(layoutQuery)]: {
             px: 'var(--layout-dashboard-content-px)',
-            ...(isNavHorizontal && { '--layout-dashboard-content-pt': '40px' }),
+            ...(isNavHorizontal && {'--layout-dashboard-content-pt': '40px'}),
           },
           ...(disablePadding && {
             p: {
@@ -61,6 +66,10 @@ export function DashboardContent({
       ]}
       {...other}
     >
+      <Typography variant="h4" sx={{mb: {xs: 3, md: 2}}}>
+        {title}
+      </Typography>
+      <Divider sx={{borderStyle: 'dashed',borderColor:'#0000004d', mb: 2}}/>
       {children}
     </Container>
   );
@@ -68,7 +77,7 @@ export function DashboardContent({
 
 // ----------------------------------------------------------------------
 
-export const VerticalDivider = styled('span')(({ theme }) => ({
+export const VerticalDivider = styled('span')(({theme}) => ({
   width: 1,
   height: 10,
   flexShrink: 0,
@@ -90,5 +99,5 @@ export const VerticalDivider = styled('span')(({ theme }) => ({
     position: 'absolute',
     backgroundColor: 'currentColor',
   },
-  '&::after': { bottom: -5, top: 'auto' },
+  '&::after': {bottom: -5, top: 'auto'},
 }));
