@@ -39,7 +39,7 @@ export const AnimateLogoZoom = forwardRef<HTMLDivElement, AnimateLogoProps>((pro
             disabled
             {...slotProps?.logo}
             sx={[
-              { width: 64, height: 64 },
+              { width: 40, height: 45 },
               ...(Array.isArray(slotProps?.logo?.sx)
                 ? (slotProps?.logo?.sx ?? [])
                 : [slotProps?.logo?.sx]),
