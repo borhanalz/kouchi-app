@@ -16,18 +16,22 @@ import {grey} from "../../../theme";
 import {Iconify} from "../../../components/iconify";
 import {DashboardContent} from "../../../layouts/dashboard";
 import IconText from "../../../components/icon-text/icon-text";
+import {paths} from "../../../routes/paths";
+import {useRouter} from "next/navigation";
 // ---------------------------------------------------------------------------
 const RoadMapView = () => {
   const theme = useTheme();
   const data = [
     {
+      id:'canada',
       title: "کارشناسی متالوژی کانادا",
       img: canada,
       cities: "شهرهای مونترال و تورنتو",
       amount: "حدود 13 تا 15 هزار دلار کانادا",
     },
-    {title: "کارشناسی شیمی ایتالیا", img: italy, cities: "شهرهای تورین و سیِ‌نا", amount: "حدود 4 تا 6 هزار یورو",}
+    { id:'italy', title: "کارشناسی شیمی ایتالیا", img: italy, cities: "شهرهای تورین و سیِ‌نا", amount: "حدود 4 تا 6 هزار یورو",}
   ]
+  const router = useRouter();
   return <DashboardContent
     maxWidth={false}
     sx={{display: 'flex', flex: '1 1 auto', flexDirection: 'column'}}
@@ -64,7 +68,7 @@ const RoadMapView = () => {
             </Stack>
           </CardContent>
           <CardActions sx={{flexDirection: 'row-reverse'}}>
-            <Button variant='contained' color='primary' startIcon={<Iconify icon='check'/>}>انتخاب و نمایش نقشه
+            <Button onClick={()=>router.push(paths.dashboard.roadMap.countryRoadMap(item?.id))} variant='contained' color='primary' startIcon={<Iconify icon='check'/>}>انتخاب و نمایش نقشه
               راه</Button>
           </CardActions>
       </Card></Grid>)}

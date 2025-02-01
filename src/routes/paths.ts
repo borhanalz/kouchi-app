@@ -23,6 +23,8 @@ export const paths = {
     root: ROOTS.DASHBOARD,
     roadMap:{
       root:`${ROOTS.DASHBOARD}/road-map`,
+      countryRoadMap:(countryName:string)=>`${ROOTS.DASHBOARD}/road-map/${countryName}`,
+      prepareDocuments:(countryName:string)=>`${ROOTS.DASHBOARD}/road-map/${countryName}/prepare-documents`,
     }
   },
 };
