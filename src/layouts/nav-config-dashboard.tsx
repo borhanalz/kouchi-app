@@ -46,7 +46,7 @@ export const navData: NavSectionProps['data'] = [
       },
       {
         title: 'لیست مدارک',
-        path: '',
+        path: paths.dashboard.documents.root,
         icon: ICONS.documentsList,
       },
       {
