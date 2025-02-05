@@ -1,5 +1,7 @@
 'use client';
 
+import {useBoolean} from "minimal-shared/hooks";
+
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -12,6 +14,7 @@ import { Iconify } from "src/components/iconify";
 import IconText from "src/components/icon-text/icon-text";
 
 import { grey } from "../../../theme";
+import ProPackagesPeyment from "../pro-packages-peyment";
 
 // ------------------------------------------------------------------------------
 
@@ -47,6 +50,7 @@ const data = [
 
 export const ProPackages = () => {
   const theme = useTheme();
+  const peymentDialog = useBoolean();
 
   return (
     <>
@@ -128,11 +132,12 @@ export const ProPackages = () => {
                   />
                 ))}
               </Stack>
-              <Button variant='contained' color='primary'>می‌خوام شروع کنم!</Button>
+              <Button variant='contained' color='primary' onClick={peymentDialog.onTrue}>می‌خوام شروع کنم!</Button>
             </Stack>
           ))}
         </Stack>
       </Stack>
+      <ProPackagesPeyment dialog={peymentDialog}/>
     </>
   );
 };
