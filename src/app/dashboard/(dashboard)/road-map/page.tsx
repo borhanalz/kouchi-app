@@ -1,6 +1,6 @@
 import { CONFIG } from 'src/global-config';
 
-import RoadMapView from "../../../sections/road-map/view";
+import RoadMapView from "src/sections/road-map/view";
 
 // ----------------------------------------------------------------------
 

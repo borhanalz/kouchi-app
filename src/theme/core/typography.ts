@@ -44,8 +44,8 @@ function responsiveFontSizes(obj: ResponsiveFontSizesInput): ResponsiveFontSizes
 const primaryFont = setFont(themeConfig.fontFamily.primary);
 const secondaryFont = setFont(themeConfig.fontFamily.secondary);
 export const typography: TypographyOptions = {
-  fontFamily: primaryFont,
-  fontSecondaryFamily: secondaryFont,
+  fontFamily: "kalameh",
+  fontSecondaryFamily: "kalameh",
   fontWeightLight: '300',
   fontWeightRegular: '400',
   fontWeightMedium: '500',
@@ -53,72 +53,81 @@ export const typography: TypographyOptions = {
   fontWeightBold: '700',
 
   h1: {
-    fontFamily: secondaryFont,
+    fontFamily: "kalameh",
     fontWeight: 800,
     lineHeight: 1.2,
     fontSize: pxToRem(20),
     ...responsiveFontSizes({ sm: 22, md: 24, lg: 26 }),
   },
   h2: {
-    fontFamily: secondaryFont,
+    fontFamily: "kalameh",
     fontWeight: 800,
     lineHeight: 1.3,
     fontSize: pxToRem(18),
     ...responsiveFontSizes({ sm: 20, md: 22, lg: 24 }),
   },
   h3: {
-    fontFamily: secondaryFont,
+    fontFamily: "kalameh",
     fontWeight: 700,
     lineHeight: 1.4,
     fontSize: pxToRem(16),
     ...responsiveFontSizes({ sm: 18, md: 20, lg: 22 }),
   },
   h4: {
+    fontFamily:"kalameh",
     fontWeight: 700,
     lineHeight: 1.4,
     fontSize: pxToRem(14),
     ...responsiveFontSizes({ sm: 16, md: 18, lg: 20 }),
   },
   h5: {
+    fontFamily:"kalameh",
     fontWeight: 700,
     lineHeight: 1.5,
     fontSize: pxToRem(12),
     ...responsiveFontSizes({ sm: 14, md: 16, lg: 18 }),
   },
   h6: {
+    fontFamily:"kalameh",
     fontWeight: 600,
     lineHeight: 1.5,
     fontSize: pxToRem(10),
     ...responsiveFontSizes({ sm: 12, md: 14, lg: 16 }),
   },
   subtitle1: {
+    fontFamily:"kalameh",
     fontWeight: 600,
     lineHeight: 1.5,
     fontSize: pxToRem(10),
     ...responsiveFontSizes({ sm: 12, md: 14, lg: 16 }),
   },
   subtitle2: {
+    fontFamily:"kalameh",
     fontWeight: 600,
     lineHeight: 1.5,
     fontSize: pxToRem(9),
     ...responsiveFontSizes({ sm: 10, md: 12, lg: 14 }),
   },
   body1: {
+    fontFamily:"kalameh",
     lineHeight: 1.5,
     fontSize: pxToRem(10),
     ...responsiveFontSizes({ sm: 12, md: 14, lg: 16 }),
   },
   body2: {
+    fontFamily:"kalameh",
     lineHeight: 1.5,
     fontSize: pxToRem(9),
     ...responsiveFontSizes({ sm: 10, md: 12, lg: 14 }),
   },
   caption: {
+    fontFamily:"kalameh",
     lineHeight: 1.4,
     fontSize: pxToRem(8),
     ...responsiveFontSizes({ sm: 9, md: 10, lg: 12 }),
   },
   overline: {
+    fontFamily:"kalameh",
     fontWeight: 700,
     lineHeight: 1.5,
     fontSize: pxToRem(8),
@@ -126,6 +135,7 @@ export const typography: TypographyOptions = {
     textTransform: 'uppercase',
   },
   button: {
+    fontFamily:"kalameh",
     fontWeight: 700,
     lineHeight: 1.5,
     fontSize: pxToRem(9),

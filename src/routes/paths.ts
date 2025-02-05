@@ -28,6 +28,9 @@ export const paths = {
     },
     documents:{
       root:`${ROOTS.DASHBOARD}/documents`,
+    },
+    proPackages:{
+      root:`${ROOTS.DASHBOARD}/pro-packages`,
     }
   },
 };
