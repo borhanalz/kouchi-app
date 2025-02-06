@@ -55,7 +55,7 @@ export function UploadBox({ placeholder,description, error, disabled, className,
       <Stack textAlign='center' alignItems='center'>
         <Typography>{placeholder}</Typography>
         <Iconify icon="upload" width={28} sx={{my:1.5}}/>
-        <Typography color='grey' fontSize={10}>{description}</Typography>
+        <Typography color='grey' variant='caption'>{description}</Typography>
       </Stack>
     </Box>
   );

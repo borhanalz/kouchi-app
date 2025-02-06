@@ -66,7 +66,7 @@ export const navData: NavSectionProps['data'] = [
       },
       {
         title: 'تیکت ها',
-        path: '',
+        path: paths.dashboard.tickets.root,
         icon: ICONS.tickets,
       },
       {

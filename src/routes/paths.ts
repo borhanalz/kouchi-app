@@ -31,6 +31,9 @@ export const paths = {
     },
     proPackages:{
       root:`${ROOTS.DASHBOARD}/pro-packages`,
+    },
+    tickets:{
+      root:`${ROOTS.DASHBOARD}/tickets`,
     }
   },
 };

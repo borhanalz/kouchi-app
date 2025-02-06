@@ -1,6 +1,7 @@
 'use client'
 
 import type { UseBooleanReturn } from "minimal-shared";
+
 import Image from "next/image";
 import { useState } from "react";
 

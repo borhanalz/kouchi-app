@@ -22,7 +22,7 @@ const TableHead = [
   {id:'id',label:"شماره"},
   {id:'title',label:"عنوان"},
   {id:'status',label:"وضعیت"},
-  {id:'date',label:"تاریخ"}
+  {id:'date',label:"تاریخ"},
 ]
 const data:IDocumentsItem[]= [
   {id:1,title:"ریز نمرات پیش دانشگاهی",status:true,date:"21 بهمن 1403"},
