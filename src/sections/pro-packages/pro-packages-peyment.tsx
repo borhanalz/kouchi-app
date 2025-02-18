@@ -16,11 +16,14 @@ import { grey } from "../../theme";
 
 import zarinLogo from '/public/assets/images/zarin-logo.png';
 import samanLogo from '/public/assets/images/saman-logo.png';
+import {paths} from "../../routes/paths";
+import {useRouter} from "next/navigation";
 
 // -------------------------------------------------------------------------------------------
 
 const ProPackagesPeyment = ({ dialog }: { dialog: UseBooleanReturn }) => {
   const [peymentBank, setPeymentBank] = useState<string>('saman');
+  const router = useRouter();
 
   const handlePeymentBankChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -70,7 +73,7 @@ const ProPackagesPeyment = ({ dialog }: { dialog: UseBooleanReturn }) => {
         <Button variant='outlined' onClick={dialog.onFalse} color='error'>
           لغو
         </Button>
-        <Button variant='contained' color='primary'>
+        <Button variant='contained' onClick={()=>router.push(paths.dashboard.proPackages.successfulPayment)} color='primary'>
           پرداخت
         </Button>
       </DialogActions>

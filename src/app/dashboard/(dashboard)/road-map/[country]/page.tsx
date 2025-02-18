@@ -1,6 +1,6 @@
 import { CONFIG } from 'src/global-config';
 
-import RoadStepsView from "../../../../sections/road-map/road-steps/road-steps";
+import RoadStepsView from "src/sections/road-map/road-steps/road-steps";
 
 // ----------------------------------------------------------------------
 

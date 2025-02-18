@@ -31,9 +31,10 @@ export const paths = {
     },
     proPackages:{
       root:`${ROOTS.DASHBOARD}/pro-packages`,
+      successfulPayment: `${ROOTS.DASHBOARD}/pro-packages/successful-payment`,
     },
     tickets:{
       root:`${ROOTS.DASHBOARD}/tickets`,
-    }
+    },
   },
 };
