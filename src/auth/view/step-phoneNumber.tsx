@@ -9,6 +9,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import {paths} from "src/routes/paths";
 
 import { Form, Field } from "src/components/hook-form";
+
+import SlideCaptcha from "../../components/slide-captcha/slide-captcha";
 // --------------------------------------------------------------
 type FormData = {
   phoneNumber: string;
@@ -26,18 +28,19 @@ const PhoneNumberStep = () => {
 
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
-      <Stack spacing={2} mt={5}>
-        <Field.Text label="شماره موبایل" name="phoneNumber" />
-        <LoadingButton
-          fullWidth
-          color="inherit"
-          size="large"
-          type="submit"
-          variant="contained"
-        >
-          ادامه
-        </LoadingButton>
-      </Stack>
+      {/*<Stack spacing={2} mt={5}>*/}
+      {/*  <Field.Text label="شماره موبایل" name="phoneNumber" />*/}
+      {/*  <LoadingButton*/}
+      {/*    fullWidth*/}
+      {/*    color="inherit"*/}
+      {/*    size="large"*/}
+      {/*    type="submit"*/}
+      {/*    variant="contained"*/}
+      {/*  >*/}
+      {/*    ادامه*/}
+      {/*  </LoadingButton>*/}
+      {/*</Stack>*/}
+      <SlideCaptcha/>
     </Form>
   );
 };

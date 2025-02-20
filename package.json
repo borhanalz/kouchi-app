@@ -1,8 +1,8 @@
 {
   "name": "@minimal-kit/starter-next-ts",
-  "author": "Minimals",
+  "author": "BorhanAlizadeh",
   "version": "6.2.0",
-  "description": "Next Starter & TypeScript",
+  "description": "Kouchi App",
   "private": true,
   "scripts": {
     "dev": "next dev -p 8083",
