@@ -17,7 +17,7 @@ type AuthGuardProps = {
   children: React.ReactNode;
 };
 
-const signInPaths = {
+const signInPaths:any = {
   jwt: paths.auth.signIn,
 };
 
