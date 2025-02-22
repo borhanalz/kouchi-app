@@ -23,9 +23,9 @@ function SlideCaptcha() {
     if (ref.current && !captcha.current) {
       captcha.current = window.sliderCaptcha({
         element: ref.current,
-        loadingText: 'Loading...',
-        failedText: 'Try again',
-        barText: 'Slide right to fill',
+        loadingText: 'لطفا صبر کنید',
+        failedText: 'مجدد تلاش کنید',
+        barText: 'پازل را سر جایس بگذارید',
         repeatIcon: 'fa fa-redo',
         onSuccess () {
           setTimeout(()=> {
@@ -41,9 +41,9 @@ function SlideCaptcha() {
     if (ref.current && !captcha.current) {
       captcha.current = window.sliderCaptcha({
         element: ref.current,
-        loadingText: 'Loading...',
-        failedText: 'Try again',
-        barText: 'Slide right to fill',
+        loadingText: 'لطفا صبر کنید',
+        failedText: 'مجدد تلاش کنید',
+        barText: 'پازل را سر جایس بگذارید',
         repeatIcon: 'fa fa-redo',
         onSuccess: function () {
           setTimeout(function () {

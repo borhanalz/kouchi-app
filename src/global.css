@@ -84,13 +84,13 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
+/*body {*/
+/*  margin: 0;*/
+/*  display: flex;*/
+/*  place-items: center;*/
+/*  min-width: 320px;*/
+/*  min-height: 100vh;*/
+/*}*/
 
 h1 {
   font-size: 3.2em;
@@ -253,9 +253,9 @@ button:focus-visible {
   content: "\f00d";
 }
 
-.sliderContainer_active .sliderText, .sliderContainer_success .sliderText, .sliderContainer_fail .sliderText {
-  display: none;
-}
+/*.sliderContainer_active .sliderText, .sliderContainer_success .sliderText, .sliderContainer_fail .sliderText {*/
+/*  display: none;*/
+/*}*/
 
 .sliderMask {
   position: absolute;
@@ -273,7 +273,8 @@ button:focus-visible {
   left: 0;
   width: 40px;
   height: 40px;
-  background: #fff;
+  background: rgba(0, 0, 0, 0.56);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z" fill="currentColor"/></svg>');
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: background .2s linear;
