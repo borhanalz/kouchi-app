@@ -4,9 +4,10 @@ import "src/lib/slide-captcha/slide-captcha";
 
 import {toast} from "sonner";
 import {useForm} from "react-hook-form";
+import {useRouter} from "next/navigation";
 import {useBoolean} from "minimal-shared/hooks";
 import {useEffect, useRef, useState} from "react";
-import {useRouter, useSearchParams} from "next/navigation";
+import {useMutation} from "@tanstack/react-query";
 
 import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
@@ -17,7 +18,10 @@ import {paths} from "src/routes/paths";
 
 import {Form, Field} from "src/components/hook-form";
 
-import {useURLSearchParams} from "../../hooks/use-search-params";
+import {GetRequest} from "../../lib/axios";
+import {endpoints} from "../../hooks/endPoints";
+
+import type {IApiCheckUser} from "../../types/check-user-interface";
 
 // --------------------------------------------------------------
 type FormData = {
@@ -29,16 +33,21 @@ const PhoneNumberStep = () => {
   const {handleSubmit} = methods;
   const router = useRouter();
   const dialog = useBoolean();
-  const [phoneNumberVal, setPhoneNumberVal] = useState<string>("");
-
-  const HandleSubmit = handleSubmit((data) => {
-    setPhoneNumberVal(data?.mobileNumber)
-    dialog.onTrue();
-  });
+  const [mobileNumberVal, setMobileNumberVal] = useState<string>("");
 
   const ref = useRef<HTMLDivElement | null>(null);
   const captcha = useRef<any>(null);
   const [keyRender, resetKeyRender] = useState<number>(0);
+
+  const {mutateAsync,isPending} = useMutation({
+    mutationKey: ['check-user-signup-status'],
+    mutationFn: (payload: FormData) => GetRequest<IApiCheckUser>(endpoints.AUTH.CHECK_USER_SIGNUP_STATUS(payload?.mobileNumber as string))
+  })
+
+  const HandleSubmit = handleSubmit(async (data) => {
+    setMobileNumberVal(data?.mobileNumber);
+    dialog.onTrue();
+  });
 
   useEffect(() => {
     if (!dialog.value) return; // Initialize ONLY when modal opens
@@ -51,11 +60,20 @@ const PhoneNumberStep = () => {
           failedText: 'مجدد تلاش کنید',
           barText: 'پازل را سر جایس بگذارید',
           repeatIcon: 'fa fa-redo',
-          onSuccess() {
+          onSuccess:(async()=> {
             toast.success('چالش با موفقیت انجام شد');
             dialog.onFalse();
-            router.push(`${paths.auth.password}?mobileNumber=${encodeURIComponent(phoneNumberVal)}`);
-          },
+            try {
+              const response = await mutateAsync({mobileNumber:mobileNumberVal});
+              if(response?.hasPassword){
+                router.push(`${paths.auth.password}?mobileNumber=${encodeURIComponent(mobileNumberVal)}`);
+              }else {
+                router.push(paths.auth.signUp)
+              }
+            }catch (error){
+              console.log(error)
+            }
+          }),
         });
       }
     }, 300); // Small delay for modal rendering

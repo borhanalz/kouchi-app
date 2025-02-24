@@ -26,12 +26,9 @@ export default axiosInstance;
 // -------------------------- Get Request ---------------------------------------
 export async function GetRequest<APIResponseType>(
   url: string,
-  signal: AbortSignal,
   id?: string
 ): Promise<APIResponseType> {
-  const response = await axiosInstance.get<APIResponseType>(url + `${id ? `/${id}` : ''}`, {
-    signal,
-  });
+  const response = await axiosInstance.get<APIResponseType>(url + `${id ? `/${id}` : ''}`);
 
   if (response.status !== 200) {
     throw new Error('Error get');

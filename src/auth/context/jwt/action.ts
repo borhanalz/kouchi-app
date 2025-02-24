@@ -1,10 +1,11 @@
 'use client';
 
-import axios, {endpoints} from 'src/lib/axios';
+import {endpoints} from "src/hooks/endPoints";
+
+import axios from 'src/lib/axios';
 
 import { setSession } from './utils';
 import { JWT_STORAGE_KEY } from './constant';
-import useEndPoints from "src/hooks/use-end-points";
 
 // ----------------------------------------------------------------------
 
@@ -24,10 +25,9 @@ export type SignUpParams = {
  * Sign in
  *************************************** */
 export const signInWithPassword = async ({ mobileNumber, password }: SignInParams): Promise<void> => {
-  const endPoint=useEndPoints();
   try {
     const params = { mobileNumber, password };
-    const res = await axios.post(endPoint.AUTH.SIGNIN, params);
+    const res = await axios.post(endpoints.AUTH.LOGIN_PASSWORD, params);
     const { accessToken } = res.data;
 
     if (!accessToken) {
@@ -57,7 +57,7 @@ export const signUp = async ({
   };
 
   try {
-    const res = await axios.post(endpoints.auth.signUp, params);
+    const res = await axios.post(endpoints.AUTH.LOGIN_PASSWORD, params);
 
     const { accessToken } = res.data;
 

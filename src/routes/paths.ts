@@ -15,7 +15,7 @@ export const paths = {
       signIn: `${ROOTS.AUTH}/step-phone-number`,
       password:`${ROOTS.AUTH}/step-password`,
       otpSignIn: `${ROOTS.AUTH}/step-otp-signin`,
-      signUp: `${ROOTS.AUTH}/sign-up`,
+      signUp: `${ROOTS.AUTH}/signup`,
       resetPassword: `${ROOTS.AUTH}/step-reset-password`,
   },
   // DASHBOARD

@@ -1,6 +1,6 @@
 'use client'
 
-import type {IDocumentsItem} from "src/models/documents";
+import type {IDocumentsItem} from "src/types/documents";
 
 import {useBoolean} from "minimal-shared/hooks";
 

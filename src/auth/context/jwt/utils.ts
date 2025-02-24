@@ -54,7 +54,6 @@ export function isValidToken(accessToken: string) {
 export function tokenExpired(exp: number) {
   const currentTime = Date.now();
   const timeLeft = exp * 1000 - currentTime;
-
   setTimeout(() => {
     try {
       alert('Token expired!');

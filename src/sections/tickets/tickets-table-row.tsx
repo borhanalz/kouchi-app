@@ -11,7 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import {grey} from "../../theme";
 import {Iconify} from "../../components/iconify";
 
-import type {IDocumentsItem} from "../../models/documents";
+import type {IDocumentsItem} from ".src/types/documents";
 
 // ------------------------------------------------------------------
 

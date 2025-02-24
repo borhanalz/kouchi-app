@@ -33,11 +33,11 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const res = await axios.get(endpoints.auth.me);
-
-        const { user } = res.data;
-
-        setState({ user: { ...user, accessToken }, loading: false });
+        // const res = await axios.get(endpoints.auth.me);
+        //
+        // const { user } = res.data;
+        //
+        setState({ user: { name:"test", accessToken }, loading: false });
       } else {
         setState({ user: null, loading: false });
       }
@@ -55,7 +55,6 @@ export function AuthProvider({ children }: Props) {
   // ----------------------------------------------------------------------
 
   const checkAuthenticated = state.user ? 'authenticated' : 'unauthenticated';
-
   const status = state.loading ? 'loading' : checkAuthenticated;
 
   const memoizedValue = useMemo(

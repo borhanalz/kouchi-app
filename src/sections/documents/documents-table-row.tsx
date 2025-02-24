@@ -6,7 +6,7 @@ import {useTheme} from "@mui/material/styles";
 import TableCell from "@mui/material/TableCell";
 import Typography from "@mui/material/Typography";
 
-import type {IDocumentsItem} from "../../models/documents";
+import type {IDocumentsItem} from "../../types/documents";
 
 // ------------------------------------------------------------------
 

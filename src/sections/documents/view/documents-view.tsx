@@ -1,5 +1,7 @@
 'use client'
 
+import type {IDocumentsItem} from "src/types/documents";
+
 import {useBoolean} from "minimal-shared/hooks";
 
 import Stack from "@mui/material/Stack";
@@ -13,10 +15,8 @@ import {useTable, TableHeadCustom} from "src/components/table";
 
 import {grey} from "../../../theme";
 import DocumentsTableRow from "../documents-table-row";
-import DocumentsCreateDialog from "../documents-create-dialog";
-
-import type {IDocumentsItem} from "../../../models/documents";
 import {Scrollbar} from "../../../components/scrollbar";
+import DocumentsCreateDialog from "../documents-create-dialog";
 // -----------------------------------------------------------------------------------------------------
 const TableHead = [
   {id:'id',label:"شماره"},
