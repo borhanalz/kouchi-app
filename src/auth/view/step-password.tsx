@@ -21,6 +21,7 @@ import {Iconify} from "../../components/iconify";
 import {signInWithPassword} from "../context/jwt";
 import {Form, Field} from "../../components/hook-form";
 import {FormReturnLink} from "../components/form-return-link";
+import {useURLSearchParams} from "../../hooks/use-search-params";
 
 // ---------------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ const PasswordStep = () => {
   const showPassword = useBoolean();
   const { checkUserSession } = useAuthContext();
   const router = useRouter();
+  const {getParam}=useURLSearchParams();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -58,7 +60,7 @@ const PasswordStep = () => {
 
   const HandleSubmit = handleSubmit(async(data) => {
     try {
-      await signInWithPassword({ email: data.email, password: data.password });
+      await signInWithPassword({ mobileNumber: getParam("mobileNumber"), password: data.password });
       await checkUserSession?.();
 
       router.refresh();
@@ -71,8 +73,7 @@ const PasswordStep = () => {
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
       <Stack spacing={2} mt={5}>
-        <Field.Text label="شماره موبایل" name="phoneNumber"/>
-        <Field.Text label='رمز عبور' name='phoneNumber'
+        <Field.Text label='رمز عبور' name='password'
                     type={showPassword.value ? 'text' : 'password'}
                     slotProps={{
                       input: {
