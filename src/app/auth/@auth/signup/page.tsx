@@ -1,6 +1,6 @@
 import { CONFIG } from 'src/global-config';
 
-import StepSignUp from "src/auth/view/step-sign-up";
+import StepSignUp from "src/auth/view/step-register";
 
 // ----------------------------------------------------------------------
 

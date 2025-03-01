@@ -1,5 +1,6 @@
 'use client'
 
+import {toast} from "sonner";
 import {useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
 import {useBoolean} from "minimal-shared/hooks";
@@ -16,51 +17,50 @@ import {Form, Field} from "src/components/hook-form";
 import OtpTimer from "src/components/hook-form/otp-timer";
 
 import {FormReturnLink} from "src/auth/components/form-return-link";
+
+import {useURLSearchParams} from "../../hooks/use-search-params";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {EditCreateRequest, GetRequest} from "../../lib/axios";
+import {endpoints} from "../../hooks/endPoints";
+import {useEffect} from "react";
 // ------------------------------------------------------------------
-type FormData = {
-  phoneNumber: string;
-  otpCode:string,
-  password:string,
-  confirmPassword:string,
+type formData = {
+  mobileNumber: string;
+  otp:string,
+  newPassword:string,
 }
 // -------------------------------------------------------------------
 const AuthView = () => {
-
-  const methods = useForm<FormData>();
-  const {handleSubmit} = methods;
   const showPassword = useBoolean();
   const router = useRouter();
+  const {getParam}=useURLSearchParams();
 
-  const HandleSubmit = handleSubmit((data)=>{
-    console.log(data);
-    router.push(paths.auth.resetPassword);
+  const {mutateAsync,isPending}=useMutation({mutationKey:['update-password'],mutationFn:(payload:formData)=>EditCreateRequest(endpoints.AUTH.CHANGE_PASSWORD,payload)});
+  const methods = useForm<formData>({
+    defaultValues:{
+      mobileNumber:getParam("mobileNumber"),
+      newPassword:"",
+      otp:""
+    }
   });
 
-  const handleTimeReset = ()=>{
-    console.log('test');
-  }
+  const {handleSubmit} = methods;
+  const HandleSubmit = handleSubmit(async(data)=>{
+    try {
+      await mutateAsync(data);
+      toast.success("با موفقیت انجام شد")
+      router.push(paths.auth.password);
+    }catch (error){
+      console.log(error)
+    }
+  });
+
+  const handleTimeReset = ()=>{}
   const handleTimeOut=()=>{};
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
       <Stack spacing={2} mt={5}>
-        <Field.Text label='شماره موبایل' name='phoneNumber'/>
-        <Field.Text label='رمز عبور جدید' name='password'
-                    type={showPassword.value ? 'text' : 'password'}
-                    slotProps={{
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton onClick={showPassword.onToggle} edge="end">
-                              <Iconify
-                                icon={showPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
-                              />
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
-        />
-        <Field.Text label='تکرار رمز عبور جدید' name='confirmPassword'
+        <Field.Text label='رمز عبور جدید' name='newPassword'
                     type={showPassword.value ? 'text' : 'password'}
                     slotProps={{
                       input: {
@@ -77,13 +77,14 @@ const AuthView = () => {
                     }}
         />
         <OtpTimer time={120} onTimeOut={handleTimeOut} onReset={handleTimeReset}/>
-        <Field.Code name='otpCode'/>
+        <Field.Code name='otp'/>
         <LoadingButton
           fullWidth
           color="inherit"
           size="large"
           type="submit"
           variant="contained"
+          loading={isPending}
         >
           تغییر رمز عبور
         </LoadingButton>
