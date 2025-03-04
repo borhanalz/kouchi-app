@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from 'react';
 
@@ -56,10 +56,7 @@ function OtpTimer({ time, onTimeOut, onReset }: OtpTimerProps) {
   );
 
   const renderTimer = () => (
-    <Typography variant="subtitle2">
-      {/*{t('otpTimer', { seconds: getTimerString(remainingTime) })}*/}
-      {getTimerString(remainingTime)} تا ارسال مجدد کد
-    </Typography>
+    <Typography variant="subtitle2">{getTimerString(remainingTime)} تا ارسال مجدد کد</Typography>
   );
 
   return (

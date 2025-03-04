@@ -24,7 +24,7 @@ export type ThemeProviderProps = Omit<MuiThemeProviderProps, 'theme'> & {
 export function ThemeProvider({ themeOverrides, children, ...other }: ThemeProviderProps) {
   const settings = useSettingsContext();
 
-  settings.state.direction='rtl';
+  settings.state.direction = 'rtl';
 
   const theme = createTheme({
     settingsState: settings.state,

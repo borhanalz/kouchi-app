@@ -5,24 +5,21 @@ import { paths } from 'src/routes/paths';
 import { Label } from 'src/components/label';
 import { SvgColor } from 'src/components/svg-color';
 
-import {Iconify} from "../components/iconify";
+import { Iconify } from '../components/iconify';
 
 // ----------------------------------------------------------------------
 
-const icon = (name: string) => (
-  <Iconify icon={name as string} />
-);
+const icon = (name: string) => <Iconify icon={name as string} />;
 
 const ICONS = {
-  send:icon('send'),
-  map:icon('map'),
-  documentsList:icon('files'),
-  businessManagement:icon('building'),
-  calender:icon('calender'),
-  files:icon('file'),
+  send: icon('send'),
+  map: icon('map'),
+  documentsList: icon('files'),
+  businessManagement: icon('building'),
+  calender: icon('calender'),
+  files: icon('file'),
   tickets: icon('messages'),
-  userInfo: icon('userInfo')
-
+  userInfo: icon('userInfo'),
 };
 
 // ----------------------------------------------------------------------

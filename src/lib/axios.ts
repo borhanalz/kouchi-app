@@ -1,4 +1,4 @@
-import type {AxiosRequestConfig, AxiosResponse} from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import axios from 'axios';
 
@@ -13,7 +13,7 @@ axiosInstance.interceptors.response.use(
 );
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("jwt_token");
+    const token = sessionStorage.getItem('jwt_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -33,7 +33,6 @@ export async function GetRequest<APIResponseType>(
   if (response.status !== 200) {
     throw new Error('Error get');
   }
-
   return response.data;
 }
 // -------------------------- Edit\Create Request ---------------------------------------

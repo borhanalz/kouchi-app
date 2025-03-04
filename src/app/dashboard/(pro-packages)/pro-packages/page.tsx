@@ -1,6 +1,6 @@
 import { CONFIG } from 'src/global-config';
 
-import ProPackages from "src/sections/pro-packages/view/pro-packages";
+import ProPackages from 'src/sections/pro-packages/view/pro-packages';
 
 // ----------------------------------------------------------------------
 

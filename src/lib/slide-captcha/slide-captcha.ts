@@ -42,7 +42,7 @@
   const extend = function (...args: ExtendOptions[]): ExtendOptions {
     const length = args.length;
     let target = args[0] || {};
-    if (typeof target !== "object" && typeof target !== "function") {
+    if (typeof target !== 'object' && typeof target !== 'function') {
       target = {};
     }
     if (length === 1) {
@@ -61,7 +61,7 @@
   };
 
   const isFunction = function (obj: any): obj is Function {
-    return typeof obj === "function" && typeof obj.nodeType !== "number";
+    return typeof obj === 'function' && typeof obj.nodeType !== 'number';
   };
 
   class SliderCaptcha {
@@ -81,10 +81,10 @@
       maxLoadCount: 3,
       localImages: () => 'images/Pic' + Math.round(Math.random() * 4) + '.jpg',
       verify: (arr: number[], url: string | null) => {
-        console.log("verify", arr, url);
+        console.log('verify', arr, url);
         return false;
       },
-      remoteUrl: null
+      remoteUrl: null,
     };
 
     public $element: HTMLElement;
@@ -167,7 +167,7 @@
         sliderIcon: sliderIcon,
         text: text,
         canvasCtx: canvas.getContext('2d') as CanvasRenderingContext2D,
-        blockCtx: block.getContext('2d') as CanvasRenderingContext2D
+        blockCtx: block.getContext('2d') as CanvasRenderingContext2D,
       };
 
       if (isFunction(Object.assign)) {
@@ -210,13 +210,16 @@
       };
 
       const img = new Image();
-      img.crossOrigin = "Anonymous";
+      img.crossOrigin = 'Anonymous';
       let loadCount = 0;
 
       img.onload = function () {
         // 随机创建滑块的位置
         that.x = getRandomNumberByRange(L + 10, that.options.width - (L + 10));
-        that.y = getRandomNumberByRange(10 + that.options.sliderR * 2, that.options.height - (L + 10));
+        that.y = getRandomNumberByRange(
+          10 + that.options.sliderR * 2,
+          that.options.height - (L + 10)
+        );
         drawImg(that.canvasCtx as CanvasRenderingContext2D, 'fill');
         drawImg(that.blockCtx as CanvasRenderingContext2D, 'clip');
 
@@ -237,7 +240,9 @@
         loadCount++;
         if (window.location.protocol === 'file:') {
           loadCount = that.options.maxLoadCount;
-          console.error("can't load pic resource file from File protocal. Please try http or https");
+          console.error(
+            "can't load pic resource file from File protocal. Please try http or https"
+          );
         }
         if (loadCount >= that.options.maxLoadCount) {
           if (that.text) {
@@ -256,8 +261,16 @@
           that.text.classList.remove('text-danger');
         }
         if (isFunction(that.options.setSrc)) src = that.options.setSrc();
-        if (!src || src === '') src = 'https://picsum.photos/' + that.options.width + '/' + that.options.height + '/?image=' + Math.round(Math.random() * 20);
-        if (isIE) { // IE浏览器无法通过img.crossOrigin跨域，使用ajax获取图片blob然后转为dataURL显示
+        if (!src || src === '')
+          src =
+            'https://picsum.photos/' +
+            that.options.width +
+            '/' +
+            that.options.height +
+            '/?image=' +
+            Math.round(Math.random() * 20);
+        if (isIE) {
+          // IE浏览器无法通过img.crossOrigin跨域，使用ajax获取图片blob然后转为dataURL显示
           const xhr = new XMLHttpRequest();
           xhr.onloadend = function (e) {
             const file = new FileReader(); // FileReader仅支持IE10+
@@ -304,7 +317,9 @@
         });
       }
 
-      let originX: number, originY: number, trail: number[] = [],
+      let originX: number,
+        originY: number,
+        trail: number[] = [],
         isMouseDown = false;
 
       const handleDragStart = (e: MouseEvent | TouchEvent): void => {
@@ -322,17 +337,17 @@
         const moveY = eventY - originY;
         if (moveX < 0 || moveX + 40 > that.options.width) return;
         if (that.slider) {
-          that.slider.style.left = (moveX - 1) + 'px';
+          that.slider.style.left = moveX - 1 + 'px';
         }
         if (that.block) {
-          const blockLeft = (that.options.width - 40 - 20) / (that.options.width - 40) * moveX;
+          const blockLeft = ((that.options.width - 40 - 20) / (that.options.width - 40)) * moveX;
           that.block.style.left = blockLeft + 'px';
         }
         if (that.sliderContainer) {
           that.sliderContainer.classList.add('sliderContainer_active');
         }
         if (that.sliderMask) {
-          that.sliderMask.style.width = (moveX + 4) + 'px';
+          that.sliderMask.style.width = moveX + 4 + 'px';
         }
         trail.push(Math.round(moveY));
       };
@@ -375,12 +390,18 @@
       document.addEventListener('mouseup', handleDragEnd);
       document.addEventListener('touchend', handleDragEnd);
 
-      document.addEventListener('mousedown', function () { return false; });
-      document.addEventListener('touchstart', function () { return false; });
-      document.addEventListener('swipe', function () { return false; });
+      document.addEventListener('mousedown', function () {
+        return false;
+      });
+      document.addEventListener('touchstart', function () {
+        return false;
+      });
+      document.addEventListener('swipe', function () {
+        return false;
+      });
     }
 
-    verify(): { spliced: boolean, verified: boolean } {
+    verify(): { spliced: boolean; verified: boolean } {
       const arr = this.trail; // 拖动时y轴的移动距离
       const left = parseInt(this.block?.style.left || '0', 10);
       let verified = false;
@@ -396,7 +417,7 @@
       }
       return {
         spliced: Math.abs(left - this.x) < this.options.offset,
-        verified: verified
+        verified: verified,
       };
     }
 
@@ -425,7 +446,11 @@
     }
   }
 
-  const Plugin = function (option: { id?: string, element?: HTMLElement, [key: string]: any }): SliderCaptcha {
+  const Plugin = function (option: {
+    id?: string;
+    element?: HTMLElement;
+    [key: string]: any;
+  }): SliderCaptcha {
     const $this = option.id ? document.getElementById(option.id) : option.element;
     if (!$this) {
       throw new Error('Element not found');

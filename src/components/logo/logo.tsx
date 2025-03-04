@@ -1,6 +1,6 @@
 import type { LinkProps } from '@mui/material/Link';
 
-import Image from "next/image";
+import Image from 'next/image';
 import { useId, forwardRef } from 'react';
 import { mergeClasses } from 'minimal-shared/utils';
 
@@ -10,7 +10,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import { RouterLink } from 'src/routes/components';
 
 import { logoClasses } from './classes';
-import {CONFIG} from "../../global-config";
+import { CONFIG } from '../../global-config';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
   const singleLogo = (
     <Image
       alt="Single logo"
-      src={`${CONFIG.assetsDir}${theme.palette.mode==='dark'?'/logo/logo-single.svg':'/logo/logo-single-dark.svg'}`}
+      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-single.svg' : '/logo/logo-single-dark.svg'}`}
       width={40}
       height={45}
     />
@@ -36,13 +36,11 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
   const fullLogo = (
     <Image
       alt="Full logo"
-      src={`${CONFIG.assetsDir}${theme.palette.mode==='dark'?'/logo/logo-single.svg':'/logo/logo-single-dark.svg'}`}
+      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-single.svg' : '/logo/logo-single-dark.svg'}`}
       width={40}
       height={45}
     />
   );
-
-
 
   return (
     <LogoRoot
@@ -56,8 +54,8 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
         () => ({
           width: 40,
           height: 40,
-          ...(!isSingle && {width: 102, height: 36}),
-          ...(disabled && {pointerEvents: 'none'}),
+          ...(!isSingle && { width: 102, height: 36 }),
+          ...(disabled && { pointerEvents: 'none' }),
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

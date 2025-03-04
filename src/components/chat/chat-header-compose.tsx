@@ -2,10 +2,10 @@ import type { IChatParticipant } from 'src/types/chat';
 
 import { useState, useCallback } from 'react';
 
-import Stack from "@mui/material/Stack";
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import {Logo} from "../logo";
+import { Logo } from '../logo';
 
 // ----------------------------------------------------------------------
 
@@ -27,9 +27,11 @@ export function ChatHeaderCompose({ contacts, onAddRecipients }: Props) {
 
   return (
     <>
-      <Stack direction='row' justifyContent='center' alignItems='center' spacing={2}>
-        <Logo/>
-        <Typography fontWeight='bold' color='grey' fontSize={20}>دستیار کوچی</Typography>
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+        <Logo />
+        <Typography fontWeight="bold" color="grey" fontSize={20}>
+          دستیار کوچی
+        </Typography>
       </Stack>
       {/*<Typography variant="subtitle2" sx={{ color: 'text.primary', mr: 2 }}>*/}
       {/*  To:*/}

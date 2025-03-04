@@ -9,7 +9,7 @@ import { Nav, NavUl, NavLi, NavSubheader } from '../components';
 import { navSectionClasses, navSectionCssVars } from '../styles';
 
 import type { NavGroupProps, NavSectionProps } from '../types';
-import Stack from "@mui/material/Stack";
+import Stack from '@mui/material/Stack';
 
 // ----------------------------------------------------------------------
 
@@ -34,18 +34,18 @@ export function NavSectionVertical({
       sx={[{ ...cssVars }, ...(Array.isArray(sx) ? sx : [sx])]}
       {...other}
     >
-      <NavUl sx={{ flex: '1 1 auto',mt:5, gap: 'var(--nav-item-gap)' }}>
-          {data.map((group) => (
-            <Group
-              key={group.subheader ?? group.items[0].title}
-              subheader={group.subheader}
-              items={group.items}
-              render={render}
-              slotProps={slotProps}
-              currentRole={currentRole}
-              enabledRootRedirect={enabledRootRedirect}
-            />
-          ))}
+      <NavUl sx={{ flex: '1 1 auto', mt: 5, gap: 'var(--nav-item-gap)' }}>
+        {data.map((group) => (
+          <Group
+            key={group.subheader ?? group.items[0].title}
+            subheader={group.subheader}
+            items={group.items}
+            render={render}
+            slotProps={slotProps}
+            currentRole={currentRole}
+            enabledRootRedirect={enabledRootRedirect}
+          />
+        ))}
       </NavUl>
     </Nav>
   );
@@ -65,19 +65,19 @@ function Group({
 
   const renderContent = () => (
     <NavUl sx={{ gap: 'var(--nav-item-gap)' }}>
-     <Stack spacing={2}>
-       {items.map((list) => (
-         <NavList
-           key={list.title}
-           data={list}
-           render={render}
-           depth={1}
-           slotProps={slotProps}
-           currentRole={currentRole}
-           enabledRootRedirect={enabledRootRedirect}
-         />
-       ))}
-     </Stack>
+      <Stack spacing={2}>
+        {items.map((list) => (
+          <NavList
+            key={list.title}
+            data={list}
+            render={render}
+            depth={1}
+            slotProps={slotProps}
+            currentRole={currentRole}
+            enabledRootRedirect={enabledRootRedirect}
+          />
+        ))}
+      </Stack>
     </NavUl>
   );
 

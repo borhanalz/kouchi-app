@@ -6,4 +6,4 @@ export * from './rhf-text-field';
 
 export * from './rhf-code';
 
-export * from './otp-timer'
+export * from './otp-timer';

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import type { IChatParticipant } from 'src/types/chat';
 
@@ -59,59 +59,54 @@ export function Chat() {
 
   const filteredParticipants: IChatParticipant[] = conversation
     ? conversation.participants.filter(
-      (participant: IChatParticipant) => participant.id !== `${user?.id}`
-    )
+        (participant: IChatParticipant) => participant.id !== `${user?.id}`
+      )
     : [];
 
   const hasConversation = selectedConversationId && conversation;
 
-  return ( <ChatLayout
-        slots={{
-          header: hasConversation ? (
-            <ChatHeaderDetail
-              collapseNav={roomNav}
-              participants={filteredParticipants}
-              loading={conversationLoading}
-            />
-          ) : (
-            <ChatHeaderCompose contacts={contacts} onAddRecipients={handleAddRecipients} />
-          ),
-          nav: (
-            null
-          ),
-          main: (
-            <>
-              {selectedConversationId ? (
-                conversationError ? (
-                  <EmptyContent
-                    title={conversationError.message}
-                  />
-                ) : (
-                  <ChatMessageList
-                    messages={conversation?.messages ?? []}
-                    participants={filteredParticipants}
-                    loading={conversationLoading}
-                  />
-                )
+  return (
+    <ChatLayout
+      slots={{
+        header: hasConversation ? (
+          <ChatHeaderDetail
+            collapseNav={roomNav}
+            participants={filteredParticipants}
+            loading={conversationLoading}
+          />
+        ) : (
+          <ChatHeaderCompose contacts={contacts} onAddRecipients={handleAddRecipients} />
+        ),
+        nav: null,
+        main: (
+          <>
+            {selectedConversationId ? (
+              conversationError ? (
+                <EmptyContent title={conversationError.message} />
               ) : (
-                <EmptyContent
-                  title="خوش آمدید !"
-                  description="برای شروع گفت و گو با کوچی لطفا پیامی ارسال کنید"
+                <ChatMessageList
+                  messages={conversation?.messages ?? []}
+                  participants={filteredParticipants}
+                  loading={conversationLoading}
                 />
-              )}
-
-              <ChatMessageInput
-                recipients={recipients}
-                onAddRecipients={handleAddRecipients}
-                selectedConversationId={selectedConversationId}
-                disabled={!recipients.length && !selectedConversationId}
+              )
+            ) : (
+              <EmptyContent
+                title="خوش آمدید !"
+                description="برای شروع گفت و گو با کوچی لطفا پیامی ارسال کنید"
               />
-            </>
-          ),
-          details: hasConversation && (
-           null
-          ),
-        }}
-      />
+            )}
+
+            <ChatMessageInput
+              recipients={recipients}
+              onAddRecipients={handleAddRecipients}
+              selectedConversationId={selectedConversationId}
+              disabled={!recipients.length && !selectedConversationId}
+            />
+          </>
+        ),
+        details: hasConversation && null,
+      }}
+    />
   );
 }

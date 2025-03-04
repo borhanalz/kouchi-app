@@ -37,7 +37,7 @@ export function AuthProvider({ children }: Props) {
         //
         // const { user } = res.data;
         //
-        setState({ user: { name:"test", accessToken }, loading: false });
+        setState({ user: { name: 'test', accessToken }, loading: false });
       } else {
         setState({ user: null, loading: false });
       }

@@ -40,10 +40,10 @@ import { NotificationsDrawer } from '../components/notifications-drawer';
 import type { MainSectionProps } from '../core/main-section';
 import type { HeaderSectionProps } from '../core/header-section';
 import type { LayoutSectionProps } from '../core/layout-section';
-import Button from "@mui/material/Button";
-import {Iconify} from "../../components/iconify";
-import {useRouter} from "next/navigation";
-import {paths} from "../../routes/paths";
+import Button from '@mui/material/Button';
+import { Iconify } from '../../components/iconify';
+import { useRouter } from 'next/navigation';
+import { paths } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -139,8 +139,14 @@ export function DashboardLayout({
       ),
       rightArea: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.75 } }}>
-
-          <Button variant='contained' color='primary' startIcon={<Iconify icon='shieldPlus'/>} onClick={()=>router.push(paths.dashboard.proPackages.root)}>اشتراک پرو</Button>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Iconify icon="shieldPlus" />}
+            onClick={() => router.push(paths.dashboard.proPackages.root)}
+          >
+            اشتراک پرو
+          </Button>
           {/** @slot Searchbar */}
           <Searchbar data={navData} />
 

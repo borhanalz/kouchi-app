@@ -11,8 +11,8 @@ import NoSsr from '@mui/material/NoSsr';
 import { styled } from '@mui/material/styles';
 
 import { iconifyClasses } from './classes';
-import SvgIcon from "@mui/material/SvgIcon";
-import {SvgColor} from "../svg-color";
+import SvgIcon from '@mui/material/SvgIcon';
+import { SvgColor } from '../svg-color';
 
 // ----------------------------------------------------------------------
 
@@ -37,10 +37,7 @@ export const Iconify = forwardRef<SVGSVGElement, IconifyProps>((props, ref) => {
 
   return (
     <NoSsr fallback={renderFallback()}>
-      <SvgColor
-        sx={sx}
-        src={`/assets/icons/${props.icon}.svg`}
-      />
+      <SvgColor sx={sx} src={`/assets/icons/${props.icon}.svg`} />
     </NoSsr>
   );
 });

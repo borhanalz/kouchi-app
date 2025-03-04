@@ -1,6 +1,6 @@
 import { CONFIG } from 'src/global-config';
 
-import ProPackagesSuccessfullPayment from "../../../../../sections/pro-packages/pro-packages-successfull-payment";
+import ProPackagesSuccessfullPayment from '../../../../../sections/pro-packages/pro-packages-successfull-payment';
 
 // ----------------------------------------------------------------------
 

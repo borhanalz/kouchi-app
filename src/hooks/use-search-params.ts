@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export function useURLSearchParams() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const getParam = (key: string) => {
-    return searchParams.get(key) || "";
+    return searchParams.get(key) || '';
   };
 
   const setParam = (key: string, value: string) => {

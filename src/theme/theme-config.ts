@@ -36,7 +36,7 @@ export const themeConfig: ThemeConfig = {
    * Typography
    *************************************** */
   fontFamily: {
-    primary: "kalameh",
+    primary: 'kalameh',
     secondary: 'kalameh',
   },
   /** **************************************

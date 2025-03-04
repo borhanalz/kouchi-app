@@ -56,7 +56,7 @@ export function TableHeadCustom({
     <TableHead sx={sx}>
       <TableRow>
         {onSelectAllRows && (
-          <TableCell align='center' padding="checkbox">
+          <TableCell align="center" padding="checkbox">
             <Checkbox
               indeterminate={!!numSelected && numSelected < rowCount}
               checked={!!rowCount && numSelected === rowCount}

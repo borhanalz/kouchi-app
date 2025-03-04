@@ -1,4 +1,4 @@
-import "src/lib/slide-captcha/slide-captcha";
+import 'src/lib/slide-captcha/slide-captcha';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -16,7 +16,7 @@ function SlideCaptcha() {
   const toggleCaptcha = () => {
     if (captcha.current) {
       captcha.current = null;
-      resetKeyRender(prev => prev + 1);
+      resetKeyRender((prev) => prev + 1);
       return;
     }
 
@@ -27,8 +27,8 @@ function SlideCaptcha() {
         failedText: 'مجدد تلاش کنید',
         barText: 'پازل را سر جایس بگذارید',
         repeatIcon: 'fa fa-redo',
-        onSuccess () {
-          setTimeout(()=> {
+        onSuccess() {
+          setTimeout(() => {
             alert('Your captcha is successfully verified.');
             captcha.current?.reset();
           }, 1000);
@@ -58,7 +58,7 @@ function SlideCaptcha() {
   return (
     <>
       <div key={keyRender} ref={ref}></div>
-      <div className='card'>
+      <div className="card">
         <button onClick={toggleCaptcha}>Toggle Captcha</button>
       </div>
     </>

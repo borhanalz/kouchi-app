@@ -1,6 +1,3 @@
-import {CustomQueryClient} from "./query-client";
+import { CustomQueryClient } from './query-client';
 
-
-export {
-  CustomQueryClient
-}
+export { CustomQueryClient };

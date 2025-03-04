@@ -1,6 +1,6 @@
 'use client';
 
-import {endpoints} from "src/hooks/endPoints";
+import { endpoints } from 'src/hooks/endPoints';
 
 import axios from 'src/lib/axios';
 
@@ -24,7 +24,10 @@ export type SignUpParams = {
 /** **************************************
  * Sign in
  *************************************** */
-export const signInWithPassword = async ({ mobileNumber, password }: SignInParams): Promise<void> => {
+export const signInWithPassword = async ({
+  mobileNumber,
+  password,
+}: SignInParams): Promise<void> => {
   try {
     const params = { mobileNumber, password };
     const res = await axios.post(endpoints.AUTH.LOGIN_PASSWORD, params);

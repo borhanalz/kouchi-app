@@ -1,11 +1,11 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 import { LinkProps } from '@mui/material/Link';
 
 import { RouterLink } from 'src/routes/components';
 
 import { Iconify } from 'src/components/iconify';
-import Stack from "@mui/material/Stack";
+import Stack from '@mui/material/Stack';
 
 // ----------------------------------------------------------------------
 
@@ -22,11 +22,17 @@ export function FormReturnLink({ sx, href, label, icon, children, ...other }: Fo
       href={href}
       color="inherit"
       variant="subtitle2"
-      style={{color:'#000',textDecoration:'none',display: 'flex',justifyContent:'center',alignItems: 'center'}}
+      style={{
+        color: '#000',
+        textDecoration: 'none',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
       {...other}
     >
-       {label || 'بازگشت'}
-       {icon || <Iconify sx={{width:12,height:12}} icon="arrowHeadLeft" />}
+      {label || 'بازگشت'}
+      {icon || <Iconify sx={{ width: 12, height: 12 }} icon="arrowHeadLeft" />}
       {children}
     </Link>
   );

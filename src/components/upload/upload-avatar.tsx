@@ -10,7 +10,7 @@ import { uploadClasses } from './classes';
 import { RejectionFiles } from './components/rejection-files';
 
 import type { UploadProps } from './types';
-import Image from "next/image";
+import Image from 'next/image';
 
 // ----------------------------------------------------------------------
 

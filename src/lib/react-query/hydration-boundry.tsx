@@ -1,9 +1,9 @@
-import type {ReactNode} from "react";
+import type { ReactNode } from 'react';
 import type { QueryOptions } from '@tanstack/react-query';
 
 import { dehydrate, HydrationBoundary as RQHydrationBoundary } from '@tanstack/react-query';
 
-import {GetQueryClient} from "./query-client";
+import { GetQueryClient } from './query-client';
 // ----------------------------------------------------------------------------------------------
 interface HydrationBoundaryProps {
   children: ReactNode;
@@ -13,7 +13,7 @@ interface HydrationBoundaryProps {
   }[];
 }
 // --------------------------------------------------------------------------------------------------
-const HydrationBoundry = async({children,queries}:HydrationBoundaryProps)=>{
+const HydrationBoundry = async ({ children, queries }: HydrationBoundaryProps) => {
   const queryClient = GetQueryClient();
 
   const prefetches = queries?.map((query) =>
@@ -28,6 +28,6 @@ const HydrationBoundry = async({children,queries}:HydrationBoundaryProps)=>{
   }
 
   return <RQHydrationBoundary state={dehydrate(queryClient)}>{children}</RQHydrationBoundary>;
-}
+};
 
 export default HydrationBoundry;

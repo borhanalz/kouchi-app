@@ -1,7 +1,6 @@
 import { CONFIG } from 'src/global-config';
 import { DashboardLayout } from 'src/layouts/dashboard';
 
-
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -13,7 +12,5 @@ export default function Layout({ children }: Props) {
     return <DashboardLayout>{children}</DashboardLayout>;
   }
 
-  return (
-      <DashboardLayout>{children}</DashboardLayout>
-  );
+  return <DashboardLayout>{children}</DashboardLayout>;
 }

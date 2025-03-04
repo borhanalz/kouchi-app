@@ -1,8 +1,8 @@
 import type { NavSectionProps } from 'src/components/nav-section';
 import type { Theme, SxProps, CSSObject, Breakpoint } from '@mui/material/styles';
 
-import Image from "next/image";
-import textLogo from 'public/assets/images/textLogo.png'
+import Image from 'next/image';
+import textLogo from 'public/assets/images/textLogo.png';
 import { varAlpha, mergeClasses } from 'minimal-shared/utils';
 
 import Box from '@mui/material/Box';
@@ -46,8 +46,7 @@ export function NavVertical({
       {slots?.topArea ?? (
         <Box sx={{ pl: 3.5, pt: 2.5, pb: 1 }}>
           <Logo />
-          <Image src={textLogo} width={100} height={60} alt='logo'/>
-
+          <Image src={textLogo} width={100} height={60} alt="logo" />
         </Box>
       )}
 

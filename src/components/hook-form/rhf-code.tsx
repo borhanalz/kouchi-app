@@ -39,43 +39,44 @@ export function RHFCode({
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <Box
-          {...slotProps?.wrapper}
-          sx={[
-            {
-              display: 'flex',
-              justifyContent: 'center',
-              [`& .${inputBaseClasses.input}`]: {
-                p: 0,
-                height: 'auto',
-                aspectRatio: '1/1',
-                maxWidth: maxSize,
+        <>
+          <Box
+            {...slotProps?.wrapper}
+            sx={[
+              {
+                display: 'flex',
+                justifyContent: 'center',
+                [`& .${inputBaseClasses.input}`]: {
+                  p: 0,
+                  height: 'auto',
+                  aspectRatio: '1/1',
+                  maxWidth: maxSize,
+                },
               },
-            },
-            ...(Array.isArray(slotProps?.wrapper?.sx)
-              ? (slotProps?.wrapper?.sx ?? [])
-              : [slotProps?.wrapper?.sx]),
-          ]}
-        >
-          <MuiOtpInput
-            {...field}
-            autoFocus
-            gap={1.5}
-            length={6}
-            TextFieldsProps={{
-              placeholder,
-              error: !!error,
-              ...slotProps?.textfield,
-            }}
-            {...other}
-          />
-
+              ...(Array.isArray(slotProps?.wrapper?.sx)
+                ? (slotProps?.wrapper?.sx ?? [])
+                : [slotProps?.wrapper?.sx]),
+            ]}
+          >
+            <MuiOtpInput
+              {...field}
+              autoFocus
+              gap={1.5}
+              length={6}
+              TextFieldsProps={{
+                placeholder,
+                error: !!error,
+                ...slotProps?.textfield,
+              }}
+              {...other}
+            />
+          </Box>
           <HelperText
             {...slotProps?.helperText}
             errorMessage={error?.message}
             helperText={helperText}
           />
-        </Box>
+        </>
       )}
     />
   );
