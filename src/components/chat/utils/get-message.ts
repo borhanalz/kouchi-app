@@ -1,4 +1,4 @@
-import type { IChatMessage, IChatParticipant } from 'src/types/chat';
+import type { IChatMessage, IChatParticipant } from 'src/types/chat-component';
 
 // ----------------------------------------------------------------------
 

@@ -26,10 +26,9 @@ export default axiosInstance;
 // -------------------------- Get Request ---------------------------------------
 export async function GetRequest<APIResponseType>(
   url: string,
-  id?: string
+  id?: string|null,
 ): Promise<APIResponseType> {
   const response = await axiosInstance.get<APIResponseType>(url + `${id ? `/${id}` : ''}`);
-
   if (response.status !== 200) {
     throw new Error('Error get');
   }

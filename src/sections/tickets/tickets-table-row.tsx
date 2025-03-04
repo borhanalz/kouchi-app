@@ -1,5 +1,9 @@
 'use client';
 
+import type { IDocumentsItem } from 'src/types/documents';
+
+import {format} from "date-fns-jalali";
+
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import TableRow from '@mui/material/TableRow';
@@ -11,16 +15,16 @@ import IconButton from '@mui/material/IconButton';
 import { grey } from '../../theme';
 import { Iconify } from '../../components/iconify';
 
-import type { IDocumentsItem } from '.src/types/documents';
+import type {ITicketFormData} from "../../types/tickets";
 
 // ------------------------------------------------------------------
 
-const TicketsTableRow = ({ row }: { row: IDocumentsItem }) => {
-  const { title, date, status, id } = row;
+const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) => {
+  const { title, status,createdAt } = row;
   const theme = useTheme();
   return (
     <TableRow>
-      <TableCell align="center">{id}</TableCell>
+      <TableCell align="center">{index}</TableCell>
       <TableCell align="center">{title}</TableCell>
       <TableCell align="center">
         <Box
@@ -34,11 +38,11 @@ const TicketsTableRow = ({ row }: { row: IDocumentsItem }) => {
           }}
         >
           <Typography fontWeight={500} variant="caption">
-            {status ? 'پاسخ داده شده' : 'پاسخ داده نشده'}
+            {status}
           </Typography>
         </Box>
       </TableCell>
-      <TableCell align="center">{date}</TableCell>
+      <TableCell align="center">{createdAt&&format(createdAt,"yyyy-MM-dd")}</TableCell>
       <TableCell align="center">
         <Tooltip title="مشاهده جزئیات">
           <IconButton>

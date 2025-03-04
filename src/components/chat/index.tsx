@@ -1,6 +1,6 @@
 'use client';
 
-import type {IChatParticipant} from 'src/types/chat';
+import type {IChatParticipant} from 'src/types/chat-component';
 
 import {useForm} from "react-hook-form";
 import {useState, useCallback} from 'react';

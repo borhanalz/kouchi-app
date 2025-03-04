@@ -8,4 +8,7 @@ export const endpoints = Object.freeze({
     SEND_OTP: '/api/auth/send-otp',
     VERIFY_OTP: '/api/auth/verify-otp',
   },
+  TICKETS:{
+    LIST:'api/tickets/get-by-user'
+  }
 });

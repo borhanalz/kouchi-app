@@ -1,5 +1,5 @@
 import type { SWRConfiguration } from 'swr';
-import type { IChatMessage, IChatParticipant, IChatConversation } from 'src/types/chat';
+import type { IChatMessage, IChatParticipant, IChatConversation } from 'src/types/chat-component';
 
 import { useMemo } from 'react';
 import { keyBy } from 'es-toolkit';

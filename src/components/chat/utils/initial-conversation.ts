@@ -1,4 +1,4 @@
-import type { IChatParticipant } from 'src/types/chat';
+import type { IChatParticipant } from 'src/types/chat-component';
 
 import { uuidv4 } from 'minimal-shared/utils';
 

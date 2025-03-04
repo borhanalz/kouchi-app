@@ -20,7 +20,7 @@ import { useMockedUser } from 'src/auth/hooks';
 import { CustomPopover } from '../custom-popover';
 import { initialConversation } from './utils/initial-conversation';
 
-import type { IChatParticipant } from '../../types/chat';
+import type { IChatParticipant } from '../../types/chat-component';
 
 type Props = {
   disabled: boolean;

@@ -1,4 +1,4 @@
-import type { IChatParticipant } from 'src/types/chat';
+import type { IChatParticipant } from 'src/types/chat-component';
 
 import { useState, useCallback } from 'react';
 
