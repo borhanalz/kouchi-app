@@ -25,3 +25,8 @@ export interface IApiRegister {
   "message": string,
   "token": string
 }
+
+export interface ISendOtpFormData {
+  mobileNumber: string;
+  otpType: 'reset' | 'login';
+}

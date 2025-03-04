@@ -25,7 +25,7 @@ import { endpoints } from '../../hooks/endPoints';
 import { EditCreateRequest } from '../../lib/axios';
 import { useURLSearchParams } from '../../hooks/use-search-params';
 
-import type { IApiResetPassword } from '../../types/auth';
+import type {IApiResetPassword, IApiSendOtp, ISendOtpFormData} from '../../types/auth';
 // ------------------------------------------------------------------
 interface IResetPassowrdFormData {
   mobileNumber: string;
@@ -55,6 +55,12 @@ const AuthView = () => {
         payload
       ),
   });
+  const { mutateAsync: sendOtp } = useMutation({
+    mutationKey: ['resent-otp-reset-password'],
+    mutationFn: () =>
+      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {mobileNumber:getParam("mobileNumber"),otpType:'login'}),
+  });
+
   const methods = useForm<IResetPassowrdFormData>({
     resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
@@ -75,11 +81,13 @@ const AuthView = () => {
     }
   });
 
-  const handleTimeReset = () => {
-    console.log('test1');
-  };
-  const handleTimeOut = () => {
-    console.log('test');
+  const handleTimeReset = async() => {
+    try{
+      const res = await sendOtp();
+      console.log(res)
+    }catch (e){
+      console.log(e)
+    }
   };
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
@@ -102,7 +110,7 @@ const AuthView = () => {
             },
           }}
         />
-        <OtpTimer time={120} onTimeOut={handleTimeOut} onReset={handleTimeReset} />
+        <OtpTimer time={120} onReset={handleTimeReset} />
         <Field.Code name="otp" />
         <LoadingButton
           fullWidth

@@ -8,7 +8,7 @@ import { Iconify } from 'src/components/iconify';
 
 export interface OtpTimerProps {
   time: number;
-  onTimeOut: () => void;
+  onTimeOut?: () => void;
   onReset: () => void;
 }
 
@@ -27,7 +27,7 @@ function OtpTimer({ time, onTimeOut, onReset }: OtpTimerProps) {
       if (remainingTime > 0) {
         setRemainingTime((oldValue) => oldValue - 1);
       } else {
-        onTimeOut();
+        // onTimeOut();
         setShowTimer(false);
       }
     }, 1000);

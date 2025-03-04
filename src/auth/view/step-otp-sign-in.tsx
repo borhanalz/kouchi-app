@@ -18,17 +18,14 @@ import OtpTimer from '../../components/hook-form/otp-timer';
 import { FormReturnLink } from '../components/form-return-link';
 import {useURLSearchParams} from "../../hooks/use-search-params";
 
-import type { IApiSendOtp, IApiOtpLogin } from '../../types/auth';
+import type {IApiSendOtp, IApiOtpLogin, ISendOtpFormData} from '../../types/auth';
 
 // ------------------------------------------------------------------------------------------
 interface IOtpLoginFormData {
   mobileNumber: string;
   otp: string;
 }
-interface ISendOtpFormData {
-  mobileNumber: string;
-  otpType: 'reset' | 'otp';
-}
+
 export const OtpLoginSchema = zod.object({
   otp: zod.string().min(6, { message: 'کد ارسالی به شماره همراه خود را وارد کنید' }),
 });
@@ -52,10 +49,10 @@ const OtpSignInStep = () => {
       EditCreateRequest<IOtpLoginFormData, IApiOtpLogin>(endpoints.AUTH.VERIFY_OTP, payload),
   });
 
-  const { mutateAsync: sendOtp, isPending: sendOtpPending } = useMutation({
+  const { mutateAsync: sendOtp } = useMutation({
     mutationKey: ['resent-otp-reset-password'],
-    mutationFn: (data: ISendOtpFormData) =>
-      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, data),
+    mutationFn: () =>
+      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {mobileNumber:getParam("mobileNumber"),otpType:'login'}),
   });
 
   const HandleSubmit = handleSubmit(async (data) => {
@@ -64,18 +61,18 @@ const OtpSignInStep = () => {
     await checkUserSession?.();
   });
 
-  const handleTimeReset = () => {
-    console.log('test');
-  };
-
-  const handleTimeOut = () => {
-    console.log('Time out');
+  const handleTimeReset = async() => {
+    try{
+       await sendOtp();
+    }catch (e){
+      console.log(e)
+    }
   };
 
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
       <Stack spacing={2} mt={5}>
-        <OtpTimer time={120} onTimeOut={handleTimeOut} onReset={handleTimeReset} />
+        <OtpTimer time={120} onReset={handleTimeReset} />
         <Field.Code name="otp" />
         <LoadingButton
           fullWidth
