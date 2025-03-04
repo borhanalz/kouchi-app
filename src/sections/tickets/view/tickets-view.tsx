@@ -2,6 +2,7 @@
 
 import type { IDocumentsItem } from 'src/types/documents';
 
+import {useRouter} from "next/navigation";
 import { useBoolean } from 'minimal-shared/hooks';
 
 import Stack from '@mui/material/Stack';
@@ -15,8 +16,8 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { useTable, TableHeadCustom } from 'src/components/table';
 
 import { grey } from '../../../theme';
+import {paths} from "../../../routes/paths";
 import TicketsTableRow from '../tickets-table-row';
-import TicketsCreateDialog from '../tickets-create-dialog';
 // -----------------------------------------------------------------------------------------------------
 const TableHead = [
   { id: 'id', label: 'شماره' },
@@ -32,6 +33,7 @@ const data: IDocumentsItem[] = [
 const TicketsView = () => {
   const table = useTable();
   const dialogStatus = useBoolean();
+  const router = useRouter();
   return (
     <DashboardContent
       maxWidth={false}
@@ -44,7 +46,7 @@ const TicketsView = () => {
             startIcon={<Iconify icon="circularPlus" sx={{ width: 25, height: 25 }} />}
             color="primary"
             variant="contained"
-            onClick={dialogStatus.onTrue}
+            onClick={()=>router.push(paths.dashboard.tickets.create)}
           >
             تیکت جدید
           </Button>
@@ -61,7 +63,6 @@ const TicketsView = () => {
           </Scrollbar>
         </Card>
       </Stack>
-      {dialogStatus?.value && <TicketsCreateDialog dialogStatus={dialogStatus} />}
     </DashboardContent>
   );
 };

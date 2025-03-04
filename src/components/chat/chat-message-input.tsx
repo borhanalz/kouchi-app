@@ -1,8 +1,7 @@
-import type { IChatParticipant } from 'src/types/chat';
-
 import { useRef, useMemo, useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 
@@ -14,12 +13,14 @@ import { today } from 'src/utils/format-time';
 import { sendMessage, createConversation } from 'src/actions/chat';
 
 import { Iconify } from 'src/components/iconify';
+import { DeleteButton, SingleFilePreview } from 'src/components/upload/components/preview-single-file';
 
 import { useMockedUser } from 'src/auth/hooks';
 
+import { CustomPopover } from '../custom-popover';
 import { initialConversation } from './utils/initial-conversation';
 
-// ----------------------------------------------------------------------
+import type { IChatParticipant } from '../../types/chat';
 
 type Props = {
   disabled: boolean;
@@ -29,18 +30,19 @@ type Props = {
 };
 
 export function ChatMessageInput({
-  disabled,
-  recipients,
-  onAddRecipients,
-  selectedConversationId,
-}: Props) {
+                                   disabled,
+                                   recipients,
+                                   onAddRecipients,
+                                   selectedConversationId,
+                                 }: Props) {
   const router = useRouter();
-
   const { user } = useMockedUser();
-
   const fileRef = useRef<HTMLInputElement>(null);
+  const attachmentButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const [message, setMessage] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  const [popoverAnchor, setPopoverAnchor] = useState<null | HTMLElement>(null);
 
   const myContact: IChatParticipant = useMemo(
     () => ({
@@ -63,11 +65,16 @@ export function ChatMessageInput({
     me: myContact,
   });
 
-  const handleAttach = useCallback(() => {
+  const handleAttach = useCallback((event: React.MouseEvent<HTMLElement>) => {
+    setPopoverAnchor(event.currentTarget);
     if (fileRef.current) {
       fileRef.current.click();
     }
   }, []);
+
+  const handleClosePopover = () => {
+    setPopoverAnchor(null);
+  };
 
   const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
@@ -79,23 +86,33 @@ export function ChatMessageInput({
 
       try {
         if (selectedConversationId) {
-          // If the conversation already exists
           await sendMessage(selectedConversationId, messageData);
         } else {
-          // If the conversation does not exist
           const res = await createConversation(conversationData);
-          router.push(`${paths.app.root}?id=${res.conversation.id}`);
-
+          router.push(`${paths.dashboard.root}?id=${res.conversation.id}`);
           onAddRecipients([]);
         }
       } catch (error) {
         console.error(error);
       } finally {
         setMessage('');
+        setFile(null);
       }
     },
     [conversationData, message, messageData, onAddRecipients, router, selectedConversationId]
   );
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files ? event.target.files[0] : null;
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFile(null);
+    handleClosePopover();
+  };
 
   return (
     <>
@@ -108,7 +125,7 @@ export function ChatMessageInput({
         placeholder="گفت و گو کنید ..."
         startAdornment={
           <IconButton>
-            <Iconify icon="stickerLabel" />
+            <Iconify icon="send" />
           </IconButton>
         }
         endAdornment={
@@ -116,9 +133,14 @@ export function ChatMessageInput({
             <IconButton onClick={handleAttach}>
               <Iconify icon="galleryUpload" />
             </IconButton>
-            <IconButton onClick={handleAttach}>
-              <Iconify icon="attachment" />
-            </IconButton>
+            <Stack>
+              <IconButton
+                ref={attachmentButtonRef}
+                onClick={handleAttach}
+              >
+                <Iconify icon="attachment" />
+              </IconButton>
+            </Stack>
             <IconButton>
               <Iconify icon="microphone" />
             </IconButton>
@@ -134,7 +156,39 @@ export function ChatMessageInput({
         ]}
       />
 
-      <input type="file" ref={fileRef} style={{ display: 'none' }} />
+      {/* Custom Popover Above the Attachment Button */}
+      <CustomPopover
+        open={Boolean(popoverAnchor)}
+        anchorEl={popoverAnchor}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        sx={{ mt: -2 }}
+        slotProps={{ arrow: { placement: 'bottom-center' } }}
+
+      >
+        {file ? (
+          <Box sx={{ position: 'relative', p: 1, width: 100, height: 100 }}>
+            <SingleFilePreview file={file} />
+            <DeleteButton onClick={handleRemoveFile} />
+          </Box>
+        ) : (
+          <Box sx={{ p: 2 }}>No file selected</Box>
+        )}
+      </CustomPopover>
+
+      <input
+        type="file"
+        ref={fileRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
     </>
   );
 }

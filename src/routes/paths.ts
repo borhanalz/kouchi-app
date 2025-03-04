@@ -36,6 +36,7 @@ export const paths = {
     },
     tickets: {
       root: `${ROOTS.DASHBOARD}/tickets`,
+      create: `${ROOTS.DASHBOARD}/tickets/create`,
     },
   },
 };

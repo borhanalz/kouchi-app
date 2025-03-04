@@ -65,7 +65,7 @@ export function DeleteButton({ sx, ...other }: IconButtonProps) {
       ]}
       {...other}
     >
-      <Iconify icon="mingcute:close-line" width={18} />
+      <Iconify icon="remove" width={18} />
     </IconButton>
   );
 }
