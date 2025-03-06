@@ -16,12 +16,15 @@ import { grey } from '../../theme';
 import { Iconify } from '../../components/iconify';
 
 import type {ITicketFormData} from "../../types/tickets";
+import {useRouter} from "next/navigation";
+import {paths} from "../../routes/paths";
 
 // ------------------------------------------------------------------
 
 const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) => {
   const { title, status,createdAt } = row;
   const theme = useTheme();
+  const router = useRouter();
   return (
     <TableRow>
       <TableCell align="center">{index}</TableCell>
@@ -45,7 +48,7 @@ const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) =
       <TableCell align="center">{createdAt&&format(createdAt,"yyyy-MM-dd")}</TableCell>
       <TableCell align="center">
         <Tooltip title="مشاهده جزئیات">
-          <IconButton>
+          <IconButton onClick={()=>router.push(paths.dashboard.tickets.details(row?._id))}>
             <Iconify icon="eye" sx={{ cursor: 'pointer', color: grey[500] }} />
           </IconButton>
         </Tooltip>

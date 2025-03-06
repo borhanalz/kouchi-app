@@ -17,7 +17,7 @@ import { getMessage } from './utils/get-message';
 // ----------------------------------------------------------------------
 
 type Props = {
-  message: IChatMessage;
+  message: any;
   participants: IChatParticipant[];
   onOpenLightbox: (value: string) => void;
 };
@@ -25,23 +25,19 @@ type Props = {
 export function ChatMessageItem({ message, participants, onOpenLightbox }: Props) {
   const { user } = useMockedUser();
 
-  const { me, senderDetails, hasImage } = getMessage({
-    message,
-    participants,
-    currentUserId: `${user?.id}`,
-  });
+  const tt:any = { me:'f', senderDetails:{firstName:'ddd', avatarUrl:'dfdf'}, hasImage:false }
+  // eslint-disable-next-line no-unsafe-optional-chaining
+  const { firstName, avatarUrl } = tt?.senderDetails;
 
-  const { firstName, avatarUrl } = senderDetails;
-
-  const { body, createdAt } = message;
+  const { text:body, createdAt } = message;
 
   const renderInfo = () => (
     <Typography
       noWrap
       variant="caption"
-      sx={{ mb: 1, color: 'text.disabled', ...(!me && { mr: 'auto' }) }}
+      sx={{ mb: 1, color: 'text.disabled', ...(!tt?.me && { mr: 'auto' }) }}
     >
-      {!me && `${firstName}, `}
+      {!tt?.me && `${firstName}, `}
 
       {fToNow(createdAt)}
     </Typography>
@@ -56,11 +52,11 @@ export function ChatMessageItem({ message, participants, onOpenLightbox }: Props
         borderRadius: 1,
         typography: 'body2',
         bgcolor: 'background.neutral',
-        ...(me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
-        ...(hasImage && { p: 0, bgcolor: 'transparent' }),
+        ...(tt?.me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
+        ...(tt?.hasImage && { p: 0, bgcolor: 'transparent' }),
       }}
     >
-      {hasImage ? (
+      {tt?.hasImage ? (
         <Box
           component="img"
           alt="Attachment"
@@ -95,7 +91,7 @@ export function ChatMessageItem({ message, participants, onOpenLightbox }: Props
         transition: theme.transitions.create(['opacity'], {
           duration: theme.transitions.duration.shorter,
         }),
-        ...(me && { right: 0, left: 'unset' }),
+        ...(tt?.me && { right: 0, left: 'unset' }),
       })}
     >
       <IconButton size="small">
@@ -117,10 +113,10 @@ export function ChatMessageItem({ message, participants, onOpenLightbox }: Props
   }
 
   return (
-    <Box sx={{ mb: 5, display: 'flex', justifyContent: me ? 'flex-end' : 'unset' }}>
-      {!me && <Avatar alt={firstName} src={avatarUrl} sx={{ width: 32, height: 32, mr: 2 }} />}
+    <Box sx={{ mb: 5, display: 'flex', justifyContent: tt?.me ? 'flex-end' : 'unset' }}>
+      {!tt?.me && <Avatar alt={firstName} src={avatarUrl} sx={{ width: 32, height: 32, mr: 2 }} />}
 
-      <Stack alignItems={me ? 'flex-end' : 'flex-start'}>
+      <Stack alignItems={tt?.me ? 'flex-end' : 'flex-start'}>
         {renderInfo()}
 
         <Box

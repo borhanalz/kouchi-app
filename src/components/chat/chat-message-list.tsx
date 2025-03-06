@@ -55,11 +55,11 @@ export function ChatMessageList({ messages = [], participants, loading }: Props)
           flex: '1 1 auto',
         }}
       >
-        {messages.map((message) => (
+        {messages.map((message:any) => (
           <ChatMessageItem
-            key={message.id}
+            key={1}
             message={message}
-            participants={participants}
+            participants={message?.responderType}
             onOpenLightbox={() => lightbox.onOpen(message.body)}
           />
         ))}

@@ -27,7 +27,15 @@ import {useCollapseNav} from './hooks/use-collapse-nav';
 type ChatType = {
   isTicket?: boolean
 }
-
+const data:any = [
+  {
+    "responderType": "user",
+    "responderName": "test",
+    "text": "zarinpal",
+    "attachments": [],
+    "createdAt": "2025-03-04T21:53:33.728Z"
+  }
+]
 export function Chat({isTicket = false}: ChatType) {
   const router = useRouter();
 
@@ -83,12 +91,12 @@ export function Chat({isTicket = false}: ChatType) {
         nav: null,
         main: (
           <>
-            {selectedConversationId ? (
+            {data ? (
               conversationError ? (
                 <EmptyContent title={conversationError.message}/>
               ) : (
                 <ChatMessageList
-                  messages={conversation?.messages ?? []}
+                  messages={data ?? []}
                   participants={filteredParticipants}
                   loading={conversationLoading}
                 />
