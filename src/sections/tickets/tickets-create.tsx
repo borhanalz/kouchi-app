@@ -12,7 +12,7 @@ const CreateTicket = () => {
       sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column' }}
       title="تیکت جدید"
     >
-     <Chat isTicket/>
+     <Chat messages={[]} isTicket/>
     </DashboardContent>
   );
 };

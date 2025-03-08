@@ -46,7 +46,6 @@ export async function EditCreateRequest<APIBodyType, APIResponseType = any>(
   } else {
     response = await axiosInstance.post<APIResponseType>(url, data);
   }
-
   if (response.status !== 200) {
     throw new Error('Error add/edit');
   }

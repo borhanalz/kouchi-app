@@ -9,6 +9,9 @@ export const endpoints = Object.freeze({
     VERIFY_OTP: '/api/auth/verify-otp',
   },
   TICKETS:{
-    LIST:'api/tickets/get-by-user'
+    LIST:'api/tickets/get-by-user',
+    GET_BY_ID:'/api/tickets/get-by-id',
+    CREATE:"api/tickets/create",
+    ADD_RESPONSE:"api/tickets/add-response",
   }
 });

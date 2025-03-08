@@ -1,5 +1,3 @@
-import type { IChatMessage, IChatParticipant } from 'src/types/chat-component';
-
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -9,23 +7,23 @@ import { Lightbox, useLightBox } from 'src/components/lightbox';
 import { ChatMessageItem } from './chat-message-item';
 import { useMessagesScroll } from './hooks/use-messages-scroll';
 
+import type {ITicketResponse} from "../../types/tickets";
+
 // ----------------------------------------------------------------------
 
 type Props = {
-  loading: boolean;
-  messages: IChatMessage[];
-  participants: IChatParticipant[];
+  loading?: boolean;
+  messages: ITicketResponse[];
 };
 
-export function ChatMessageList({ messages = [], participants, loading }: Props) {
+export function ChatMessageList({ messages = [], loading }: Props) {
   const { messagesEndRef } = useMessagesScroll(messages);
 
   const slides = messages
     .filter((message) => message.contentType === 'image')
-    .map((message) => ({ src: message.body }));
+    .map((message) => ({ src: message.text }));
 
   const lightbox = useLightBox(slides);
-
   if (loading) {
     return (
       <Stack sx={{ flex: '1 1 auto', position: 'relative' }}>
@@ -57,14 +55,11 @@ export function ChatMessageList({ messages = [], participants, loading }: Props)
       >
         {messages.map((message:any) => (
           <ChatMessageItem
-            key={1}
+            key={message?.id}
             message={message}
-            participants={message?.responderType}
-            onOpenLightbox={() => lightbox.onOpen(message.body)}
           />
         ))}
       </Scrollbar>
-
       <Lightbox
         slides={slides}
         open={lightbox.open}

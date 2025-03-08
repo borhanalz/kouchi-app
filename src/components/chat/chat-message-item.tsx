@@ -1,8 +1,8 @@
-import type { IChatMessage, IChatParticipant } from 'src/types/chat-component';
+import type { IChatParticipant } from 'src/types/chat-component';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
+import {useTheme} from "@mui/material/styles";
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
@@ -12,32 +12,29 @@ import { Iconify } from 'src/components/iconify';
 
 import { useMockedUser } from 'src/auth/hooks';
 
-import { getMessage } from './utils/get-message';
+import type {ITicketResponse} from "../../types/tickets";
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  message: any;
-  participants: IChatParticipant[];
-  onOpenLightbox: (value: string) => void;
+  message: ITicketResponse;
 };
 
-export function ChatMessageItem({ message, participants, onOpenLightbox }: Props) {
-  const { user } = useMockedUser();
+export function ChatMessageItem({ message }: Props) {
+  const theme = useTheme();
+  const isUser = message?.responderType==="user";
 
-  const tt:any = { me:'f', senderDetails:{firstName:'ddd', avatarUrl:'dfdf'}, hasImage:false }
-  // eslint-disable-next-line no-unsafe-optional-chaining
-  const { firstName, avatarUrl } = tt?.senderDetails;
+  const { responderName } = message;
 
-  const { text:body, createdAt } = message;
+  const { text, createdAt } = message;
 
   const renderInfo = () => (
     <Typography
       noWrap
       variant="caption"
-      sx={{ mb: 1, color: 'text.disabled', ...(!tt?.me && { mr: 'auto' }) }}
+      sx={{ mb: 1, color: 'text.disabled', ...(isUser && { mr: 'auto' }) }}
     >
-      {!tt?.me && `${firstName}, `}
+      {isUser && `${responderName}, `}
 
       {fToNow(createdAt)}
     </Typography>
@@ -46,42 +43,41 @@ export function ChatMessageItem({ message, participants, onOpenLightbox }: Props
   const renderBody = () => (
     <Stack
       sx={{
-        p: 1.5,
+        p: 2,
         minWidth: 48,
         maxWidth: 320,
         borderRadius: 1,
-        typography: 'body2',
-        bgcolor: 'background.neutral',
-        ...(tt?.me && { color: 'grey.800', bgcolor: 'primary.lighter' }),
-        ...(tt?.hasImage && { p: 0, bgcolor: 'transparent' }),
+        bgcolor: theme.vars.palette.primary.light,
+        ...(!isUser && { color: 'grey.800', bgcolor: 'primary.light' }),
+        // ...(hasImage && { p: 0, bgcolor: 'transparent' }),
       }}
     >
-      {tt?.hasImage ? (
-        <Box
-          component="img"
-          alt="Attachment"
-          src={body}
-          onClick={() => onOpenLightbox(body)}
-          sx={{
-            width: 400,
-            height: 'auto',
-            borderRadius: 1.5,
-            cursor: 'pointer',
-            objectFit: 'cover',
-            aspectRatio: '16/11',
-            '&:hover': { opacity: 0.9 },
-          }}
-        />
-      ) : (
-        body
-      )}
+      {/*{hasImage ? (*/}
+      {/*  <Box*/}
+      {/*    component="img"*/}
+      {/*    alt="Attachment"*/}
+      {/*    src={text}*/}
+      {/*    onClick={() => onOpenLightbox(text)}*/}
+      {/*    sx={{*/}
+      {/*      width: 400,*/}
+      {/*      height: 'auto',*/}
+      {/*      borderRadius: 1.5,*/}
+      {/*      cursor: 'pointer',*/}
+      {/*      objectFit: 'cover',*/}
+      {/*      aspectRatio: '16/11',*/}
+      {/*      '&:hover': { opacity: 0.9 },*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*) : (*/}
+        <Typography lineHeight={1.8} variant='body1'>{text}</Typography>
+      {/*)}*/}
     </Stack>
   );
 
   const renderActions = () => (
     <Box
       className="message-actions"
-      sx={(theme) => ({
+      sx={() => ({
         pt: 0.5,
         left: 0,
         opacity: 0,
@@ -91,32 +87,32 @@ export function ChatMessageItem({ message, participants, onOpenLightbox }: Props
         transition: theme.transitions.create(['opacity'], {
           duration: theme.transitions.duration.shorter,
         }),
-        ...(tt?.me && { right: 0, left: 'unset' }),
+        ...(!isUser && { right: 0, left: 'unset' }),
       })}
     >
       <IconButton size="small">
-        <Iconify icon="solar:reply-bold" width={16} />
+        <Iconify icon="arrowBack" sx={{width:15,height:15}} />
       </IconButton>
 
       <IconButton size="small">
-        <Iconify icon="eva:smiling-face-fill" width={16} />
+        <Iconify icon="smile" sx={{width:15,height:15}} />
       </IconButton>
 
       <IconButton size="small">
-        <Iconify icon="solar:trash-bin-trash-bold" width={16} />
+        <Iconify icon="trash" sx={{width:15,height:15}} />
       </IconButton>
     </Box>
   );
 
-  if (!message.body) {
+  if (!message.text) {
     return null;
   }
 
   return (
-    <Box sx={{ mb: 5, display: 'flex', justifyContent: tt?.me ? 'flex-end' : 'unset' }}>
-      {!tt?.me && <Avatar alt={firstName} src={avatarUrl} sx={{ width: 32, height: 32, mr: 2 }} />}
-
-      <Stack alignItems={tt?.me ? 'flex-end' : 'flex-start'}>
+    <Box sx={{ mb: 5, display: 'flex', justifyContent: message?.responderType!=="user" ? 'flex-end' : 'unset' }}>
+      {/*{!me && <Avatar alt={firstName} src={img.src} sx={{ width: 32, height: 32, mr: 2 }} />}*/}
+      {/*<Image src={img} alt='img' style={{ width: 40,height:40,borderRadius:50 }} />*/}
+      <Stack alignItems={message?.responderType==="user" ? 'flex-end' : 'flex-start'}>
         {renderInfo()}
 
         <Box

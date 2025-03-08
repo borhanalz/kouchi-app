@@ -1,8 +1,7 @@
 'use client';
 
-import type { IDocumentsItem } from 'src/types/documents';
-
 import {format} from "date-fns-jalali";
+import {useRouter} from "next/navigation";
 
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
@@ -13,16 +12,15 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
 import { grey } from '../../theme';
+import {paths} from "../../routes/paths";
 import { Iconify } from '../../components/iconify';
 
 import type {ITicketFormData} from "../../types/tickets";
-import {useRouter} from "next/navigation";
-import {paths} from "../../routes/paths";
 
 // ------------------------------------------------------------------
 
 const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) => {
-  const { title, status,createdAt } = row;
+  const { title, status,createdAt,id } = row;
   const theme = useTheme();
   const router = useRouter();
   return (
@@ -48,7 +46,7 @@ const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) =
       <TableCell align="center">{createdAt&&format(createdAt,"yyyy-MM-dd")}</TableCell>
       <TableCell align="center">
         <Tooltip title="مشاهده جزئیات">
-          <IconButton onClick={()=>router.push(paths.dashboard.tickets.details(row?._id))}>
+          <IconButton onClick={()=>router.push(paths.dashboard.tickets.details(String(id)))}>
             <Iconify icon="eye" sx={{ cursor: 'pointer', color: grey[500] }} />
           </IconButton>
         </Tooltip>

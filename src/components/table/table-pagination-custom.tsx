@@ -26,6 +26,7 @@ export function TablePaginationCustom({
       <TablePagination
         rowsPerPageOptions={rowsPerPageOptions}
         component="div"
+        labelRowsPerPage='تعداد در هر صفحه'
         {...other}
         sx={{ borderTopColor: 'transparent' }}
       />

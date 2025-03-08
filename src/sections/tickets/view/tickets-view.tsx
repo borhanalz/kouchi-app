@@ -23,6 +23,7 @@ import TicketsTableRow from '../tickets-table-row';
 import {endpoints} from "../../../hooks/endPoints";
 
 import type {IApiTicketsList} from "../../../types/tickets";
+import ticketDetails from "../ticket-details";
 // -----------------------------------------------------------------------------------------------------
 const TableHead = [
   {id: 'id', label: 'شماره'},
@@ -50,6 +51,7 @@ const TicketsView = () => {
       mobileNumber: '09127017331'
     })
   });
+  console.log(TicketsList)
  const rowNumber = (index:number) => table.page * table.rowsPerPage + index + 1;
   return (
     <DashboardContent
@@ -81,7 +83,7 @@ const TicketsView = () => {
         </Card>
         <TablePaginationCustom
           page={table.page}
-          count={TicketsList?.tickets?.length || 0}
+          count={TicketsList?.totalCount as number}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           onRowsPerPageChange={table.onChangeRowsPerPage}

@@ -1,6 +1,7 @@
 import type { IChatMessage } from 'src/types/chat-component';
 
 import { useRef, useEffect, useCallback } from 'react';
+import {ITicketResponse} from "../../../types/tickets";
 
 // ----------------------------------------------------------------------
 
@@ -8,7 +9,7 @@ export type UseMessagesScrollReturn = {
   messagesEndRef: React.RefObject<HTMLDivElement>;
 };
 
-export function useMessagesScroll(messages: IChatMessage[]): UseMessagesScrollReturn {
+export function useMessagesScroll(messages: ITicketResponse[]): UseMessagesScrollReturn {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
