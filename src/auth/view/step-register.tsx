@@ -52,7 +52,7 @@ const RegisterStep = () => {
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       name: '',
-      mobileNumber: '',
+      mobileNumber: sessionStorage.getItem("mobileNumber") as string,
       password: '',
       otp: '',
     },

@@ -81,9 +81,8 @@ const PhoneNumberStep = () => {
             try {
               const response = await mutateAsync({ mobileNumber: mobileNumberVal });
               if (response?.hasPassword) {
-                router.push(
-                  `${paths.auth.password}?mobileNumber=${encodeURIComponent(mobileNumberVal)}`
-                );
+                sessionStorage.setItem("mobileNumber",mobileNumberVal)
+                router.push(paths.auth.password);
               } else {
                 router.push(paths.auth.signUp);
               }

@@ -3,7 +3,7 @@ import {toast} from "sonner";
 import {useForm} from "react-hook-form";
 import {usePathname} from "next/navigation";
 import {zodResolver} from "@hookform/resolvers/zod";
-import { useRef, useState, useCallback } from 'react';
+import {useRef, useState, useCallback} from 'react';
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 
 import Box from '@mui/material/Box';
@@ -12,53 +12,60 @@ import Button from "@mui/material/Button";
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
+import {paths} from 'src/routes/paths';
+import {useRouter} from 'src/routes/hooks';
 
-import { Iconify } from 'src/components/iconify';
-import { DeleteButton, SingleFilePreview } from 'src/components/upload/components/preview-single-file';
+import {Iconify} from 'src/components/iconify';
+import {DeleteButton, SingleFilePreview} from 'src/components/upload/components/preview-single-file';
 
 import {Field, Form} from "../hook-form";
 import {endpoints} from "../../hooks/endPoints";
-import { CustomPopover } from '../custom-popover';
+import {CustomPopover} from '../custom-popover';
 import {EditCreateRequest} from "../../lib/axios";
 import {IAddResponseFormData, IApiAddResponse, IApiCreateTicket, ICreateTicketFormData} from "../../types/tickets";
 //----------------------------------------------------------------------------------
 type Props = {
   isNewTicket?: boolean;
 };
+
 // --------------------------------------------------------------------------------
-export function ChatMessageInput({isNewTicket=true}:Props) {
-  const router =useRouter();
-  const pathname=usePathname();
+export function ChatMessageInput({isNewTicket = true}: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
   const queryClient = useQueryClient();
   const createTicketSchema = zod.object({
-    title: zod.string().min(2, { message: 'عنوان حداقل باید 2 کاراکتر باشد' }),
-    priority: zod.string().min(2, { message: 'میزان اهمیت حداقل باید 3 کاراکتر باشد' }),
-    description: zod.string().min(2, { message: 'پیغام حداقل باید 6 کاراکتر باشد' }),
-    category: zod.string().min(2, { message: 'موضوع حداقل باید 3 کاراکتر باشد' }),
+    title: zod.string().min(2, {message: 'عنوان حداقل باید 2 کاراکتر باشد'}),
+    priority: zod.string().min(2, {message: 'میزان اهمیت حداقل باید 3 کاراکتر باشد'}),
+    description: zod.string().min(2, {message: 'پیغام حداقل باید 6 کاراکتر باشد'}),
+    category: zod.string().min(2, {message: 'موضوع حداقل باید 3 کاراکتر باشد'}),
   });
 
   const fileRef = useRef<HTMLInputElement>(null);
   const attachmentButtonRef = useRef<HTMLButtonElement | null>(null);
-  const ticketId =pathname?.split("/")[3];
+  const ticketId = pathname?.split("/")[3];
   const [message, setMessage] = useState('');
   const [file, setFile] = useState<File | null>();
   const [popoverAnchor, setPopoverAnchor] = useState<null | HTMLElement>(null);
 
   const methods = useForm<ICreateTicketFormData>({
-    resolver:zodResolver(createTicketSchema),
-    defaultValues:{
+    resolver: zodResolver(createTicketSchema),
+    defaultValues: {
       title: '',
       priority: '',
-      description:'',
-      category:'',
+      description: '',
+      category: '',
     }
   });
-  const {handleSubmit}=methods;
+  const {handleSubmit} = methods;
 
-  const {mutateAsync:CreateTicket,isPending:createTicketPending}=useMutation({mutationKey:['create-ticket'],mutationFn:(data:ICreateTicketFormData)=>EditCreateRequest<ICreateTicketFormData,IApiCreateTicket>(endpoints.TICKETS.CREATE,data)})
-  const {mutateAsync:AddResponse,isPending:addResponsePending}=useMutation({mutationKey:['add-response-ticket'],mutationFn:(data:IAddResponseFormData)=>EditCreateRequest<IAddResponseFormData,IApiAddResponse>(endpoints.TICKETS.ADD_RESPONSE,data)})
+  const {mutateAsync: CreateTicket, isPending: createTicketPending} = useMutation({
+    mutationKey: ['create-ticket'],
+    mutationFn: (data: ICreateTicketFormData) => EditCreateRequest<ICreateTicketFormData, IApiCreateTicket>(endpoints.TICKETS.CREATE, data)
+  })
+  const {mutateAsync: AddResponse, isPending: addResponsePending} = useMutation({
+    mutationKey: ['add-response-ticket'],
+    mutationFn: (data: IAddResponseFormData) => EditCreateRequest<IAddResponseFormData, IApiAddResponse>(endpoints.TICKETS.ADD_RESPONSE, data,undefined,{"Content-Type":"multipart/form-data"})
+  })
 
   const handleAttach = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setPopoverAnchor(event.currentTarget);
@@ -76,42 +83,40 @@ export function ChatMessageInput({isNewTicket=true}:Props) {
   }, []);
 
   const handleSendMessage = handleSubmit(async (payloads) => {
-      try {
-        const response = await CreateTicket({
-          "title": payloads?.title,
-          "description": payloads?.description,
-          "category": payloads?.category,
-          "priority": payloads?.priority,
-          "requiresPayment":false,
-          "price": 1000
-        });
-        toast.success("تیکت با موفقیت ایجاد");
-        router.push(paths.dashboard.tickets.details(String(response.ticketId)));
-        queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
-      } catch (e) {
-        console.log(e)
-      }
-    });
+    try {
+      const response = await CreateTicket({
+        "title": payloads?.title,
+        "description": payloads?.description,
+        "category": payloads?.category,
+        "priority": payloads?.priority,
+        "requiresPayment": false,
+        "price": 1000
+      });
+      toast.success("تیکت با موفقیت ایجاد");
+      router.push(paths.dashboard.tickets.details(String(response.ticketId)));
+      queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
+    } catch (e) {
+      console.log(e)
+    }
+  });
 
-  const handleSendResponse = async()=>{
-    console.log(message)
-    if(message!=='') {
+  const handleSendResponse = async () => {
+    if (message !== '') {
       try {
-        const response = await AddResponse({
+        await AddResponse({
           ticketId: Number(ticketId),
           "responderType": "user",
           "responderName": "test",
           "text": message,
-          "attachments": []
+          "attachments": file ?? null
         });
-        console.log(response);
         queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
-        setMessage('')
-        // router.push(paths.dashboard.tickets.details(String(response.ticketId)));
+        setMessage('');
+        setFile(null);
       } catch (e) {
         console.log(e)
       }
-    }else {
+    } else {
       toast.error("لطفا پیغام خود را وارد کنید")
     }
   }
@@ -130,7 +135,7 @@ export function ChatMessageInput({isNewTicket=true}:Props) {
 
   return (
     <>
-      {isNewTicket?<Form methods={methods} onSubmit={handleSendMessage}>
+      {isNewTicket ? <Form methods={methods} onSubmit={handleSendMessage}>
         <Stack spacing={2} p={2}>
           <Field.Text name='title' label='عنوان'/>
           <Field.Text name='category' label='موضوع'/>
@@ -138,7 +143,7 @@ export function ChatMessageInput({isNewTicket=true}:Props) {
           <Field.Text name='description' label='پیغام ...'/>
           <Button type='submit' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
         </Stack>
-      </Form>:<InputBase
+      </Form> : <InputBase
         name="chat-message"
         id="chat-message-input"
         value={message}
@@ -146,25 +151,19 @@ export function ChatMessageInput({isNewTicket=true}:Props) {
         placeholder="گفت و گو کنید ..."
         startAdornment={
           <IconButton onClick={handleSendResponse}>
-            {addResponsePending?<Iconify icon="circularLoading"/>:<Iconify icon="send"/>}
+            {addResponsePending ? <Iconify icon="circularLoading"/> : <Iconify icon="send"/>}
           </IconButton>
         }
         endAdornment={
-          <Box sx={{ flexShrink: 0, display: 'flex' }}>
-            <IconButton onClick={handleAttach}>
-              <Iconify icon="galleryUpload" />
-            </IconButton>
+          <Box sx={{flexShrink: 0, display: 'flex'}}>
             <Stack>
               <IconButton
                 ref={attachmentButtonRef}
                 onClick={handleAttach}
               >
-                <Iconify icon="attachment" />
+                <Iconify icon="attachment"/>
               </IconButton>
             </Stack>
-            <IconButton>
-              <Iconify icon="microphone" />
-            </IconButton>
           </Box>
         }
         sx={[
@@ -189,23 +188,23 @@ export function ChatMessageInput({isNewTicket=true}:Props) {
           vertical: 'bottom',
           horizontal: 'center',
         }}
-        sx={{ mt: -2 }}
-        slotProps={{ arrow: { placement: 'bottom-center' } }}
+        sx={{mt: -2}}
+        slotProps={{arrow: {placement: 'bottom-center'}}}
       >
         {file ? (
-          <Box sx={{ position: 'relative', p: 1, width: 100, height: 100 }}>
-            <SingleFilePreview file={file} />
-            <DeleteButton onClick={handleRemoveFile} />
+          <Box sx={{position: 'relative', p: 1, width: 100, height: 100}}>
+            <SingleFilePreview file={file}/>
+            <DeleteButton onClick={handleRemoveFile}/>
           </Box>
         ) : (
-          <Box sx={{ p: 2 }}>No file selected</Box>
+          <Box sx={{p: 2}}>No file selected</Box>
         )}
       </CustomPopover>
 
       <input
         type="file"
         ref={fileRef}
-        style={{ display: 'none' }}
+        style={{display: 'none'}}
         onChange={handleFileChange}
       />
     </>

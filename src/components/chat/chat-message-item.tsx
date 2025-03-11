@@ -24,7 +24,7 @@ export function ChatMessageItem({ message }: Props) {
   const theme = useTheme();
   const isUser = message?.responderType==="user";
 
-  const { responderName } = message;
+  const { responderName,attachments } = message;
 
   const { text, createdAt } = message;
 
@@ -49,28 +49,26 @@ export function ChatMessageItem({ message }: Props) {
         borderRadius: 1,
         bgcolor: theme.vars.palette.primary.light,
         ...(!isUser && { color: 'grey.800', bgcolor: 'primary.light' }),
-        // ...(hasImage && { p: 0, bgcolor: 'transparent' }),
       }}
     >
-      {/*{hasImage ? (*/}
-      {/*  <Box*/}
-      {/*    component="img"*/}
-      {/*    alt="Attachment"*/}
-      {/*    src={text}*/}
-      {/*    onClick={() => onOpenLightbox(text)}*/}
-      {/*    sx={{*/}
-      {/*      width: 400,*/}
-      {/*      height: 'auto',*/}
-      {/*      borderRadius: 1.5,*/}
-      {/*      cursor: 'pointer',*/}
-      {/*      objectFit: 'cover',*/}
-      {/*      aspectRatio: '16/11',*/}
-      {/*      '&:hover': { opacity: 0.9 },*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*) : (*/}
+      {attachments?.length>0 ? (
+          <Stack spacing={2}>
+            <Typography>{text}</Typography>
+            <Box
+              sx={{
+                borderRadius: 1.5,
+                cursor: 'pointer',
+                backgroundColor:theme.vars.palette.grey[300],
+                p:1,
+                '&:hover': { opacity: 0.9 },
+              }}
+            >
+              <Typography variant='caption'>{attachments[0]}</Typography>
+            </Box>
+          </Stack>
+      ) : (
         <Typography lineHeight={1.8} variant='body1'>{text}</Typography>
-      {/*)}*/}
+      )}
     </Stack>
   );
 

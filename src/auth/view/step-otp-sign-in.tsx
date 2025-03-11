@@ -32,12 +32,12 @@ export const OtpLoginSchema = zod.object({
 // ----------------------------------------------------------------------------------------------
 const OtpSignInStep = () => {
   const { checkUserSession } = useAuthContext();
-  const {getParam} = useURLSearchParams();
+  const mobileNumber = sessionStorage.getItem("mobileNumber") as string
 
   const methods = useForm<IOtpLoginFormData>({
     resolver: zodResolver(OtpLoginSchema),
     defaultValues: {
-      mobileNumber: getParam("mobileNumber"),
+      mobileNumber: '',
       otp: '',
     },
   });
@@ -52,11 +52,11 @@ const OtpSignInStep = () => {
   const { mutateAsync: sendOtp } = useMutation({
     mutationKey: ['resent-otp-reset-password'],
     mutationFn: () =>
-      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {mobileNumber:getParam("mobileNumber"),otpType:'login'}),
+      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {mobileNumber:mobileNumber,otpType:'login'}),
   });
 
   const HandleSubmit = handleSubmit(async (data) => {
-    const response = await mutateAsync({...data,mobileNumber:getParam('mobileNumber') });
+    const response = await mutateAsync({...data,mobileNumber });
     setSession(response?.token);
     await checkUserSession?.();
   });

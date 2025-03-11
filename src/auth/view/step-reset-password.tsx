@@ -23,7 +23,6 @@ import { FormReturnLink } from 'src/auth/components/form-return-link';
 
 import { endpoints } from '../../hooks/endPoints';
 import { EditCreateRequest } from '../../lib/axios';
-import { useURLSearchParams } from '../../hooks/use-search-params';
 
 import type {IApiResetPassword, IApiSendOtp, ISendOtpFormData} from '../../types/auth';
 // ------------------------------------------------------------------
@@ -45,7 +44,6 @@ export const ResetPasswordSchema = zod.object({
 const AuthView = () => {
   const showPassword = useBoolean();
   const router = useRouter();
-  const { getParam } = useURLSearchParams();
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['update-password'],
@@ -58,13 +56,13 @@ const AuthView = () => {
   const { mutateAsync: sendOtp } = useMutation({
     mutationKey: ['resent-otp-reset-password'],
     mutationFn: () =>
-      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {mobileNumber:getParam("mobileNumber"),otpType:'login'}),
+      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {mobileNumber:sessionStorage.getItem("mobileNumber") as string,otpType:'login'}),
   });
 
   const methods = useForm<IResetPassowrdFormData>({
     resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
-      mobileNumber: getParam('mobileNumber'),
+      mobileNumber: '',
       newPassword: '',
       otp: '',
     },

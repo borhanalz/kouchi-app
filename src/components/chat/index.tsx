@@ -62,6 +62,7 @@ export function Chat({isTicket = false, messages}: ChatType) {
     )
     : [];
   const hasConversation = selectedConversationId && conversation;
+  console.log(messages)
   return (
     <ChatLayout
       slots={{

@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type {AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders} from 'axios';
 
 import axios from 'axios';
 
@@ -38,13 +38,14 @@ export async function GetRequest<APIResponseType>(
 export async function EditCreateRequest<APIBodyType, APIResponseType = any>(
   url: string,
   data: APIBodyType,
-  id?: number
+  id?: number,
+  headers?:RawAxiosRequestHeaders
 ): Promise<APIResponseType> {
   let response: AxiosResponse<APIResponseType> | undefined = undefined;
   if (id !== undefined) {
     response = await axiosInstance.put<APIResponseType>(url, data);
   } else {
-    response = await axiosInstance.post<APIResponseType>(url, data);
+    response = await axiosInstance.post<APIResponseType>(url, data,{headers:headers});
   }
   if (response.status !== 200) {
     throw new Error('Error add/edit');
