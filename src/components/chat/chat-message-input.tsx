@@ -60,7 +60,7 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
 
   const {mutateAsync: CreateTicket, isPending: createTicketPending} = useMutation({
     mutationKey: ['create-ticket'],
-    mutationFn: (data: ICreateTicketFormData) => EditCreateRequest<ICreateTicketFormData, IApiCreateTicket>(endpoints.TICKETS.CREATE, data)
+    mutationFn: (data: ICreateTicketFormData) => EditCreateRequest<ICreateTicketFormData, IApiCreateTicket>(endpoints.TICKETS.CREATE, data,undefined,{"Content-Type":"multipart/form-data"})
   })
   const {mutateAsync: AddResponse, isPending: addResponsePending} = useMutation({
     mutationKey: ['add-response-ticket'],
@@ -83,6 +83,14 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
   }, []);
 
   const handleSendMessage = handleSubmit(async (payloads) => {
+    console.log({
+      "title": payloads?.title,
+      "description": payloads?.description,
+      "category": payloads?.category,
+      "priority": payloads?.priority,
+      "requiresPayment": false,
+      "price": 1000
+    })
     try {
       const response = await CreateTicket({
         "title": payloads?.title,
@@ -90,7 +98,8 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
         "category": payloads?.category,
         "priority": payloads?.priority,
         "requiresPayment": false,
-        "price": 1000
+        "price": 1000,
+        attachment:null
       });
       toast.success("تیکت با موفقیت ایجاد");
       router.push(paths.dashboard.tickets.details(String(response.ticketId)));
@@ -140,7 +149,7 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
           <Field.Text name='title' label='عنوان'/>
           <Field.Text name='category' label='موضوع'/>
           <Field.Text name='priority' label='میزان اهمیت'/>
-          <Field.Text name='description' label='پیغام ...'/>
+          <Field.Text type='text' name='description' label='پیغام ...'/>
           <Button type='submit' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
         </Stack>
       </Form> : <InputBase

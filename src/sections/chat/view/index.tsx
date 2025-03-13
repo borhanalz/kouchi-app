@@ -12,7 +12,7 @@ const ChatView = () => (
     sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column' }}
     title="گفت و گو با کوچی"
   >
-    <Chat />
+    <Chat messages={[]} />
   </DashboardContent>
 );
 export default ChatView;

@@ -38,8 +38,8 @@ const ProfileView = () => {
         <Stack spacing={2}>
           <TitleValue title='نام' value={selectUserData?.name as string}/>
 
-          <TitleValue title='شماره همراه' value={selectUserData?.mobileNumber}/>
-          <TitleValue title='ایمیل' value={selectUserData?.email}/>
+          <TitleValue title='شماره همراه' value={selectUserData?.mobileNumber as string}/>
+          <TitleValue title='ایمیل' value={selectUserData?.email as string}/>
         </Stack>
       </Stack>
     </Stack>
