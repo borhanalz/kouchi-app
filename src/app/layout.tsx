@@ -19,6 +19,7 @@ import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/component
 import { AuthProvider } from 'src/auth/context/jwt';
 
 import ReactQueryProvider from '../lib/react-query/react-query-provider';
+import StoreProvider from "../lib/redux/store-provider";
 
 // ----------------------------------------------------------------------
 
@@ -70,6 +71,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           modeStorageKey={themeConfig.modeStorageKey}
           attribute={themeConfig.cssVariables.colorSchemeSelector}
         />
+        <StoreProvider>
         <ReactQueryProvider>
           <AuthProvider>
             <SettingsProvider
@@ -92,6 +94,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             </SettingsProvider>
           </AuthProvider>
         </ReactQueryProvider>
+        </StoreProvider>
       </body>
     </html>
   );

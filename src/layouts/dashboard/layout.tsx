@@ -4,46 +4,47 @@ import type { Breakpoint } from '@mui/material/styles';
 import type { NavSectionProps } from 'src/components/nav-section';
 
 import { merge } from 'es-toolkit';
+import { useRouter } from 'next/navigation';
+import {useQuery} from "@tanstack/react-query";
 import { useBoolean } from 'minimal-shared/hooks';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import { iconButtonClasses } from '@mui/material/IconButton';
 
-import { _contacts, _notifications } from 'src/_mock';
+import { _notifications } from 'src/_mock';
 
 import { Logo } from 'src/components/logo';
 import { useSettingsContext } from 'src/components/settings';
 
 import { NavMobile } from './nav-mobile';
+import { paths } from '../../routes/paths';
+import {GetRequest} from "../../lib/axios";
 import { VerticalDivider } from './content';
 import { NavVertical } from './nav-vertical';
 import { layoutClasses } from '../core/classes';
+import {endpoints} from "../../hooks/endPoints";
 import { NavHorizontal } from './nav-horizontal';
-import { _account } from '../nav-config-account';
 import { MainSection } from '../core/main-section';
+import { Iconify } from '../../components/iconify';
 import { Searchbar } from '../components/searchbar';
-import { _workspaces } from '../nav-config-workspace';
+import {useAppDispatch} from "../../lib/redux/hooks";
 import { MenuButton } from '../components/menu-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
 import { AccountDrawer } from '../components/account-drawer';
+import {setUserInfo} from "../../lib/redux/slices/user-slice";
 import { SettingsButton } from '../components/settings-button';
-import { LanguagePopover } from '../components/language-popover';
-import { ContactsPopover } from '../components/contacts-popover';
-import { WorkspacesPopover } from '../components/workspaces-popover';
 import { navData as dashboardNavData } from '../nav-config-dashboard';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
 import { NotificationsDrawer } from '../components/notifications-drawer';
 
+import type {IApiUserGetInfo} from "../../types/user";
 import type { MainSectionProps } from '../core/main-section';
 import type { HeaderSectionProps } from '../core/header-section';
 import type { LayoutSectionProps } from '../core/layout-section';
-import Button from '@mui/material/Button';
-import { Iconify } from '../../components/iconify';
-import { useRouter } from 'next/navigation';
-import { paths } from '../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +72,9 @@ export function DashboardLayout({
 
   const settings = useSettingsContext();
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const {data:userInfo} = useQuery({queryKey:['user-info'],queryFn:()=>GetRequest<IApiUserGetInfo>(endpoints.PROFILE.GET_INFO).then(res=>dispatch(setUserInfo({info:res.user})))});
 
   const navVars = dashboardNavColorVars(theme, settings.state.navColor, settings.state.navLayout);
 
@@ -81,7 +85,7 @@ export function DashboardLayout({
   const isNavMini = settings.state.navLayout === 'mini';
   const isNavHorizontal = settings.state.navLayout === 'horizontal';
   const isNavVertical = isNavMini || settings.state.navLayout === 'vertical';
-
+  console.log(userInfo)
   const renderHeader = () => {
     const headerSlotProps: HeaderSectionProps['slotProps'] = {
       container: {
@@ -138,7 +142,7 @@ export function DashboardLayout({
         </>
       ),
       rightArea: (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.75 } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 5 } }}>
           <Button
             variant="contained"
             color="primary"
@@ -171,7 +175,7 @@ export function DashboardLayout({
           <SettingsButton />
 
           {/** @slot Account drawer */}
-          <AccountDrawer data={_account} />
+          <AccountDrawer data={userInfo?.payload?.info} />
         </Box>
       ),
     };

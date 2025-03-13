@@ -13,5 +13,8 @@ export const endpoints = Object.freeze({
     GET_BY_ID:'/api/tickets/get-by-id',
     CREATE:"api/tickets/create",
     ADD_RESPONSE:"api/tickets/add-response",
+  },
+  PROFILE:{
+    GET_INFO:'api/user/info'
   }
 });

@@ -12,7 +12,7 @@ import { varTap, varHover, AnimateBorder, transitionTap } from 'src/components/a
 // ----------------------------------------------------------------------
 
 export type AccountButtonProps = IconButtonProps & {
-  photoURL: string;
+  photoURL?: string;
   displayName: string;
 };
 

@@ -1,24 +1,12 @@
 'use client';
 
-import type {IChatParticipant} from 'src/types/chat-component';
-
-import {useForm} from "react-hook-form";
-import {useState, useCallback} from 'react';
-
 import {useSearchParams} from 'src/routes/hooks';
 
-import {useGetContacts, useGetConversation, useGetConversations} from 'src/actions/chat';
-
 import {EmptyContent} from 'src/components/empty-content';
-
-import {useMockedUser} from 'src/auth/hooks';
 
 import {ChatLayout} from './layout';
 import {ChatMessageList} from './chat-message-list';
 import {ChatMessageInput} from './chat-message-input';
-import {ChatHeaderDetail} from './chat-header-detail';
-import {ChatHeaderCompose} from './chat-header-compose';
-import {useCollapseNav} from './hooks/use-collapse-nav';
 
 import type {ITicketResponse} from "../../types/tickets";
 
@@ -29,20 +17,20 @@ type ChatType = {
 }
 
 export function Chat({isTicket = false, messages}: ChatType) {
-  const {user} = useMockedUser();
-
-  const {contacts} = useGetContacts();
+  // const {user} = useMockedUser();
+  //
+  // const {contacts} = useGetContacts();
 
   const searchParams = useSearchParams();
   const selectedConversationId = searchParams.get('id') || '';
 
-  const {conversations, conversationsLoading} = useGetConversations();
-  const {conversation, conversationError, conversationLoading} =
-    useGetConversation(selectedConversationId);
+  // const {conversations, conversationsLoading} = useGetConversations();
+  // const {conversation, conversationError, conversationLoading} =
+  //   useGetConversation(selectedConversationId);
 
-  const roomNav = useCollapseNav();
-
-  const [recipients, setRecipients] = useState<IChatParticipant[]>([]);
+  // const roomNav = useCollapseNav();
+  //
+  // const [recipients, setRecipients] = useState<IChatParticipant[]>([]);
 
   // useEffect(() => {
   //   if (!selectedConversationId) {
@@ -52,29 +40,30 @@ export function Chat({isTicket = false, messages}: ChatType) {
   //   }
   // }, [conversationError, router, selectedConversationId]);
 
-  const handleAddRecipients = useCallback((selected: IChatParticipant[]) => {
-    setRecipients(selected);
-  }, []);
-
-  const filteredParticipants: IChatParticipant[] = conversation
-    ? conversation.participants.filter(
-      (participant: IChatParticipant) => participant.id !== `${user?.id}`
-    )
-    : [];
-  const hasConversation = selectedConversationId && conversation;
+  // const handleAddRecipients = useCallback((selected: IChatParticipant[]) => {
+  //   setRecipients(selected);
+  // }, []);
+  //
+  // const filteredParticipants: IChatParticipant[] = conversation
+  //   ? conversation.participants.filter(
+  //     (participant: IChatParticipant) => participant.id !== `${user?.id}`
+  //   )
+  //   : [];
+  const hasConversation = messages?.length > 0;
   console.log(messages)
   return (
     <ChatLayout
       slots={{
-        header: hasConversation ? (
-          <ChatHeaderDetail
-            collapseNav={roomNav}
-            participants={filteredParticipants}
-            loading={conversationLoading}
-          />
-        ) : (
-          <ChatHeaderCompose contacts={contacts} onAddRecipients={handleAddRecipients}/>
-        ),
+        // header: hasConversation ? (
+        //   <ChatHeaderDetail
+        //     collapseNav={roomNav}
+        //     participants={filteredParticipants}
+        //     loading={conversationLoading}
+        //   />
+        // ) : (
+        //   <ChatHeaderCompose contacts={contacts} onAddRecipients={handleAddRecipients}/>
+        // ),
+        header:null,
         nav: null,
         main: (
           <>
@@ -82,7 +71,6 @@ export function Chat({isTicket = false, messages}: ChatType) {
               <ChatMessageList
                 messages={messages ?? []}
                 // participants={filteredParticipants}
-                loading={conversationLoading}
               />
             ) : (
               <EmptyContent

@@ -42,7 +42,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
     if (!authenticated) {
       const { method } = CONFIG.auth;
 
-      const signInPath = signInPaths[method];
+      const signInPath = signInPaths.jwt;
       const redirectPath = createRedirectPath(signInPath);
 
       router.replace(redirectPath);

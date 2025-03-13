@@ -2,11 +2,10 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 import { Iconify } from 'src/components/iconify';
 
-import type { AccountDrawerProps } from './components/account-drawer';
 
 // ----------------------------------------------------------------------
 
-export const _account: AccountDrawerProps['data'] = [
+export const _account: any = [
   { label: 'Home', href: '/', icon: <Iconify icon="solar:home-angle-bold-duotone" /> },
   {
     label: 'Profile',
