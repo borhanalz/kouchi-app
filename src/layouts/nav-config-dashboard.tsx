@@ -68,7 +68,7 @@ export const navData: NavSectionProps['data'] = [
       },
       {
         title: 'اطلاعات کاربری',
-        path: '',
+        path: paths.dashboard.profile.root,
         icon: ICONS.userInfo,
       },
       // { title: 'Two', path: paths.app.two, icon: ICONS.ecommerce },

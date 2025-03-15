@@ -1,7 +1,7 @@
 'use client';
 
-import type {IconButtonProps} from '@mui/material/IconButton';
 
+import {useRouter} from "next/navigation";
 import {usePopover} from 'minimal-shared/hooks';
 
 import Stack from "@mui/material/Stack";
@@ -9,18 +9,16 @@ import Avatar from '@mui/material/Avatar';
 import Divider from "@mui/material/Divider";
 import MenuList from '@mui/material/MenuList';
 import MenuItem from "@mui/material/MenuItem";
-
-import {usePathname} from 'src/routes/hooks';
+import Typography from "@mui/material/Typography";
 
 import {Iconify} from 'src/components/iconify';
 import {AnimateBorder} from 'src/components/animate';
 
 import {useMockedUser} from 'src/auth/hooks';
 
-import {CustomPopover} from "../../components/custom-popover";
-import Typography from "@mui/material/Typography";
+import {paths} from "../../routes/paths";
 import {AccountButton} from "./account-button";
-import Button from "@mui/material/Button";
+import {CustomPopover} from "../../components/custom-popover";
 
 // ----------------------------------------------------------------------
 export interface IAccountDrawer {
@@ -35,23 +33,8 @@ export interface IAccountDrawer {
 };
 
 export function AccountDrawer({data}:IAccountDrawer) {
-  const pathname = usePathname();
+  const router = useRouter();
   const {open, anchorEl, onClose, onOpen} = usePopover();
-  const {user} = useMockedUser();
-
-  const renderAvatar = () => (
-    <AnimateBorder
-      sx={{mb: 2, p: '6px', width: 96, height: 96, borderRadius: '50%'}}
-      slotProps={{
-        primaryBorder: {size: 120, sx: {color: 'primary.main'}},
-      }}
-    >
-      <Avatar src={user?.photoURL} alt={user?.displayName} sx={{width: 1, height: 1}}>
-        {user?.displayName?.charAt(0).toUpperCase()}
-      </Avatar>
-    </AnimateBorder>
-  );
-
 
   const renderMenuActions = () => (
     <CustomPopover
@@ -68,7 +51,7 @@ export function AccountDrawer({data}:IAccountDrawer) {
          <Typography>{data?.name}</Typography>
        </MenuItem>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={()=>router.push(paths.dashboard.profile.root)}>
           <Stack direction='row' spacing={0.5} sx={{py:1,px:0.5}}>
             <Iconify icon='profile'/>
             <Typography variant='body2'>پروفایل</Typography>
@@ -91,7 +74,6 @@ export function AccountDrawer({data}:IAccountDrawer) {
     <>
       <AccountButton
         onClick={onOpen}
-        // photoURL={user?.photoURL}
         displayName={data?.name as string}
       />
       {renderMenuActions()}

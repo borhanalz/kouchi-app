@@ -38,11 +38,11 @@ export async function GetRequest<APIResponseType>(
 export async function EditCreateRequest<APIBodyType, APIResponseType = any>(
   url: string,
   data: APIBodyType,
-  id?: number,
-  headers?:RawAxiosRequestHeaders
+  headers?:RawAxiosRequestHeaders,
+  reqType?:'post'|'put'
 ): Promise<APIResponseType> {
   let response: AxiosResponse<APIResponseType> | undefined = undefined;
-  if (id !== undefined) {
+  if (reqType==="put") {
     response = await axiosInstance.put<APIResponseType>(url, data);
   } else {
     response = await axiosInstance.post<APIResponseType>(url, data,{headers:headers});

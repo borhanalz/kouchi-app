@@ -14,15 +14,17 @@ import { varTap, varHover, AnimateBorder, transitionTap } from 'src/components/a
 export type AccountButtonProps = IconButtonProps & {
   photoURL?: string;
   displayName: string;
+  height?:number,
+  width?:number
 };
 
-export function AccountButton({ photoURL, displayName, sx, ...other }: AccountButtonProps) {
+export function AccountButton({ photoURL,height,width, displayName, sx, ...other }: AccountButtonProps) {
   const renderFallback = () => (
     <Avatar
       sx={[
         (theme) => ({
-          width: 40,
-          height: 40,
+          width: width??40,
+          height: height?? 40,
           border: `solid 2px ${theme.vars.palette.background.default}`,
         }),
       ]}
@@ -50,7 +52,7 @@ export function AccountButton({ photoURL, displayName, sx, ...other }: AccountBu
     >
       <NoSsr fallback={renderFallback()}>
         <AnimateBorder
-          sx={{ p: '3px', borderRadius: '50%', width: 40, height: 40 }}
+          sx={{ p: '3px', borderRadius: '50%', width: width??40, height: height??40 }}
           slotProps={{
             primaryBorder: { size: 60, width: '1px', sx: { color: 'primary.main' } },
             secondaryBorder: { sx: { color: 'warning.main' } },

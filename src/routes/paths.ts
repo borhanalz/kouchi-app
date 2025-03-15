@@ -39,5 +39,8 @@ export const paths = {
       create: `${ROOTS.DASHBOARD}/tickets/create`,
       details:(id:string)=>`${ROOTS.DASHBOARD}/tickets/${id}`
     },
+    profile:{
+      root:`${ROOTS.DASHBOARD}/profile`,
+    }
   },
 };
