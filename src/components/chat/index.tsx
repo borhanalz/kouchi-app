@@ -1,14 +1,25 @@
 'use client';
 
-import {useSearchParams} from 'src/routes/hooks';
+import {toast} from "sonner";
+import {z as zod} from "zod";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 
-import {EmptyContent} from 'src/components/empty-content';
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 
 import {ChatLayout} from './layout';
+import {Field, Form} from "../hook-form";
+import {paths} from "../../routes/paths";
+import {useRouter} from "../../routes/hooks";
+import {endpoints} from "../../hooks/endPoints";
+import {EditCreateRequest} from "../../lib/axios";
 import {ChatMessageList} from './chat-message-list';
 import {ChatMessageInput} from './chat-message-input';
 
-import type {ITicketResponse} from "../../types/tickets";
+import type {IApiCreateTicket, ICreateTicketFormData, ITicketResponse} from "../../types/tickets";
+import {useTheme} from "@mui/material/styles";
 
 // ----------------------------------------------------------------------
 type ChatType = {
@@ -17,42 +28,65 @@ type ChatType = {
 }
 
 export function Chat({isTicket = false, messages}: ChatType) {
-  // const {user} = useMockedUser();
-  //
-  // const {contacts} = useGetContacts();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const theme = useTheme()
+  const createTicketSchema = zod.object({
+    title: zod.string().min(2, {message: 'عنوان حداقل باید 2 کاراکتر باشد'}),
+    priority: zod.string().min(2, {message: 'میزان اهمیت حداقل باید 3 کاراکتر باشد'}),
+    description: zod.string().min(2, {message: 'پیغام حداقل باید 6 کاراکتر باشد'}),
+    category: zod.string().min(2, {message: 'موضوع حداقل باید 3 کاراکتر باشد'}),
+    attachments: zod.custom().transform((data, ctx) => {
+      const hasFile = data instanceof File || (typeof data === 'string' && !!data.length);
+      if (!hasFile) {
+        ctx.addIssue({
+          code: zod.ZodIssueCode.custom,
+          message: 'فایل را انتخاب کنید',
+        });
+        return null;
+      }
+      return data;
+    }),
+  });
+  const methods = useForm<ICreateTicketFormData>({
+    resolver: zodResolver(createTicketSchema),
+    defaultValues: {
+      title: '',
+      priority: '',
+      description: '',
+      category: '',
+      attachments:null
+    }
+  });
+  const {handleSubmit,setValue} = methods;
 
-  const searchParams = useSearchParams();
-  const selectedConversationId = searchParams.get('id') || '';
+  const {mutateAsync: CreateTicket, isPending: createTicketPending} = useMutation({
+    mutationKey: ['create-ticket'],
+    mutationFn: (data: ICreateTicketFormData) => EditCreateRequest<ICreateTicketFormData, IApiCreateTicket>(endpoints.TICKETS.CREATE, data,{"Content-Type":"multipart/form-data"})
+  })
+  const handleSendMessage = handleSubmit(async (payloads) => {
+    try {
+      const response = await CreateTicket({
+        "title": payloads?.title,
+        "description": payloads?.description,
+        "category": payloads?.category,
+        "priority": payloads?.priority,
+        "requiresPayment": false,
+        "price": 1000,
+        attachments:payloads?.attachments
+      });
+      toast.success("تیکت با موفقیت ایجاد شد");
+      router.push(paths.dashboard.tickets.details(String(response.ticketId)));
+      queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
+    } catch (e) {
+      console.log(e)
+    }
+  });
 
-  // const {conversations, conversationsLoading} = useGetConversations();
-  // const {conversation, conversationError, conversationLoading} =
-  //   useGetConversation(selectedConversationId);
-
-  // const roomNav = useCollapseNav();
-  //
-  // const [recipients, setRecipients] = useState<IChatParticipant[]>([]);
-
-  // useEffect(() => {
-  //   if (!selectedConversationId) {
-  //     startTransition(() => {
-  //       router.push(paths.dashboard.root);
-  //     });
-  //   }
-  // }, [conversationError, router, selectedConversationId]);
-
-  // const handleAddRecipients = useCallback((selected: IChatParticipant[]) => {
-  //   setRecipients(selected);
-  // }, []);
-  //
-  // const filteredParticipants: IChatParticipant[] = conversation
-  //   ? conversation.participants.filter(
-  //     (participant: IChatParticipant) => participant.id !== `${user?.id}`
-  //   )
-  //   : [];
   const hasConversation = messages?.length > 0;
-  console.log(messages)
   return (
-    <ChatLayout
+    <>
+    {messages?.length>0?<ChatLayout
       slots={{
         // header: hasConversation ? (
         //   <ChatHeaderDetail
@@ -67,28 +101,30 @@ export function Chat({isTicket = false, messages}: ChatType) {
         nav: null,
         main: (
           <>
-            {messages?.length > 0 ? (
+            {messages?.length > 0 && (
               <ChatMessageList
                 messages={messages ?? []}
-                // participants={filteredParticipants}
-              />
-            ) : (
-              <EmptyContent
-                title="خوش آمدید !"
-                description="لطفا تیکت خود را ایحاد کنید."
               />
             )}
             <ChatMessageInput
               isNewTicket={messages?.length<1}
-              // recipients={recipients}
-              // onAddRecipients={handleAddRecipients}
-              // selectedConversationId={selectedConversationId}
-              // disabled={!recipients.length && !selectedConversationId}
             />
           </>
         ),
         details: hasConversation && null,
       }}
-    />
+    />:<Stack>
+      <Form methods={methods} onSubmit={handleSendMessage}>
+        <Stack spacing={2} sx={{border:1,boxShadow:0.5,borderRadius:2,p:2,borderColor:theme?.vars?.palette?.grey[300]}}>
+          <Field.Text name='title' label='عنوان'/>
+          <Field.Text name='category' label='موضوع'/>
+          <Field.Text name='priority' label='میزان اهمیت'/>
+          <Field.Text type='text' name='description' label='پیغام ...'/>
+          <Field.Upload name='attachments' onDelete={()=>setValue("attachments",null)}/>
+          <Button type='submit' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
+        </Stack>
+      </Form>
+  </Stack>}
+      </>
   );
 }

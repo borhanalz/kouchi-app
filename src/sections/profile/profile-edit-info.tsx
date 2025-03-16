@@ -16,13 +16,13 @@ import {endpoints} from "../../hooks/endPoints";
 import {Field, Form} from "../../components/hook-form";
 import IconText from "../../components/icon-text/icon-text";
 import {EditCreateRequest, GetRequest} from "../../lib/axios";
+import {LoadingScreen} from "../../components/loading-screen";
 import {
   IApiEditUserDetail,
   IApiUserDetails,
   IEditUserDetailFormData,
   IUserDetailFormData,
 } from "../../types/user";
-import {LoadingScreen} from "../../components/loading-screen";
 
 // -----------------------------------------------------------------------
 const profileEditInfoSchema = zod.object({

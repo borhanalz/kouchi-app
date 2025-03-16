@@ -30,15 +30,8 @@ type Props = {
 
 // --------------------------------------------------------------------------------
 export function ChatMessageInput({isNewTicket = true}: Props) {
-  const router = useRouter();
   const pathname = usePathname();
   const queryClient = useQueryClient();
-  const createTicketSchema = zod.object({
-    title: zod.string().min(2, {message: 'عنوان حداقل باید 2 کاراکتر باشد'}),
-    priority: zod.string().min(2, {message: 'میزان اهمیت حداقل باید 3 کاراکتر باشد'}),
-    description: zod.string().min(2, {message: 'پیغام حداقل باید 6 کاراکتر باشد'}),
-    category: zod.string().min(2, {message: 'موضوع حداقل باید 3 کاراکتر باشد'}),
-  });
 
   const fileRef = useRef<HTMLInputElement>(null);
   const attachmentButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -47,24 +40,9 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
   const [file, setFile] = useState<File | null>();
   const [popoverAnchor, setPopoverAnchor] = useState<null | HTMLElement>(null);
 
-  const methods = useForm<ICreateTicketFormData>({
-    resolver: zodResolver(createTicketSchema),
-    defaultValues: {
-      title: '',
-      priority: '',
-      description: '',
-      category: '',
-    }
-  });
-  const {handleSubmit} = methods;
-
-  const {mutateAsync: CreateTicket, isPending: createTicketPending} = useMutation({
-    mutationKey: ['create-ticket'],
-    mutationFn: (data: ICreateTicketFormData) => EditCreateRequest<ICreateTicketFormData, IApiCreateTicket>(endpoints.TICKETS.CREATE, data,undefined,{"Content-Type":"multipart/form-data"})
-  })
   const {mutateAsync: AddResponse, isPending: addResponsePending} = useMutation({
     mutationKey: ['add-response-ticket'],
-    mutationFn: (data: IAddResponseFormData) => EditCreateRequest<IAddResponseFormData, IApiAddResponse>(endpoints.TICKETS.ADD_RESPONSE, data,undefined,{"Content-Type":"multipart/form-data"})
+    mutationFn: (data: IAddResponseFormData) => EditCreateRequest<IAddResponseFormData, IApiAddResponse>(endpoints.TICKETS.ADD_RESPONSE, data,{"Content-Type":"multipart/form-data"})
   })
 
   const handleAttach = useCallback((event: React.MouseEvent<HTMLElement>) => {
@@ -82,32 +60,6 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
     setMessage(event.target.value);
   }, []);
 
-  const handleSendMessage = handleSubmit(async (payloads) => {
-    console.log({
-      "title": payloads?.title,
-      "description": payloads?.description,
-      "category": payloads?.category,
-      "priority": payloads?.priority,
-      "requiresPayment": false,
-      "price": 1000
-    })
-    try {
-      const response = await CreateTicket({
-        "title": payloads?.title,
-        "description": payloads?.description,
-        "category": payloads?.category,
-        "priority": payloads?.priority,
-        "requiresPayment": false,
-        "price": 1000,
-        attachment:null
-      });
-      toast.success("تیکت با موفقیت ایجاد");
-      router.push(paths.dashboard.tickets.details(String(response.ticketId)));
-      queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
-    } catch (e) {
-      console.log(e)
-    }
-  });
 
   const handleSendResponse = async () => {
     if (message !== '') {
@@ -144,15 +96,7 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
 
   return (
     <>
-      {isNewTicket ? <Form methods={methods} onSubmit={handleSendMessage}>
-        <Stack spacing={2} p={2}>
-          <Field.Text name='title' label='عنوان'/>
-          <Field.Text name='category' label='موضوع'/>
-          <Field.Text name='priority' label='میزان اهمیت'/>
-          <Field.Text type='text' name='description' label='پیغام ...'/>
-          <Button type='submit' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
-        </Stack>
-      </Form> : <InputBase
+      <InputBase
         name="chat-message"
         id="chat-message-input"
         value={message}
@@ -183,7 +127,7 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
             borderTop: `solid 1px ${theme.vars.palette.divider}`,
           }),
         ]}
-      />}
+      />
 
       <CustomPopover
         open={Boolean(popoverAnchor)}

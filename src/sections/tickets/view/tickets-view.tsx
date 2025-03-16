@@ -89,6 +89,7 @@ const TicketsView = () => {
           onRowsPerPageChange={table.onChangeRowsPerPage}
         />
       </Stack>
+
     </DashboardContent>
   );
 };

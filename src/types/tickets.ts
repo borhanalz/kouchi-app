@@ -55,7 +55,7 @@ export interface ICreateTicketFormData {
   "priority" : string,
   "requiresPayment" : boolean,
   "price": number,
-  attachment:null|undefined|any
+  attachments:null|undefined|any
 }
 
 export interface IAddResponseFormData {

@@ -1,14 +1,10 @@
 import { varAlpha, mergeClasses } from 'minimal-shared/utils';
 
+import Box from "@mui/material/Box";
 import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
 
-import { fData } from 'src/utils/format-number';
-
-import { Iconify } from '../../iconify';
 import { uploadClasses } from '../classes';
-import { fileData, FileThumbnail } from '../../file-thumbnail';
+import { FileThumbnail } from '../../file-thumbnail';
 
 import type { MultiFilePreviewProps } from '../types';
 
@@ -21,26 +17,17 @@ export function MultiFilePreview({
   thumbnail,
   slotProps,
   firstNode,
-  files = [],
+  file,
   className,
   ...other
-}: MultiFilePreviewProps) {
+}: any) {
   return (
-    <ListRoot
-      thumbnail={thumbnail}
+    <Box
       className={mergeClasses([uploadClasses.uploadMultiPreview, className])}
       sx={sx}
       {...other}
     >
-      {firstNode && <ItemNode thumbnail={thumbnail}>{firstNode}</ItemNode>}
-
-      {files.map((file) => {
-        const { name, size } = fileData(file);
-
-        if (thumbnail) {
-          return (
-            <ItemThumbnail key={name}>
-              <FileThumbnail
+       <FileThumbnail
                 tooltip
                 imageView
                 file={file}
@@ -55,31 +42,9 @@ export function MultiFilePreview({
                 slotProps={{ icon: { sx: { width: 36, height: 36 } } }}
                 {...slotProps?.thumbnail}
               />
-            </ItemThumbnail>
-          );
-        }
-
-        return (
-          <ItemRow key={name}>
-            <FileThumbnail file={file} {...slotProps?.thumbnail} />
-
-            <ListItemText
-              primary={name}
-              secondary={fData(size)}
-              secondaryTypographyProps={{ component: 'span', typography: 'caption' }}
-            />
-
-            {onRemove && (
-              <IconButton size="small" onClick={() => onRemove(file)}>
-                <Iconify width={16} icon="mingcute:close-line" />
-              </IconButton>
-            )}
-          </ItemRow>
-        );
-      })}
 
       {lastNode && <ItemNode thumbnail={thumbnail}>{lastNode}</ItemNode>}
-    </ListRoot>
+    </Box>
   );
 }
 

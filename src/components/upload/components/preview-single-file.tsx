@@ -23,7 +23,7 @@ export function SingleFilePreview({ file, sx, className, ...other }: SingleFileP
       sx={sx}
       {...other}
     >
-      <img alt={fileName} src={previewUrl} />
+      <img alt={fileName} src={previewUrl}/>
     </PreviewRoot>
   );
 }

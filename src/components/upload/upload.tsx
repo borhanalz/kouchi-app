@@ -85,8 +85,6 @@ export function Upload({
             outline: 'none',
             borderRadius: 1,
             cursor: 'pointer',
-            overflow: 'hidden',
-            position: 'relative',
             bgcolor: varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
             border: `1px dashed ${varAlpha(theme.vars.palette.grey['500Channel'], 0.2)}`,
             transition: theme.transitions.create(['opacity', 'padding']),
@@ -98,14 +96,12 @@ export function Upload({
               borderColor: 'error.main',
               bgcolor: varAlpha(theme.vars.palette.error.mainChannel, 0.08),
             }),
-            ...(hasFile && { padding: '28% 0' }),
           }),
         ]}
       >
         <input {...getInputProps()} />
 
-        {/* Single file */}
-        {hasFile ? <SingleFilePreview file={value as File} /> : <UploadPlaceholder />}
+        {hasFile ? <MultiFilePreview file={value as File} /> : <UploadPlaceholder/>}
       </Box>
 
       {/* Single file */}
