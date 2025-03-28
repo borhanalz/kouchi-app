@@ -91,18 +91,19 @@ const PasswordStep = () => {
         toast.error(e?.message);
       }
     } else {
+      console.log({mobileNumber, otpType: 'login'})
       try {
         await sendOtp({mobileNumber, otpType: 'login'});
         router.push(paths.auth.otpSignIn);
       } catch (e: any) {
-        toast.error(e);
+        toast.error(e.error);
       }
     }
   }
 
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
-      <Stack spacing={2} mt={5}>
+      <Stack spacing={2}>
         <Field.Text
           label="رمز عبور"
           name="password"
@@ -138,7 +139,7 @@ const PasswordStep = () => {
         </Stack>
         <LoadingButton
           fullWidth
-          color="inherit"
+          color="primary"
           size="large"
           type="submit"
           variant="contained"

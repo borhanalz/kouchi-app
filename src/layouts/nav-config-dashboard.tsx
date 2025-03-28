@@ -20,6 +20,7 @@ const ICONS = {
   files: icon('file'),
   tickets: icon('messages'),
   userInfo: icon('userInfo'),
+  services: icon('shieldPlus'),
 };
 
 // ----------------------------------------------------------------------
@@ -36,31 +37,31 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.send,
         info: <Label>دستیار</Label>,
       },
-      {
-        title: 'نقشه راه',
-        path: paths.dashboard.roadMap.root,
-        icon: ICONS.map,
-      },
-      {
-        title: 'لیست مدارک',
-        path: paths.dashboard.documents.root,
-        icon: ICONS.documentsList,
-      },
-      {
-        title: 'مدیریت کارها',
-        path: '',
-        icon: ICONS.businessManagement,
-      },
-      {
-        title: 'تقویم',
-        path: '',
-        icon: ICONS.calender,
-      },
-      {
-        title: 'فایل ها',
-        path: '',
-        icon: ICONS.files,
-      },
+      // {
+      //   title: 'نقشه راه',
+      //   path: paths.dashboard.roadMap.root,
+      //   icon: ICONS.map,
+      // },
+      // {
+      //   title: 'لیست مدارک',
+      //   path: paths.dashboard.documents.root,
+      //   icon: ICONS.documentsList,
+      // },
+      // {
+      //   title: 'مدیریت کارها',
+      //   path: '',
+      //   icon: ICONS.businessManagement,
+      // },
+      // {
+      //   title: 'تقویم',
+      //   path: '',
+      //   icon: ICONS.calender,
+      // },
+      // {
+      //   title: 'فایل ها',
+      //   path: '',
+      //   icon: ICONS.files,
+      // },
       {
         title: 'تیکت ها',
         path: paths.dashboard.tickets.root,
@@ -70,6 +71,11 @@ export const navData: NavSectionProps['data'] = [
         title: 'اطلاعات کاربری',
         path: paths.dashboard.profile.root,
         icon: ICONS.userInfo,
+      },
+      {
+        title: 'سرویس ها',
+        path: paths.dashboard.proPackages.root,
+        icon: ICONS.services,
       },
       // { title: 'Two', path: paths.app.two, icon: ICONS.ecommerce },
       // { title: 'Three', path: paths.app.three, icon: ICONS.analytics },

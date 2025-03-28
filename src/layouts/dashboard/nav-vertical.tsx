@@ -1,19 +1,19 @@
 import type { NavSectionProps } from 'src/components/nav-section';
 import type { Theme, SxProps, CSSObject, Breakpoint } from '@mui/material/styles';
 
-import Image from 'next/image';
-import textLogo from 'public/assets/images/textLogo.png';
 import { varAlpha, mergeClasses } from 'minimal-shared/utils';
 
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
-import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
 
 import { layoutClasses } from '../core/classes';
 import { NavToggleButton } from '../components/nav-toggle-button';
+import {Logo} from "../../components/logo";
+import Image from "next/image";
+import logoIcon from 'public/logo/logo-icon.png'
 
 // ----------------------------------------------------------------------
 
@@ -45,8 +45,7 @@ export function NavVertical({
     <>
       {slots?.topArea ?? (
         <Box sx={{ pl: 3.5, pt: 2.5, pb: 1 }}>
-          <Logo />
-          <Image src={textLogo} width={100} height={60} alt="logo" />
+        <Logo/>
         </Box>
       )}
 
@@ -62,7 +61,7 @@ export function NavVertical({
     <>
       {slots?.topArea ?? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 2.5 }}>
-          <Logo />
+         <Image src={logoIcon} width={30} height={30} alt='logoIcon'/>
         </Box>
       )}
 

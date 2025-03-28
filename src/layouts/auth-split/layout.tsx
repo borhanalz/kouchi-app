@@ -46,11 +46,11 @@ export function AuthSplitLayout({
       //     This is an info Alert.
       //   </Alert>
       // ),
-      centerArea: (
-        <>
-          <Logo />
-        </>
-      ),
+      // centerArea: (
+      //   <>
+      //     <Logo />
+      //   </>
+      // ),
       // rightArea: (
       //   <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
       //    <ArrowLeftIcon/>

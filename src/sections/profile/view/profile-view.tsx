@@ -72,10 +72,12 @@ const ProfileView = () => {
           value={tabVal}
           variant="fullWidth"
           onChange={(_, n) => setTabVal(n)}
+          color='primary'
+          textColor='primary'
         >
-          <Tab value={1} label="اطلاعات کاربری" />
-          <Tab value={2} label="ویرایش پروفایل" />
-          <Tab value={3} label="سوابق مالی" />
+          <Tab color='primary' value={1} label="اطلاعات کاربری" />
+          <Tab color='primary' value={2} label="ویرایش پروفایل" />
+          <Tab color='primary' value={3} label="سوابق مالی" />
         </CustomTabs>
         {tabVal === 1 && (
           <Stack justifyContent="center" mt={5} alignItems="center" spacing={5}>

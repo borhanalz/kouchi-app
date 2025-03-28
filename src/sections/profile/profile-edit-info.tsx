@@ -227,6 +227,7 @@ const ProfileEditInfo = () => {
               })
             }
             variant="outlined"
+            color='secondary'
           >
             افزودن اطلاعات تحصیلی
           </Button>
@@ -299,10 +300,11 @@ const ProfileEditInfo = () => {
               })
             }
             variant="outlined"
+            color='secondary'
           >
             افزودن اطلاعات زبان
           </Button>
-          <Button type="submit" variant="contained" loading={isPending}>
+          <Button type="submit" variant="contained" color='primary' loading={isPending}>
             ثبت اطلاعات
           </Button>
         </Stack>

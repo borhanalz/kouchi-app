@@ -3,16 +3,14 @@
 import type { BoxProps } from '@mui/material/Box';
 import type { Breakpoint } from '@mui/material/styles';
 
-import Image from 'next/image';
 import { mergeClasses } from 'minimal-shared/utils';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
+import {Logo} from "../../components/logo";
 import { layoutClasses } from '../core/classes';
 import { FormHead } from '../../auth/components/form-head';
-
-import img from '/public/assets/images/illustration-seo.png';
 
 // ----------------------------------------------------------------------
 
@@ -52,9 +50,9 @@ export function AuthSplitContent({
           maxWidth: 'var(--layout-auth-content-width)',
         }}
       >
-        <Box sx={{ borderRadius: 2, backgroundColor: '#ffff', p: 2 }}>
-          <Stack textAlign="center" spacing={1} alignItems="center">
-            <Image src={img} width={200} alt="illustration" />
+        <Box sx={{ borderRadius: 2, p: 1 }}>
+          <Stack textAlign="center" spacing={3} alignItems="center">
+            <Logo  />
             <FormHead title="ورود به کوچی" description="دستیار هوش مصنوعی مهاجرت تحصیلی" />
           </Stack>
           {children}

@@ -60,9 +60,9 @@ const AuthView = () => {
   });
 
   const methods = useForm<IResetPassowrdFormData>({
-    resolver: zodResolver(ResetPasswordSchema),
+    // resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
-      mobileNumber: '',
+      mobileNumber:sessionStorage.getItem("mobileNumber") as string,
       newPassword: '',
       otp: '',
     },
@@ -70,6 +70,7 @@ const AuthView = () => {
 
   const { handleSubmit } = methods;
   const HandleSubmit = handleSubmit(async (data) => {
+    console.log(data)
     try {
       await mutateAsync(data);
       toast.success('با موفقیت انجام شد');
@@ -89,7 +90,7 @@ const AuthView = () => {
   };
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
-      <Stack spacing={2} mt={5}>
+      <Stack spacing={2}>
         <Field.Text
           label="رمز عبور جدید"
           name="newPassword"
@@ -112,7 +113,7 @@ const AuthView = () => {
         <Field.Code name="otp" />
         <LoadingButton
           fullWidth
-          color="inherit"
+          color="primary"
           size="large"
           type="submit"
           variant="contained"

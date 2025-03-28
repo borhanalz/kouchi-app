@@ -23,7 +23,6 @@ export function FormReturnLink({ sx, href, label, icon, children, ...other }: Fo
       color="inherit"
       variant="subtitle2"
       style={{
-        color: '#000',
         textDecoration: 'none',
         display: 'flex',
         justifyContent: 'center',

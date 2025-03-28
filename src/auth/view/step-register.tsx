@@ -74,7 +74,7 @@ const RegisterStep = () => {
 
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
-      <Stack spacing={2} mt={5}>
+      <Stack spacing={2}>
         <Field.Text label="شماره موبایل" name="mobileNumber" />
         <Field.Text label="نام" name="name" />
         <Field.Text
@@ -99,7 +99,7 @@ const RegisterStep = () => {
         <Field.Code name="otp" />
         <LoadingButton
           fullWidth
-          color="inherit"
+          color="primary"
           size="large"
           type="submit"
           variant="contained"

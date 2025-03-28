@@ -19,6 +19,7 @@ import {useMockedUser} from 'src/auth/hooks';
 import {paths} from "../../routes/paths";
 import {AccountButton} from "./account-button";
 import {CustomPopover} from "../../components/custom-popover";
+import {signOut} from "../../auth/context/jwt";
 
 // ----------------------------------------------------------------------
 export interface IAccountDrawer {
@@ -35,6 +36,7 @@ export interface IAccountDrawer {
 export function AccountDrawer({data}:IAccountDrawer) {
   const router = useRouter();
   const {open, anchorEl, onClose, onOpen} = usePopover();
+
 
   const renderMenuActions = () => (
     <CustomPopover
@@ -57,7 +59,7 @@ export function AccountDrawer({data}:IAccountDrawer) {
             <Typography variant='body2'>پروفایل</Typography>
           </Stack>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={signOut}>
           <Stack direction='row' spacing={0.5} sx={{py:1,px:0.5}}>
             <Iconify icon='logout' sx={{color:'red'}}/>
             <Typography color='error' variant='body2'>خروچ</Typography>

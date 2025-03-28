@@ -41,6 +41,6 @@ export const paths = {
     },
     profile:{
       root:`${ROOTS.DASHBOARD}/profile`,
-    }
+    },
   },
 };

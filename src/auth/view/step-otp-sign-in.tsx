@@ -71,12 +71,12 @@ const OtpSignInStep = () => {
 
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
-      <Stack spacing={2} mt={5}>
+      <Stack spacing={2}>
         <OtpTimer time={120} onReset={handleTimeReset} />
         <Field.Code name="otp" />
         <LoadingButton
           fullWidth
-          color="inherit"
+          color="primary"
           size="large"
           type="submit"
           variant="contained"

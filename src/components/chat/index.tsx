@@ -119,7 +119,7 @@ export function Chat({isTicket = false, messages}: ChatType) {
           <Field.Text name='title' label='عنوان'/>
           <Field.Text name='category' label='موضوع'/>
           <Field.Text name='priority' label='میزان اهمیت'/>
-          <Field.Text type='text' name='description' label='پیغام ...'/>
+          <Field.Text multiline rows={4} type='text' name='description' label='پیغام ...'/>
           <Field.Upload name='attachments' onDelete={()=>setValue("attachments",null)}/>
           <Button type='submit' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
         </Stack>

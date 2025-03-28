@@ -1,6 +1,6 @@
 'use client';
 
-import type { Breakpoint } from '@mui/material/styles';
+import {Breakpoint, useColorScheme} from '@mui/material/styles';
 import type { NavSectionProps } from 'src/components/nav-section';
 
 import { merge } from 'es-toolkit';
@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
-import { iconButtonClasses } from '@mui/material/IconButton';
+import IconButton, { iconButtonClasses } from '@mui/material/IconButton';
 
 import { _notifications } from 'src/_mock';
 
@@ -45,6 +45,7 @@ import type {IApiUserGetInfo} from "../../types/user";
 import type { MainSectionProps } from '../core/main-section';
 import type { HeaderSectionProps } from '../core/header-section';
 import type { LayoutSectionProps } from '../core/layout-section';
+import {BaseOption} from "../../components/settings/drawer/base-option";
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +72,8 @@ export function DashboardLayout({
   const theme = useTheme();
 
   const settings = useSettingsContext();
+
+  const { mode, setMode, systemMode } = useColorScheme();
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -143,16 +146,16 @@ export function DashboardLayout({
       ),
       rightArea: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 5 } }}>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Iconify icon="shieldPlus" />}
-            onClick={() => router.push(paths.dashboard.proPackages.root)}
-          >
-            اشتراک پرو
-          </Button>
+          {/*<Button*/}
+          {/*  variant="contained"*/}
+          {/*  color="primary"*/}
+          {/*  startIcon={<Iconify icon="shieldPlus" />}*/}
+          {/*  onClick={() => router.push(paths.dashboard.proPackages.root)}*/}
+          {/*>*/}
+          {/*  اشتراک پرو*/}
+          {/*</Button>*/}
           {/** @slot Searchbar */}
-          <Searchbar data={navData} />
+          {/*<Searchbar data={navData} />*/}
 
           {/** @slot Language popover */}
           {/*<LanguagePopover*/}
@@ -172,7 +175,22 @@ export function DashboardLayout({
           {/*<ContactsPopover data={_contacts} />*/}
 
           {/** @slot Settings button */}
-          <SettingsButton />
+          {/*<SettingsButton />*/}
+          {/*<BaseOption*/}
+          {/*  label="Dark mode"*/}
+          {/*  icon="moon"*/}
+          {/*  selected={settings.state.colorScheme === 'dark'}*/}
+          {/*  onChangeOption={() => {*/}
+          {/*    setMode(mode === 'light' ? 'dark' : 'light');*/}
+          {/*    settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <Box>
+            <IconButton onClick={()=>{
+                setMode(mode === 'light' ? 'dark' : 'light');
+                settings.setState({ colorScheme: mode === 'light' ? 'dark' : 'light' });
+            }}><Iconify icon={mode === 'light'?'moon':'sun'} /></IconButton>
+          </Box>
 
           {/** @slot Account drawer */}
           <AccountDrawer data={userInfo?.payload?.info} />

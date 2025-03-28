@@ -27,8 +27,8 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
   const singleLogo = (
     <Image
       alt="Single logo"
-      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-single.svg' : '/logo/logo-single-dark.svg'}`}
-      width={40}
+      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-single-dark.png' : '/logo/logo-full.png'}`}
+      width={100}
       height={45}
     />
   );
@@ -36,8 +36,8 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
   const fullLogo = (
     <Image
       alt="Full logo"
-      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-single.svg' : '/logo/logo-single-dark.svg'}`}
-      width={40}
+      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-single-dark.png' : '/logo/logo-full.png'}`}
+      width={100}
       height={45}
     />
   );
@@ -52,8 +52,8 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
       className={mergeClasses([logoClasses.root, className])}
       sx={[
         () => ({
-          width: 40,
-          height: 40,
+          width: 100,
+          height: 45,
           ...(!isSingle && { width: 102, height: 36 }),
           ...(disabled && { pointerEvents: 'none' }),
         }),

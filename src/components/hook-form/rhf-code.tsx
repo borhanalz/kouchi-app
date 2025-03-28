@@ -25,13 +25,13 @@ export interface RHFCodesProps extends Omit<MuiOtpInputProps, 'sx'> {
 }
 
 export function RHFCode({
-  name,
-  slotProps,
-  helperText,
-  maxSize = 56,
-  placeholder = '-',
-  ...other
-}: RHFCodesProps) {
+                          name,
+                          slotProps,
+                          helperText,
+                          maxSize = 56,
+                          placeholder = '-',
+                          ...other
+                        }: RHFCodesProps) {
   const { control } = useFormContext();
 
   return (
@@ -42,10 +42,12 @@ export function RHFCode({
         <>
           <Box
             {...slotProps?.wrapper}
+            dir="rtl" // Set RTL direction here
             sx={[
               {
                 display: 'flex',
                 justifyContent: 'center',
+                direction: 'rtl',
                 [`& .${inputBaseClasses.input}`]: {
                   p: 0,
                   height: 'auto',
@@ -54,7 +56,7 @@ export function RHFCode({
                 },
               },
               ...(Array.isArray(slotProps?.wrapper?.sx)
-                ? (slotProps?.wrapper?.sx ?? [])
+                ? slotProps?.wrapper?.sx
                 : [slotProps?.wrapper?.sx]),
             ]}
           >

@@ -107,14 +107,13 @@ const PhoneNumberStep = () => {
   return (
     <>
       <Form methods={methods} onSubmit={HandleSubmit}>
-        <Stack spacing={2} mt={5}>
+        <Stack spacing={2}>
           <Field.Text label="شماره موبایل" name="mobileNumber"/>
-          <LoadingButton fullWidth color="inherit" size="large" type="submit" variant="contained" loading={isPending}>
+          <LoadingButton fullWidth color="primary" size="large" type="submit" variant="contained" loading={isPending}>
             ادامه
           </LoadingButton>
         </Stack>
       </Form>
-
       <Dialog open={dialog.value}>
         <DialogContent sx={{p: 3}}>
           <div key={keyRender} ref={ref}/>

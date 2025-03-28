@@ -15,6 +15,7 @@ import IconText from 'src/components/icon-text/icon-text';
 
 import { grey } from '../../../theme';
 import ProPackagesPeyment from '../pro-packages-peyment';
+import {DashboardContent} from "../../../layouts/dashboard";
 
 // ------------------------------------------------------------------------------
 
@@ -71,23 +72,21 @@ export const ProPackages = () => {
 
   return (
     <>
-      <Stack
-        direction="row"
-        justifyContent="start"
-        px={1.5}
-        onClick={() => window.history.back()}
+      <DashboardContent
+        maxWidth={false}
         sx={{
-          position: 'absolute',
-          top: 20,
-          right: 20,
-          zIndex: 1,
+          display: "flex",
+          flex: "1 1 auto",
+          flexDirection: "column"
         }}
+        title="سرویس ها"
       >
-        <Iconify icon="arrowLeft" sx={{ width: 35, cursor: 'pointer', height: 35 }} />
-      </Stack>
       <Stack
         sx={{
-          minHeight: '100vh',
+          border:1,
+          borderRadius: 2,
+          borderColor:theme.palette.grey[300],
+          p:2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -104,7 +103,7 @@ export const ProPackages = () => {
           </Typography>
         </Stack>
         <Stack
-          direction="row"
+          direction={{md:"row",xs:'column'}}
           justifyContent="center"
           spacing={5}
           textAlign="center"
@@ -179,6 +178,7 @@ export const ProPackages = () => {
         </Stack>
       </Stack>
       <ProPackagesPeyment dialog={peymentDialog} />
+      </DashboardContent>
     </>
   );
 };
