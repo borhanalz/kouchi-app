@@ -11,7 +11,7 @@ export interface IApiUserGetInfo {
 }
 
 export interface IUserDetailFormData {
-  age: number;
+  age: number|null;
   gender: "male" | "female";
   married: boolean;
   militaryStatus: string;

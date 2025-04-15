@@ -20,6 +20,7 @@ import {paths} from "../../routes/paths";
 import {AccountButton} from "./account-button";
 import {CustomPopover} from "../../components/custom-popover";
 import {signOut} from "../../auth/context/jwt";
+import IconText from "../../components/icon-text/icon-text";
 
 // ----------------------------------------------------------------------
 export interface IAccountDrawer {
@@ -48,19 +49,19 @@ export function AccountDrawer({data}:IAccountDrawer) {
 
       <Divider sx={{borderStyle: 'dashed'}}/>
 
-      <MenuList sx={{p: 1, my: 1, '& li': {p: 0}}}>
-       <MenuItem>
-         <Typography>{data?.name}</Typography>
-       </MenuItem>
+      <MenuList  sx={{p: 1, my: 1, '& li': {p: 0}}}>
+        <Stack p={1}>
+          <IconText icon='user' label={data?.name as string} />
+        </Stack>
         <Divider />
         <MenuItem onClick={()=>router.push(paths.dashboard.profile.root)}>
-          <Stack direction='row' spacing={0.5} sx={{py:1,px:0.5}}>
+          <Stack direction='row' alignItems='center' spacing={0.5} sx={{py:1,px:0.5}}>
             <Iconify icon='profile'/>
             <Typography variant='body2'>پروفایل</Typography>
           </Stack>
         </MenuItem>
         <MenuItem onClick={signOut}>
-          <Stack direction='row' spacing={0.5} sx={{py:1,px:0.5}}>
+          <Stack direction='row' alignItems='center' spacing={0.5} sx={{py:1,px:0.5}}>
             <Iconify icon='logout' sx={{color:'red'}}/>
             <Typography color='error' variant='body2'>خروچ</Typography>
           </Stack>

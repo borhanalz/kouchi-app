@@ -1,7 +1,7 @@
 'use client';
 
 import type { SettingsState } from 'src/components/settings';
-import type { Theme, Components } from '@mui/material/styles';
+import type {Theme, Components, Palette} from '@mui/material/styles';
 
 import { createTheme as createMuiTheme } from '@mui/material/styles';
 
@@ -26,7 +26,13 @@ export const baseTheme: ThemeOptions = {
       customShadows: customShadows.light,
     },
     dark: {
-      palette: palette.dark,
+      palette: {
+        ...palette.dark!,
+        primary: {
+          ...palette.dark!.primary,
+          main: themeConfig.palette.secondary.main, // ✅ override only `main`
+        }as Palette['primary'],
+      },
       shadows: shadows.dark,
       customShadows: customShadows.dark,
     },
@@ -49,19 +55,16 @@ type CreateThemeProps = {
 };
 
 export function createTheme({
-  settingsState,
-  themeOverrides = {},
-  localeComponents = {},
-}: CreateThemeProps = {}): Theme {
-  // Update core theme settings
+                              settingsState,
+                              themeOverrides = {},
+                              localeComponents = {},
+                            }: CreateThemeProps = {}): Theme {
   const updatedCore = settingsState ? updateCoreWithSettings(baseTheme, settingsState) : baseTheme;
 
-  // Update component settings
   const updatedComponents = settingsState
     ? updateComponentsWithSettings(components, settingsState)
     : {};
 
-  // Create and return the final theme
   const theme = createMuiTheme(updatedCore, updatedComponents, localeComponents, themeOverrides);
 
   return theme;

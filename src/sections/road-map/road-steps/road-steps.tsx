@@ -96,7 +96,7 @@ const RoadStepsView: FC<IRoadSteps> = ({ countryName }) => {
                 <Stack
                   direction="row"
                   justifyContent="space-between"
-                  sx={{ borderRadius: 2, p: 1.5, border: 1, borderColor: grey[300] }}
+                  sx={{ borderRadius: 2, p: 1.5, border: 1,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],}}
                   spacing={1}
                 >
                   <Stack spacing={1}>

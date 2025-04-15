@@ -20,41 +20,51 @@ import {ChatMessageInput} from './chat-message-input';
 
 import type {IApiCreateTicket, ICreateTicketFormData, ITicketResponse} from "../../types/tickets";
 import {useTheme} from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 
 // ----------------------------------------------------------------------
 type ChatType = {
   isTicket?: boolean,
-  messages: ITicketResponse[]
+  messages: ITicketResponse[],
+  title?:string
 }
 
-export function Chat({isTicket = false, messages}: ChatType) {
+export function Chat({isTicket = false,title, messages}: ChatType) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const theme = useTheme()
   const createTicketSchema = zod.object({
     title: zod.string().min(2, {message: 'عنوان حداقل باید 2 کاراکتر باشد'}),
-    priority: zod.string().min(2, {message: 'میزان اهمیت حداقل باید 3 کاراکتر باشد'}),
+    // priority: zod.string().min(2, {message: 'میزان اهمیت حداقل باید 3 کاراکتر باشد'}),
     description: zod.string().min(2, {message: 'پیغام حداقل باید 6 کاراکتر باشد'}),
-    category: zod.string().min(2, {message: 'موضوع حداقل باید 3 کاراکتر باشد'}),
-    attachments: zod.custom().transform((data, ctx) => {
-      const hasFile = data instanceof File || (typeof data === 'string' && !!data.length);
-      if (!hasFile) {
-        ctx.addIssue({
-          code: zod.ZodIssueCode.custom,
-          message: 'فایل را انتخاب کنید',
-        });
-        return null;
-      }
-      return data;
-    }),
+    // category: zod.string().min(2, {message: 'موضوع حداقل باید 3 کاراکتر باشد'}),
+    attachments: zod
+      .custom<File | string | undefined>()
+      .optional()
+      .transform((data, ctx) => {
+        if (!data) return undefined;
+
+        const hasFile =
+          data instanceof File || (typeof data === 'string' && data.length > 0);
+
+        if (!hasFile) {
+          ctx.addIssue({
+            code: zod.ZodIssueCode.custom,
+            message: 'فایل معتبر نیست',
+          });
+          return undefined;
+        }
+
+        return data;
+      }),
   });
   const methods = useForm<ICreateTicketFormData>({
     resolver: zodResolver(createTicketSchema),
     defaultValues: {
       title: '',
-      priority: '',
+      // priority: '',
       description: '',
-      category: '',
+      // category: '',
       attachments:null
     }
   });
@@ -69,15 +79,16 @@ export function Chat({isTicket = false, messages}: ChatType) {
       const response = await CreateTicket({
         "title": payloads?.title,
         "description": payloads?.description,
-        "category": payloads?.category,
-        "priority": payloads?.priority,
+        // "category": payloads?.category,
+        // "priority": payloads?.priority,
         "requiresPayment": false,
         "price": 1000,
         attachments:payloads?.attachments
       });
       toast.success("تیکت با موفقیت ایجاد شد");
       router.push(paths.dashboard.tickets.details(String(response.ticketId)));
-      queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
+      await queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
+      await queryClient.invalidateQueries({queryKey: ["tickets-list"]});
     } catch (e) {
       console.log(e)
     }
@@ -97,7 +108,7 @@ export function Chat({isTicket = false, messages}: ChatType) {
         // ) : (
         //   <ChatHeaderCompose contacts={contacts} onAddRecipients={handleAddRecipients}/>
         // ),
-        header:null,
+        header:<Stack mx={2}><Typography fontWeight='bold' variant='h4'>{title}</Typography></Stack>,
         nav: null,
         main: (
           <>
@@ -115,13 +126,15 @@ export function Chat({isTicket = false, messages}: ChatType) {
       }}
     />:<Stack>
       <Form methods={methods} onSubmit={handleSendMessage}>
-        <Stack spacing={2} sx={{border:1,boxShadow:0.5,borderRadius:2,p:2,borderColor:theme?.vars?.palette?.grey[300]}}>
+        <Stack spacing={2} sx={{border:1,boxShadow:0.5,borderRadius:2,p:2,borderColor:theme?.palette?.mode==="dark"?theme?.vars?.palette?.grey[800]:theme?.vars?.palette?.grey[300]}}>
           <Field.Text name='title' label='عنوان'/>
-          <Field.Text name='category' label='موضوع'/>
-          <Field.Text name='priority' label='میزان اهمیت'/>
+          {/*<Field.Text name='category' label='موضوع'/>*/}
+          {/*<Field.Text name='priority' label='میزان اهمیت'/>*/}
           <Field.Text multiline rows={4} type='text' name='description' label='پیغام ...'/>
           <Field.Upload name='attachments' onDelete={()=>setValue("attachments",null)}/>
-          <Button type='submit' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
+          <Stack direction='row' justifyContent='right'>
+            <Button type='submit' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
+          </Stack>
         </Stack>
       </Form>
   </Stack>}

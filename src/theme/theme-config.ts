@@ -36,27 +36,27 @@ export const themeConfig: ThemeConfig = {
    * Typography
    *************************************** */
   fontFamily: {
-    primary: 'kalameh',
-    secondary: 'kalameh',
+    primary: 'Dana',
+    secondary: 'Dana',
   },
   /** **************************************
    * Palette
    *************************************** */
   palette: {
     primary: {
+      contrastText: '#FFFFFF',
+      lighter: '#3d4065',
+      light: '#262fa8',
+      main: '#0A1157',
+      dark: '#071059',
+      darker: '#1a084f',
+    },
+    secondary: {
       lighter: '#f8ce9c',
       light: '#eea04f',
       main: '#EB8205',
       dark: '#b96502',
       darker: '#ab5d00',
-      contrastText: '#FFFFFF',
-    },
-    secondary: {
-      lighter: '#3d4065',
-      light: '#252a64',
-      main: '#0A1157',
-      dark: '#071059',
-      darker: '#1a084f',
       contrastText: '#FFFFFF',
     },
     info: {

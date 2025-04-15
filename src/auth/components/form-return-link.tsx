@@ -6,27 +6,29 @@ import { RouterLink } from 'src/routes/components';
 
 import { Iconify } from 'src/components/iconify';
 import Stack from '@mui/material/Stack';
+import {useTheme} from "@mui/material/styles";
 
 // ----------------------------------------------------------------------
 
 type FormReturnLinkProps = LinkProps & {
-  href: string;
+  href?: string;
   icon?: React.ReactNode;
   label?: React.ReactNode;
 };
 
 export function FormReturnLink({ sx, href, label, icon, children, ...other }: FormReturnLinkProps) {
+  const theme = useTheme();
   return (
     <Link
       component={RouterLink}
-      href={href}
-      color="inherit"
+      href={href??''}
       variant="subtitle2"
       style={{
         textDecoration: 'none',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        color:theme?.palette?.secondary?.main,
       }}
       {...other}
     >

@@ -4,7 +4,7 @@ import OtpSignInStep from 'src/auth/view/step-otp-sign-in';
 
 // ----------------------------------------------------------------------
 
-export const metadata = { title: `Sign up | Jwt - ${CONFIG.appName}` };
+export const metadata = { title: `${CONFIG.appName} | ورود با رمز یکبار مصرف ` };
 
 export default function Page() {
   return <OtpSignInStep />;

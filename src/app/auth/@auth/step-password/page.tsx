@@ -6,7 +6,7 @@ import StepPassword from 'src/auth/view/step-password';
 
 // ----------------------------------------------------------------------
 
-export const metadata = { title: `Sign up | Jwt - ${CONFIG.appName}` };
+export const metadata = { title: `${CONFIG.appName} | ورود ` };
 
 export default function Page() {
   return <StepPassword />;

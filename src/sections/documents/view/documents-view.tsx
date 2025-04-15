@@ -17,6 +17,7 @@ import { grey } from '../../../theme';
 import DocumentsTableRow from '../documents-table-row';
 import { Scrollbar } from '../../../components/scrollbar';
 import DocumentsCreateDialog from '../documents-create-dialog';
+import {useTheme} from "@mui/material/styles";
 // -----------------------------------------------------------------------------------------------------
 const TableHead = [
   { id: 'id', label: 'شماره' },
@@ -32,6 +33,7 @@ const data: IDocumentsItem[] = [
 const DocumentsView = () => {
   const table = useTable();
   const dialogStatus = useBoolean();
+  const theme = useTheme();
   return (
     <DashboardContent
       maxWidth={false}
@@ -49,7 +51,7 @@ const DocumentsView = () => {
             مدرک جدید
           </Button>
         </Stack>
-        <Card sx={{ borderRadius: 2, border: 1.5, borderColor: grey[300] }}>
+        <Card sx={{ borderRadius: 2, border: 1.5,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],}}>
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
               <TableHeadCustom headCells={TableHead} sx={{ whiteSpace: 'nowrap' }} />

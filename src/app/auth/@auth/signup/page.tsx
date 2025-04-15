@@ -4,7 +4,7 @@ import StepSignUp from 'src/auth/view/step-register';
 
 // ----------------------------------------------------------------------
 
-export const metadata = { title: `Sign up | Jwt - ${CONFIG.appName}` };
+export const metadata = { title: `${CONFIG.appName} | ثبت نام ` };
 
 export default function Page() {
   return <StepSignUp />;

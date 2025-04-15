@@ -101,7 +101,7 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
         id="chat-message-input"
         value={message}
         onChange={handleChangeMessage}
-        placeholder="گفت و گو کنید ..."
+        placeholder="پاسخ خود را بنویسید…"
         startAdornment={
           <IconButton onClick={handleSendResponse}>
             {addResponsePending ? <Iconify icon="circularLoading"/> : <Iconify icon="send"/>}
@@ -150,7 +150,7 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
             <DeleteButton onClick={handleRemoveFile}/>
           </Box>
         ) : (
-          <Box sx={{p: 2}}>No file selected</Box>
+          <Box sx={{p: 2,fontSize:'14px'}}>فایلی انتخاب نشده است !</Box>
         )}
       </CustomPopover>
 

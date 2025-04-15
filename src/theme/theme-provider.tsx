@@ -13,6 +13,7 @@ import { Rtl } from './with-settings/right-to-left';
 
 import type {} from './extend-theme-types';
 import type { ThemeOptions } from './types';
+import {themeConfig} from "./theme-config";
 
 // ----------------------------------------------------------------------
 

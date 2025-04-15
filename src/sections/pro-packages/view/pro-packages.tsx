@@ -85,7 +85,7 @@ export const ProPackages = () => {
         sx={{
           border:1,
           borderRadius: 2,
-          borderColor:theme.palette.grey[300],
+          borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],
           p:2,
           display: 'flex',
           alignItems: 'center',
@@ -95,10 +95,10 @@ export const ProPackages = () => {
         <Stack textAlign="center" spacing={1} mb={2}>
           <Stack direction="row" spacing={1}>
             <Iconify icon="goldStar" sx={{ color: yellow[700] }} />
-            <Typography variant="h1">بسته های کوچی</Typography>
+            <Typography variant="h4">بسته های کوچی</Typography>
             <Iconify icon="goldStar" sx={{ color: yellow[700] }} />
           </Stack>
-          <Typography variant="h6" color={grey[500]}>
+          <Typography variant="body2" color={grey[500]}>
             کوچی فکر همه‌جا رو کرده
           </Typography>
         </Stack>
@@ -116,7 +116,7 @@ export const ProPackages = () => {
               sx={{
                 border: 1,
                 maxHeight: '100%',
-                borderColor: grey[300],
+                borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],
                 borderRadius: 2,
                 p: 3,
                 display: 'flex',
@@ -126,10 +126,10 @@ export const ProPackages = () => {
             >
               <Stack direction="row" justifyContent="space-between">
                 <Stack spacing={2}>
-                  <Typography fontWeight="bold" variant="h4" textAlign="left">
+                  <Typography fontWeight="bold" variant="h6" textAlign="left">
                     {item?.title}
                   </Typography>
-                  <Typography variant="h6" color={grey[500]}>
+                  <Typography variant="body2" color={grey[500]}>
                     {item?.subTitle}
                   </Typography>
                 </Stack>

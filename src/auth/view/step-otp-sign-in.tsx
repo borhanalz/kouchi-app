@@ -1,5 +1,6 @@
 'use client';
 
+import {toast} from "sonner";
 import { z as zod } from 'zod';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
@@ -16,7 +17,6 @@ import { EditCreateRequest } from '../../lib/axios';
 import { Form, Field } from '../../components/hook-form';
 import OtpTimer from '../../components/hook-form/otp-timer';
 import { FormReturnLink } from '../components/form-return-link';
-import {useURLSearchParams} from "../../hooks/use-search-params";
 
 import type {IApiSendOtp, IApiOtpLogin, ISendOtpFormData} from '../../types/auth';
 
@@ -56,16 +56,20 @@ const OtpSignInStep = () => {
   });
 
   const HandleSubmit = handleSubmit(async (data) => {
-    const response = await mutateAsync({...data,mobileNumber });
-    setSession(response?.token);
-    await checkUserSession?.();
+    try{
+      const response = await mutateAsync({...data,mobileNumber });
+      setSession(response?.token);
+      await checkUserSession?.();
+    }catch (e:any){
+      toast.error(e?.message);
+    }
   });
 
   const handleTimeReset = async() => {
     try{
        await sendOtp();
-    }catch (e){
-      console.log(e)
+    }catch (e:any){
+      toast?.error(e?.message);
     }
   };
 

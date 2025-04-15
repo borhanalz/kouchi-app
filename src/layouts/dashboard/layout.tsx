@@ -145,7 +145,7 @@ export function DashboardLayout({
         </>
       ),
       rightArea: (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 5 } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 2.5, sm: 5 } }}>
           {/*<Button*/}
           {/*  variant="contained"*/}
           {/*  color="primary"*/}
@@ -169,7 +169,7 @@ export function DashboardLayout({
           {/*/>*/}
 
           {/** @slot Notifications popover */}
-          <NotificationsDrawer data={_notifications} />
+          {/*<NotificationsDrawer data={_notifications} />*/}
 
           {/** @slot Contacts popover */}
           {/*<ContactsPopover data={_contacts} />*/}

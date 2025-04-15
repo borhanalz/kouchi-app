@@ -51,11 +51,11 @@ export interface IApiCreateTicket {
 export interface ICreateTicketFormData {
   "title" : string,
   "description": string,
-  "category" : string,
-  "priority" : string,
+  // "category" : string,
+  // "priority" : string,
   "requiresPayment" : boolean,
   "price": number,
-  attachments:null|undefined|any
+  attachments?:null|undefined|any
 }
 
 export interface IAddResponseFormData {

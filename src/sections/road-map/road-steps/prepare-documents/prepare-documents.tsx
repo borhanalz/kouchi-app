@@ -1,7 +1,7 @@
 'use client';
 
-import { FC, useState } from 'react';
 import Image from 'next/image';
+import { FC, useState } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 import italyImg from 'public/assets/images/italy.png';
 import canadaImg from 'public/assets/images/canadaFlag.jpg';
@@ -67,7 +67,7 @@ const PrepareDocumentsView: FC<IPrepareDocuments> = ({ countryName }) => {
         <Stack
           direction="row"
           justifyContent="space-between"
-          sx={{ borderRadius: 2, p: 1.5, border: 1, borderColor: grey[300], mt: 5 }}
+          sx={{ borderRadius: 2, p: 1.5, border: 1,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300], mt: 5 }}
           spacing={1}
         >
           <Stack spacing={1} width="100%">
@@ -122,7 +122,7 @@ const PrepareDocumentsView: FC<IPrepareDocuments> = ({ countryName }) => {
               </AccordionSummary>
               <AccordionDetails>
                 <Stack spacing={1}>
-                  <Stack sx={{ border: 1, borderRadius: 2, p: 2, borderColor: grey[400] }}>
+                  <Stack sx={{ border: 1, borderRadius: 2, p: 2,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],}}>
                     <Typography variant="body1">مدرک تحصیلی دیپلم</Typography>
                     <Stack direction="row" spacing={2} mt={3}>
                       <Button
@@ -140,7 +140,7 @@ const PrepareDocumentsView: FC<IPrepareDocuments> = ({ countryName }) => {
                       <Button variant="outlined">سوال دارم</Button>
                     </Stack>
                   </Stack>
-                  <Stack sx={{ border: 1, borderRadius: 2, p: 2, borderColor: grey[400] }}>
+                  <Stack sx={{ border: 1, borderRadius: 2, p: 2, borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],}}>
                     <Typography variant="body1">ریز نمرات پیش دانشگاهی</Typography>
                     <Stack direction="row" spacing={2} mt={3}>
                       <Button
@@ -174,7 +174,7 @@ const PrepareDocumentsView: FC<IPrepareDocuments> = ({ countryName }) => {
               </AccordionSummary>
               <AccordionDetails>
                 <Stack spacing={1}>
-                  <Stack sx={{ border: 1, borderRadius: 2, p: 2, borderColor: grey[400] }}>
+                  <Stack sx={{ border: 1, borderRadius: 2, p: 2,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],}}>
                     <Typography variant="body1">رزومه و نامه‌ها</Typography>
                     <Stack direction="row" spacing={2} mt={3}>
                       <Alert sx={{ py: 0.1, px: 2 }} severity="success">
@@ -194,7 +194,7 @@ const PrepareDocumentsView: FC<IPrepareDocuments> = ({ countryName }) => {
                       </Button>
                     </Stack>
                   </Stack>
-                  <Stack sx={{ border: 1, borderRadius: 2, p: 2, borderColor: grey[400] }}>
+                  <Stack sx={{ border: 1, borderRadius: 2, p: 2, borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],}}>
                     <Typography variant="body1">انگیزه نامه (SOP)</Typography>
                     <Stack direction="row" spacing={2} mt={3}>
                       <Button

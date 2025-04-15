@@ -41,7 +41,6 @@ export function ChatMessageList({ messages = [], loading }: Props) {
       </Stack>
     );
   }
-
   return (
     <>
       <Scrollbar

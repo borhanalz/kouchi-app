@@ -40,7 +40,7 @@ interface ISignInFormData {
 }
 
 export const SignInSchema = zod.object({
-  password: zod.string().min(6, {message: 'رمزعبور حداقل باید 6 کاراکتر باشد'}),
+  password: zod.string().min(1, {message: 'لطفا رمز عبور را وارد نمایید'}),
 });
 // ---------------------------------------------------------------------------
 const PasswordStep = () => {
@@ -75,10 +75,10 @@ const PasswordStep = () => {
       await signInWithPassword({mobileNumber, password: data.password});
       await checkUserSession?.();
       router.refresh();
-    } catch (error) {
-      console.error(error);
-      const feedbackMessage = getErrorMessage(error);
-      setErrorMessage(feedbackMessage);
+    } catch (error: any) {
+        const feedbackMessage = getErrorMessage(error);
+        setErrorMessage(feedbackMessage);
+        toast.error(error.message);
     }
   });
 
@@ -88,15 +88,15 @@ const PasswordStep = () => {
         await sendOtp({mobileNumber, otpType: 'reset'});
         router.push(paths.auth.resetPassword);
       } catch (e: any) {
-        toast.error(e?.message);
+        toast.error(e.message);
       }
     } else {
-      console.log({mobileNumber, otpType: 'login'})
       try {
         await sendOtp({mobileNumber, otpType: 'login'});
         router.push(paths.auth.otpSignIn);
       } catch (e: any) {
-        toast.error(e.error);
+        console.log(e)
+        toast.error(e.message);
       }
     }
   }
@@ -114,7 +114,7 @@ const PasswordStep = () => {
                 <InputAdornment position="end">
                   <IconButton onClick={showPassword.onToggle} edge="end">
                     <Iconify
-                      icon={showPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
+                      icon={showPassword.value ? 'eye' : 'eye-closed'}
                     />
                   </IconButton>
                 </InputAdornment>
@@ -134,7 +134,7 @@ const PasswordStep = () => {
             sx={{p: 1, fontSize: 10, border: 1, borderRadius: 2, cursor: 'pointer'}}
             onClick={() => HandleSendOtp('reset')}
           >
-            بازیابی رمز عبور
+            تغییر رمز عبور
           </Box>
         </Stack>
         <LoadingButton

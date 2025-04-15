@@ -27,7 +27,7 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
   const singleLogo = (
     <Image
       alt="Single logo"
-      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-single-dark.png' : '/logo/logo-full.png'}`}
+      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-png.png' : '/logo/logo-full.png'}`}
       width={100}
       height={45}
     />
@@ -36,7 +36,7 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
   const fullLogo = (
     <Image
       alt="Full logo"
-      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-single-dark.png' : '/logo/logo-full.png'}`}
+      src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-png.png' : '/logo/logo-full.png'}`}
       width={100}
       height={45}
     />

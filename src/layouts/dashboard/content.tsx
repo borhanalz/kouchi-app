@@ -14,6 +14,9 @@ import { layoutClasses } from '../core/classes';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { grey } from '../../theme';
+import Stack from "@mui/material/Stack";
+import {Iconify} from "../../components/iconify";
+import IconButton from "@mui/material/IconButton";
 
 // ----------------------------------------------------------------------
 
@@ -66,9 +69,14 @@ export function DashboardContent({
       ]}
       {...other}
     >
-      <Typography variant="h4" sx={{ mb: { xs: 3, md: 2 } }}>
-        {title}
-      </Typography>
+     <Stack direction='row' alignItems='center' justifyContent='space-between'>
+       <Typography variant="h4" sx={{ mb: { xs: 3, md: 2 } }}>
+         {title}
+       </Typography>
+       <IconButton onClick={()=>window.history.back()}>
+         <Iconify icon='arrowHeadLeft' sx={{width:15,cursor:'pointer'}}/>
+       </IconButton>
+     </Stack>
       <Divider sx={{ borderStyle: 'dashed', borderColor: '#0000004d', mb: 2 }} />
       {children}
     </Container>

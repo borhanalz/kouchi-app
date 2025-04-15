@@ -1,10 +1,8 @@
 'use client';
 
-import type {IDocumentsItem} from 'src/types/documents';
 
 import {useRouter} from "next/navigation";
 import {useQuery} from "@tanstack/react-query";
-import {useBoolean} from 'minimal-shared/hooks';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -14,16 +12,17 @@ import {DashboardContent} from 'src/layouts/dashboard';
 
 import {Iconify} from 'src/components/iconify';
 import {Scrollbar} from 'src/components/scrollbar';
-import {useTable, TableHeadCustom, TableSkeleton, TablePaginationCustom} from 'src/components/table';
+import {useTable, TableSkeleton, TableHeadCustom, TablePaginationCustom} from 'src/components/table';
 
-import {grey} from '../../../theme';
 import {paths} from "../../../routes/paths";
-import {EditCreateRequest, GetRequest} from "../../../lib/axios";
 import TicketsTableRow from '../tickets-table-row';
 import {endpoints} from "../../../hooks/endPoints";
+import {EditCreateRequest} from "../../../lib/axios";
+import {EmptyContent} from "../../../components/empty-content";
+import {LoadingScreen} from "../../../components/loading-screen";
 
 import type {IApiTicketsList} from "../../../types/tickets";
-import ticketDetails from "../ticket-details";
+import {useTheme} from "@mui/material/styles";
 // -----------------------------------------------------------------------------------------------------
 const TableHead = [
   {id: 'id', label: 'شماره'},
@@ -42,6 +41,7 @@ interface ITicketListFormData {
 const TicketsView = () => {
   const table = useTable();
   const router = useRouter();
+  const theme = useTheme();
 
   const {data: TicketsList, isPending} = useQuery({
     queryKey: ['tickets-list',table.page,table.rowsPerPage],
@@ -51,7 +51,6 @@ const TicketsView = () => {
       mobileNumber: '09127017331'
     })
   });
-  console.log(TicketsList)
  const rowNumber = (index:number) => table.page * table.rowsPerPage + index + 1;
   return (
     <DashboardContent
@@ -59,7 +58,7 @@ const TicketsView = () => {
       sx={{display: 'flex', flex: '1 1 auto', flexDirection: 'column'}}
       title="تیکت ها"
     >
-      <Stack direction="column" spacing={2}>
+      {isPending?<LoadingScreen/>:<Stack direction="column" spacing={2}>
         <Stack direction="row" justifyContent="right">
           <Button
             startIcon={<Iconify icon="circularPlus" sx={{width: 25, height: 25}}/>}
@@ -70,25 +69,27 @@ const TicketsView = () => {
             تیکت جدید
           </Button>
         </Stack>
-        <Card sx={{borderRadius: 2, border: 1.5, borderColor: grey[300]}}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{minWidth: 960}}>
-              <TableHeadCustom headCells={TableHead} sx={{whiteSpace: 'nowrap'}}/>
-              <TableBody>
-                {TicketsList?.tickets?.map((row,index) => <TicketsTableRow row={row} index={rowNumber(index)}/>)}
-                {isPending && <TableSkeleton rowCount={5} cellCount={TableHead.length}/>}
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </Card>
-        <TablePaginationCustom
+        {!TicketsList?.tickets?.length ? <Stack mt={8}><EmptyContent title='تیکتی برای شما یافت نشد'
+                                                                     description='برای ساخت تیکت از قسمت تیکت جدید اقدام فرمایید'/></Stack> :
+          <Card sx={{borderRadius: 2, border: 1.5,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300]}}>
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'} sx={{minWidth: 960}}>
+                <TableHeadCustom headCells={TableHead} sx={{whiteSpace: 'nowrap'}}/>
+                <TableBody>
+                  {TicketsList?.tickets?.map((row, index) => <TicketsTableRow row={row} index={rowNumber(index)}/>)}
+                  {isPending && <TableSkeleton rowCount={5} cellCount={TableHead.length}/>}
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </Card>}
+        {TicketsList?.tickets && TicketsList?.tickets?.length > 0 && <TablePaginationCustom
           page={table.page}
           count={TicketsList?.totalCount as number}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           onRowsPerPageChange={table.onChangeRowsPerPage}
-        />
-      </Stack>
+        />}
+      </Stack>}
 
     </DashboardContent>
   );

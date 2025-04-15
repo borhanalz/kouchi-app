@@ -47,7 +47,7 @@ const RoadMapView = () => {
       <Grid container gap={2}>
         {data?.map((item) => (
           <Grid size={{ xs: 12, md: 6, xl: 4 }}>
-            <Card sx={{ border: 1.4, boxShadow: 0.2, borderColor: grey[300] }}>
+            <Card sx={{ border: 1.4, boxShadow: 0.2,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],}}>
               <CardContent sx={{ p: 2 }}>
                 <Stack spacing={2}>
                   <Image

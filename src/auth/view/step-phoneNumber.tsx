@@ -22,6 +22,8 @@ import {GetRequest} from '../../lib/axios';
 import {endpoints} from '../../hooks/endPoints';
 
 import type {IApiCheckUser} from '../../types/auth';
+import StepRegister from "./step-register";
+import {useURLSearchParams} from "../../hooks/use-search-params";
 
 // --------------------------------------------------------------
 export interface PhoneNumberSchemaType {
@@ -46,7 +48,9 @@ const PhoneNumberStep = () => {
   const {handleSubmit} = methods;
   const router = useRouter();
   const dialog = useBoolean();
+  const [signUpStatus, setSignUpStatus] = useState(false);
   // const [mobileNumberVal, setMobileNumberVal] = useState<string>('');
+  const {getParam}=useURLSearchParams();
 
   const ref = useRef<HTMLDivElement | null>(null);
   const captcha = useRef<any>(null);
@@ -57,21 +61,34 @@ const PhoneNumberStep = () => {
     mutationFn: (payload: PhoneNumberSchemaType) => GetRequest<IApiCheckUser>(endpoints.AUTH.CHECK_USER_SIGNUP_STATUS(payload?.mobileNumber as string)),
   });
 
-  const HandleSubmit = handleSubmit(async (data) => {
-    // setMobileNumberVal(data?.mobileNumber);
-    // dialog.onTrue();
+  const CheckUser = async(data:PhoneNumberSchemaType)=>{
     try {
       const response = await mutateAsync({mobileNumber: data?.mobileNumber});
       if (response?.hasPassword) {
         sessionStorage.setItem("mobileNumber", data?.mobileNumber)
-        router.push(paths.auth.password);
+        router.replace(paths.auth.password);
       } else {
-        router.push(paths.auth.signUp);
+        sessionStorage.setItem("mobileNumber", data?.mobileNumber)
+        // router.replace(paths.auth.signUp);
+        setSignUpStatus(true);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+      toast.error(error?.message);
     }
+  }
+
+  const HandleSubmit = handleSubmit(async (data) => {
+    // setMobileNumberVal(data?.mobileNumber);
+    // dialog.onTrue();
+    CheckUser(data);
   });
+
+  useEffect(() => {
+    if(getParam("name")!==''){
+      console.log(getParam("mobileNumber"))
+      CheckUser({mobileNumber:getParam("mobileNumber")})
+    }
+  }, []);
 
   // useEffect(() => {
   //   if (!dialog.value) return;
@@ -106,14 +123,14 @@ const PhoneNumberStep = () => {
 
   return (
     <>
-      <Form methods={methods} onSubmit={HandleSubmit}>
+      {signUpStatus?<StepRegister onClose={()=>setSignUpStatus(false)}/>:<Form methods={methods} onSubmit={HandleSubmit}>
         <Stack spacing={2}>
           <Field.Text label="شماره موبایل" name="mobileNumber"/>
           <LoadingButton fullWidth color="primary" size="large" type="submit" variant="contained" loading={isPending}>
             ادامه
           </LoadingButton>
         </Stack>
-      </Form>
+      </Form>}
       <Dialog open={dialog.value}>
         <DialogContent sx={{p: 3}}>
           <div key={keyRender} ref={ref}/>

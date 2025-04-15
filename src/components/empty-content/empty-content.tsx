@@ -41,12 +41,12 @@ export function EmptyContent({
       <Box
         component="img"
         alt="Empty content"
-        src={imgUrl ?? `${CONFIG.assetsDir}/assets/icons/empty/ic-content.svg`}
+        src={imgUrl ?? `${CONFIG.assetsDir}/assets/images/empty-illustrator.png`}
         {...slotProps?.img}
         sx={[
           {
             width: 1,
-            maxWidth: 160,
+            maxWidth: 180,
           },
           ...(Array.isArray(slotProps?.img?.sx)
             ? (slotProps?.img?.sx ?? [])
@@ -60,7 +60,7 @@ export function EmptyContent({
           {...slotProps?.title}
           sx={[
             {
-              mt: 1,
+              mt: 4,
               textAlign: 'center',
               color: 'text.disabled',
             },
@@ -79,7 +79,7 @@ export function EmptyContent({
           {...slotProps?.description}
           sx={[
             {
-              mt: 1,
+              mt: 1.5,
               textAlign: 'center',
               color: 'text.disabled',
             },

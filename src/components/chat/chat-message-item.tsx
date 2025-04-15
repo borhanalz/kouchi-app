@@ -1,5 +1,7 @@
 import type { IChatParticipant } from 'src/types/chat-component';
 
+import {format, formatDistance} from "date-fns-jalali";
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import {useTheme} from "@mui/material/styles";
@@ -13,6 +15,7 @@ import { Iconify } from 'src/components/iconify';
 import { useMockedUser } from 'src/auth/hooks';
 
 import type {ITicketResponse} from "../../types/tickets";
+import {faIR} from "date-fns-jalali/locale";
 
 // ----------------------------------------------------------------------
 
@@ -27,16 +30,14 @@ export function ChatMessageItem({ message }: Props) {
   const { responderName,attachments } = message;
 
   const { text, createdAt } = message;
-
   const renderInfo = () => (
     <Typography
       noWrap
       variant="caption"
       sx={{ mb: 1, color: 'text.disabled', ...(isUser && { mr: 'auto' }) }}
     >
-      {isUser && `${responderName}, `}
-
-      {fToNow(createdAt)}
+      {format(createdAt,'HH:mm')} ,
+      {format(createdAt,'yyyy-MM-dd')}
     </Typography>
   );
 
@@ -58,12 +59,12 @@ export function ChatMessageItem({ message }: Props) {
               sx={{
                 borderRadius: 1.5,
                 cursor: 'pointer',
-                backgroundColor:theme.vars.palette.grey[300],
+                backgroundColor:theme.palette.mode==="dark"?theme.vars.palette.primary.main:theme.vars.palette.grey[300],
                 p:1,
                 '&:hover': { opacity: 0.9 },
               }}
             >
-              <Typography variant='caption'>{attachments[0]}</Typography>
+              <Typography variant='caption'>{`${attachments?.length} فایل پیوست دارد.`}</Typography>
             </Box>
           </Stack>
       ) : (
@@ -105,12 +106,15 @@ export function ChatMessageItem({ message }: Props) {
   if (!message.text) {
     return null;
   }
-
+  const distance = formatDistance(message?.createdAt, new Date(), {
+    addSuffix: true, // adds "ago" (پیش)
+    locale: faIR     // use Persian locale
+  });
   return (
     <Box sx={{ mb: 5, display: 'flex', justifyContent: message?.responderType!=="user" ? 'flex-end' : 'unset' }}>
       {/*{!me && <Avatar alt={firstName} src={img.src} sx={{ width: 32, height: 32, mr: 2 }} />}*/}
       {/*<Image src={img} alt='img' style={{ width: 40,height:40,borderRadius:50 }} />*/}
-      <Stack alignItems={message?.responderType==="user" ? 'flex-end' : 'flex-start'}>
+      <Stack alignItems={message?.responderType === "user" ? 'flex-end' : 'flex-start'}>
         {renderInfo()}
 
         <Box
@@ -118,12 +122,13 @@ export function ChatMessageItem({ message }: Props) {
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
-            '&:hover': { '& .message-actions': { opacity: 1 } },
+            '&:hover': {'& .message-actions': {opacity: 1}},
           }}
         >
           {renderBody()}
-          {renderActions()}
+          {/*{renderActions()}*/}
         </Box>
+        <Typography mt={1} textAlign='right' color='grey' variant='caption'>{distance}</Typography>
       </Stack>
     </Box>
   );

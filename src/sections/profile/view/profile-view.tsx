@@ -38,8 +38,8 @@ interface FormValues {
 function TitleValue({ title, value }: { title: string; value: string }) {
   return (
     <Stack direction="row" spacing={2} justifyContent="space-between">
-      <Typography>{title} : </Typography>
-      <Typography color="grey">{value || "--"}</Typography>
+      <Typography variant='body1'>{title} : </Typography>
+      <Typography variant='body1' color="grey">{value || "--"}</Typography>
     </Stack>
   );
 }
@@ -47,7 +47,7 @@ function TitleValue({ title, value }: { title: string; value: string }) {
 const ProfileView = () => {
   const theme = useTheme();
   const selectUserData = useAppSelector((state) => state.userReducer.info);
-  const [tabVal, setTabVal] = useState(1);
+  const [tabVal, setTabVal] = useState(2);
 
   return (
     <DashboardContent
@@ -63,7 +63,7 @@ const ProfileView = () => {
         sx={{
           bosizehadow: 0.5,
           border: 0.5,
-          borderColor: theme.vars.palette.grey[300],
+          borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],
           borderRadius: 2,
           p: 3
         }}
@@ -75,11 +75,10 @@ const ProfileView = () => {
           color='primary'
           textColor='primary'
         >
-          <Tab color='primary' value={1} label="اطلاعات کاربری" />
-          <Tab color='primary' value={2} label="ویرایش پروفایل" />
+          <Tab color='primary' value={2} label="پروفایل" />
           <Tab color='primary' value={3} label="سوابق مالی" />
         </CustomTabs>
-        {tabVal === 1 && (
+        {tabVal === 2 && (
           <Stack justifyContent="center" mt={5} alignItems="center" spacing={5}>
             <AccountButton
               width={80}

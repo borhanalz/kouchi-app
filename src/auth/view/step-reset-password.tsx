@@ -24,70 +24,83 @@ import { FormReturnLink } from 'src/auth/components/form-return-link';
 import { endpoints } from '../../hooks/endPoints';
 import { EditCreateRequest } from '../../lib/axios';
 
-import type {IApiResetPassword, IApiSendOtp, ISendOtpFormData} from '../../types/auth';
-// ------------------------------------------------------------------
-interface IResetPassowrdFormData {
-  mobileNumber: string;
-  otp: string;
-  newPassword: string;
-}
-export const ResetPasswordSchema = zod.object({
-  newPassword: zod.string().min(6, { message: 'رمزعبور حداقل باید 6 کاراکتر باشد' }),
-  mobileNumber: zod
-    .string()
-    .regex(/^09\d{9}$/, { message: 'شماره موبایل معتبر نیست' })
-    .min(11, { message: 'شماره موبایل باید 11 رقم باشد' })
-    .max(11, { message: 'شماره موبایل باید 11 رقم باشد' }),
-  otp: zod.string().min(6, { message: 'کد ارسالی به شماره همراه خود را وارد کنید' }),
-});
-// -------------------------------------------------------------------
+import type { IApiSendOtp, ISendOtpFormData, IApiResetPassword } from '../../types/auth';
+
+// --------------------------------------------------
+
+const ResetPasswordSchema = zod
+  .object({
+    newPassword: zod.string().min(1, { message: 'لطفا رمز عبور را وارد نمایید' }),
+    confirmNewPassword: zod.string().min(1, { message: ' لطفا تکرار رمز عبور را وارد نمایید' }),
+    mobileNumber: zod
+      .string()
+      .regex(/^09\d{9}$/, { message: 'شماره موبایل معتبر نیست' })
+      .length(11, { message: 'شماره موبایل باید 11 رقم باشد' }),
+    otp: zod.string().min(6, { message: 'کد ارسالی به شماره همراه خود را وارد کنید' }),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: 'رمزهای عبور یکسان نیستند',
+    path: ['confirmNewPassword'],
+  });
+
+type ResetPasswordFormType = zod.infer<typeof ResetPasswordSchema>;
+
+// --------------------------------------------------
+
 const AuthView = () => {
   const showPassword = useBoolean();
   const router = useRouter();
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['update-password'],
-    mutationFn: (payload: IResetPassowrdFormData) =>
-      EditCreateRequest<IResetPassowrdFormData, IApiResetPassword>(
+    mutationFn: (payload: Omit<ResetPasswordFormType, 'confirmNewPassword'>) =>
+      EditCreateRequest<Omit<ResetPasswordFormType, 'confirmNewPassword'>, IApiResetPassword>(
         endpoints.AUTH.CHANGE_PASSWORD,
         payload
       ),
   });
+
   const { mutateAsync: sendOtp } = useMutation({
     mutationKey: ['resent-otp-reset-password'],
     mutationFn: () =>
-      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {mobileNumber:sessionStorage.getItem("mobileNumber") as string,otpType:'login'}),
+      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {
+        mobileNumber: sessionStorage.getItem('mobileNumber') as string,
+        otpType: 'login',
+      }),
   });
 
-  const methods = useForm<IResetPassowrdFormData>({
-    // resolver: zodResolver(ResetPasswordSchema),
+  const methods = useForm<ResetPasswordFormType>({
+    resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
-      mobileNumber:sessionStorage.getItem("mobileNumber") as string,
+      mobileNumber: sessionStorage.getItem('mobileNumber') as string,
       newPassword: '',
+      confirmNewPassword: '',
       otp: '',
     },
   });
 
   const { handleSubmit } = methods;
+
   const HandleSubmit = handleSubmit(async (data) => {
-    console.log(data)
     try {
-      await mutateAsync(data);
+      const { confirmNewPassword, ...payload } = data;
+      await mutateAsync(payload);
       toast.success('با موفقیت انجام شد');
       router.push(paths.auth.password);
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+      toast?.error(error?.message);
     }
   });
 
-  const handleTimeReset = async() => {
-    try{
+  const handleTimeReset = async () => {
+    try {
       const res = await sendOtp();
-      console.log(res)
-    }catch (e){
-      console.log(e)
+      console.log(res);
+    } catch (e) {
+      console.log(e);
     }
   };
+
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
       <Stack spacing={2}>
@@ -100,9 +113,23 @@ const AuthView = () => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton onClick={showPassword.onToggle} edge="end">
-                    <Iconify
-                      icon={showPassword.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'}
-                    />
+                    <Iconify icon={showPassword.value ? 'eye' : 'eye-closed'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+        <Field.Text
+          label="تکرار رمز عبور جدید"
+          name="confirmNewPassword"
+          type={showPassword.value ? 'text' : 'password'}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={showPassword.onToggle} edge="end">
+                    <Iconify icon={showPassword.value ? 'eye' : 'eye-closed'} />
                   </IconButton>
                 </InputAdornment>
               ),
@@ -126,4 +153,5 @@ const AuthView = () => {
     </Form>
   );
 };
+
 export default AuthView;

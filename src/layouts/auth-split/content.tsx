@@ -11,7 +11,8 @@ import Stack from '@mui/material/Stack';
 import {Logo} from "../../components/logo";
 import { layoutClasses } from '../core/classes';
 import { FormHead } from '../../auth/components/form-head';
-
+import illustration from 'public/assets/images/login-illustrator.png'
+import Image from "next/image";
 // ----------------------------------------------------------------------
 
 export type AuthSplitContentProps = BoxProps & { layoutQuery?: Breakpoint };
@@ -53,6 +54,9 @@ export function AuthSplitContent({
         <Box sx={{ borderRadius: 2, p: 1 }}>
           <Stack textAlign="center" spacing={3} alignItems="center">
             <Logo  />
+            <Box>
+              <Image alt='illustration' src={illustration} style={{width:'100px',height:'auto'}}/>
+            </Box>
             <FormHead title="ورود به کوچی" description="دستیار هوش مصنوعی مهاجرت تحصیلی" />
           </Stack>
           {children}

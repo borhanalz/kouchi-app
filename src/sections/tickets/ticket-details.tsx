@@ -21,6 +21,7 @@ const TicketDetail = ({ticketId}: ITicketDetail) => {
     queryKey: ['get-ticket-by-id'],
     queryFn: () => EditCreateRequest<ITicketDetail, IApiGetTicket>(endpoints.TICKETS.GET_BY_ID, {ticketId})
   });
+
   return (
     <DashboardContent
       maxWidth={false}
@@ -28,7 +29,7 @@ const TicketDetail = ({ticketId}: ITicketDetail) => {
       title="تیکت"
     >
       {isPending ? <ChatSkeleton/> :
-        <Chat messages={data?.ticket.responses as ITicketResponse[]} isTicket/>}
+        <Chat title={data?.ticket?.title as string} messages={data?.ticket.responses as ITicketResponse[]} isTicket/>}
     </DashboardContent>
   );
 };
