@@ -1,18 +1,30 @@
-import Typography from '@mui/material/Typography';
+'use client'
 
-import { DashboardContent } from 'src/layouts/dashboard';
+import {useQuery} from "@tanstack/react-query";
 
-import { Chat } from 'src/components/chat';
+import {Chat} from "src/components/chat";
 
-// --------------------------------------------------------------------------------
+import {EditCreateRequest, GetRequest} from "../../../lib/axios";
+import {IApiChatHistory, IChat} from "../../../types/chat";
+import {endpoints} from "../../../hooks/endPoints";
+import {DashboardContent} from "../../../layouts/dashboard";
+import ChatSkeleton from "../../../components/Skeleton/chat-skeleton";
 
-const ChatView = () => (
-  <DashboardContent
-    maxWidth={false}
-    sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column' }}
-    title="گفت و گو با کوچی"
-  >
-    <Chat messages={[]} />
-  </DashboardContent>
-);
+// -------------------------------------------------------------------------------------------
+const ChatView = () => {
+  const {data, isPending} = useQuery({
+    queryKey: ['get-chat-history'],
+    queryFn: () => EditCreateRequest<any,IApiChatHistory>(endpoints.CHAT.CHAT_HISTORY,{},{},'post',{baseURL:'https://koochichat.liara.run'}),
+  });
+  return (
+    <DashboardContent
+      maxWidth={false}
+      sx={{display: 'flex', flex: '1 1 auto', flexDirection: 'column'}}
+      title=""
+    >
+      {isPending ? <ChatSkeleton/> :
+       <Chat title='' messages={data?.chats as IChat[]} />}
+    </DashboardContent>
+  );
+};
 export default ChatView;

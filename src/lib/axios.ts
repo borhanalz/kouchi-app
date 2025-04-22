@@ -39,13 +39,21 @@ export async function EditCreateRequest<APIBodyType, APIResponseType = any>(
   url: string,
   data: APIBodyType,
   headers?:RawAxiosRequestHeaders,
-  reqType?:'post'|'put'
+  reqType?:'post'|'put',
+  configs?:AxiosRequestConfig
 ): Promise<APIResponseType> {
   let response: AxiosResponse<APIResponseType> | undefined = undefined;
+  const requestConfig: AxiosRequestConfig = {
+    ...configs,
+    headers: {
+      ...configs?.headers,
+      ...headers,
+    },
+  };
   if (reqType==="put") {
-    response = await axiosInstance.put<APIResponseType>(url, data);
+    response = await axiosInstance.put<APIResponseType>(url, data,requestConfig);
   } else {
-    response = await axiosInstance.post<APIResponseType>(url, data,{headers:headers});
+    response = await axiosInstance.post<APIResponseType>(url, data,requestConfig);
   }
   if (response.status !== 200) {
     throw new Error('Error add/edit');

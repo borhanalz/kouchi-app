@@ -1,35 +1,43 @@
-import {z as zod} from "zod";
 import {toast} from "sonner";
-import {useForm} from "react-hook-form";
 import {usePathname} from "next/navigation";
-import {zodResolver} from "@hookform/resolvers/zod";
 import {useRef, useState, useCallback} from 'react';
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Button from "@mui/material/Button";
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
-
-import {paths} from 'src/routes/paths';
-import {useRouter} from 'src/routes/hooks';
 
 import {Iconify} from 'src/components/iconify';
 import {DeleteButton, SingleFilePreview} from 'src/components/upload/components/preview-single-file';
 
-import {Field, Form} from "../hook-form";
+import {IApiChat, IChatFormData} from "../../types/chat";
 import {endpoints} from "../../hooks/endPoints";
 import {CustomPopover} from '../custom-popover';
 import {EditCreateRequest} from "../../lib/axios";
-import {IAddResponseFormData, IApiAddResponse, IApiCreateTicket, ICreateTicketFormData} from "../../types/tickets";
+import {IAddResponseFormData, IApiAddResponse} from "../../types/tickets";
+
 //----------------------------------------------------------------------------------
 type Props = {
   isNewTicket?: boolean;
+  isTicket: boolean;
+  HandleChatResponse: () => void;
+  addChatResponsePending: boolean;
+  isChatLoading: boolean;
+  setChatMessage?:any;
+  chatMessage?:string;
 };
 
 // --------------------------------------------------------------------------------
-export function ChatMessageInput({isNewTicket = true}: Props) {
+export function ChatMessageInput({
+                                   isNewTicket = true,
+                                   isChatLoading,
+                                   addChatResponsePending,
+                                   isTicket,
+                                   HandleChatResponse,
+                                   setChatMessage,
+  chatMessage
+                                 }: Props) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
 
@@ -42,8 +50,13 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
 
   const {mutateAsync: AddResponse, isPending: addResponsePending} = useMutation({
     mutationKey: ['add-response-ticket'],
-    mutationFn: (data: IAddResponseFormData) => EditCreateRequest<IAddResponseFormData, IApiAddResponse>(endpoints.TICKETS.ADD_RESPONSE, data,{"Content-Type":"multipart/form-data"})
-  })
+    mutationFn: (data: IAddResponseFormData) =>
+      EditCreateRequest<IAddResponseFormData, IApiAddResponse>(
+        endpoints.TICKETS.ADD_RESPONSE,
+        data,
+        {"Content-Type": "multipart/form-data"}
+      )
+  });
 
   const handleAttach = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setPopoverAnchor(event.currentTarget);
@@ -52,71 +65,98 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
     }
   }, []);
 
-  const handleClosePopover = () => {
+  const handleClosePopover = useCallback(() => {
     setPopoverAnchor(null);
-  };
-
-  const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(event.target.value);
   }, []);
 
+  const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    if(isTicket) {
+      setMessage(event.target.value);
+    }else {
+      setChatMessage(event.target.value)
+    }
+  }, []);
 
-  const handleSendResponse = async () => {
-    if (message !== '') {
+  const handleSendResponse = useCallback(async () => {
+    if (message.trim()||chatMessage?.trim() !== '') {
       try {
-        await AddResponse({
-          ticketId: Number(ticketId),
-          "responderType": "user",
-          "responderName": "test",
-          "text": message,
-          "attachments": file ?? null
-        });
-        queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
+        if (isTicket) {
+          await AddResponse({
+            ticketId: Number(ticketId),
+            "responderType": "user",
+            "responderName": "test",
+            "text": message,
+            "attachments": file ?? null
+          });
+          queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
+        } else {
+          await HandleChatResponse();
+        }
         setMessage('');
         setFile(null);
       } catch (e) {
-        console.log(e)
+        console.error(e);
+        toast.error("ارسال پیام با خطا مواجه شد");
       }
     } else {
-      toast.error("لطفا پیغام خود را وارد کنید")
+      toast.error("لطفا پیغام خود را وارد کنید");
     }
-  }
+  }, [message, isTicket, ticketId, AddResponse, queryClient, HandleChatResponse, file]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSendResponse();
+    }
+  }, [handleSendResponse]);
+
+  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;
     if (selectedFile) {
       setFile(selectedFile);
     }
-  };
+  }, []);
 
-  const handleRemoveFile = () => {
+  const handleRemoveFile = useCallback(() => {
     setFile(null);
     handleClosePopover();
-  };
+  }, [handleClosePopover]);
 
   return (
     <>
       <InputBase
         name="chat-message"
         id="chat-message-input"
-        value={message}
+        value={isTicket?message:chatMessage}
         onChange={handleChangeMessage}
+        disabled={isChatLoading}
+        onKeyDown={handleKeyDown}
         placeholder="پاسخ خود را بنویسید…"
         startAdornment={
-          <IconButton onClick={handleSendResponse}>
-            {addResponsePending ? <Iconify icon="circularLoading"/> : <Iconify icon="send"/>}
+          <IconButton
+            onClick={handleSendResponse}
+            disabled={isChatLoading || addResponsePending || addChatResponsePending}
+          >
+            {addResponsePending || addChatResponsePending ? (
+              <Iconify icon="circularLoading"/>
+            ) : (
+              <Iconify icon="send"/>
+            )}
           </IconButton>
         }
         endAdornment={
           <Box sx={{flexShrink: 0, display: 'flex'}}>
-            <Stack>
-              <IconButton
-                ref={attachmentButtonRef}
-                onClick={handleAttach}
-              >
-                <Iconify icon="attachment"/>
-              </IconButton>
-            </Stack>
+            {isTicket && (
+              <Stack>
+                <IconButton
+                  ref={attachmentButtonRef}
+                  onClick={handleAttach}
+                  disabled={addResponsePending || addChatResponsePending}
+                >
+                  <Iconify icon="attachment"/>
+                </IconButton>
+              </Stack>
+            )}
           </Box>
         }
         sx={[
@@ -150,7 +190,7 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
             <DeleteButton onClick={handleRemoveFile}/>
           </Box>
         ) : (
-          <Box sx={{p: 2,fontSize:'14px'}}>فایلی انتخاب نشده است !</Box>
+          <Box sx={{p: 2, fontSize: '14px'}}>فایلی انتخاب نشده است !</Box>
         )}
       </CustomPopover>
 
@@ -159,6 +199,7 @@ export function ChatMessageInput({isNewTicket = true}: Props) {
         ref={fileRef}
         style={{display: 'none'}}
         onChange={handleFileChange}
+        disabled={addResponsePending || addChatResponsePending}
       />
     </>
   );

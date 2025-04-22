@@ -1,43 +1,41 @@
-import type { IChatParticipant } from 'src/types/chat-component';
-
-import {format, formatDistance} from "date-fns-jalali";
+import { faIR } from 'date-fns-jalali/locale';
+import { format, formatDistance } from 'date-fns-jalali';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import {useTheme} from "@mui/material/styles";
+import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
-import { fToNow } from 'src/utils/format-time';
-
 import { Iconify } from 'src/components/iconify';
 
-import { useMockedUser } from 'src/auth/hooks';
-
-import type {ITicketResponse} from "../../types/tickets";
-import {faIR} from "date-fns-jalali/locale";
+import type {IChat} from '../../types/chat';
+import type { ITicketResponse } from '../../types/tickets';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  message: ITicketResponse;
+  message: ITicketResponse | IChat;
 };
+
+// Type guard to identify ITicketResponse
+function isTicketResponse(message: ITicketResponse | IChat): message is ITicketResponse {
+  return 'responderType' in message;
+}
 
 export function ChatMessageItem({ message }: Props) {
   const theme = useTheme();
-  const isUser = message?.responderType==="user";
 
-  const { responderName,attachments } = message;
+  const isTicket = isTicketResponse(message);
+  const isUser = isTicket ? message.responderType === 'user':message.role==="user";
 
-  const { text, createdAt } = message;
   const renderInfo = () => (
     <Typography
       noWrap
       variant="caption"
       sx={{ mb: 1, color: 'text.disabled', ...(isUser && { mr: 'auto' }) }}
     >
-      {format(createdAt,'HH:mm')} ,
-      {format(createdAt,'yyyy-MM-dd')}
+      {format(isTicket?message?.createdAt:message?.timestamp, 'HH:mm')} , {format(isTicket?message?.createdAt:message?.timestamp, 'yyyy-MM-dd')}
     </Typography>
   );
 
@@ -48,27 +46,34 @@ export function ChatMessageItem({ message }: Props) {
         minWidth: 48,
         maxWidth: 320,
         borderRadius: 1,
-        bgcolor: theme.vars.palette.primary.light,
+        bgcolor: theme.vars.palette.secondary.main,
         ...(!isUser && { color: 'grey.800', bgcolor: 'primary.light' }),
       }}
     >
-      {attachments?.length>0 ? (
-          <Stack spacing={2}>
-            <Typography>{text}</Typography>
-            <Box
-              sx={{
-                borderRadius: 1.5,
-                cursor: 'pointer',
-                backgroundColor:theme.palette.mode==="dark"?theme.vars.palette.primary.main:theme.vars.palette.grey[300],
-                p:1,
-                '&:hover': { opacity: 0.9 },
-              }}
-            >
-              <Typography variant='caption'>{`${attachments?.length} فایل پیوست دارد.`}</Typography>
-            </Box>
-          </Stack>
+      {isTicket && message.attachments?.length > 0 ? (
+        <Stack spacing={2}>
+          <Typography>{message?.text}</Typography>
+          <Box
+            sx={{
+              borderRadius: 1.5,
+              cursor: 'pointer',
+              backgroundColor:
+                theme.palette.mode === 'dark'
+                  ? theme.vars.palette.primary.main
+                  : theme.vars.palette.grey[300],
+              p: 1,
+              '&:hover': { opacity: 0.9 },
+            }}
+          >
+            <Typography variant="caption">
+              {`${message.attachments?.length} فایل پیوست دارد.`}
+            </Typography>
+          </Box>
+        </Stack>
       ) : (
-        <Typography lineHeight={1.8} variant='body1'>{text}</Typography>
+        <Typography lineHeight={1.8} variant="body2" color='#fff'>
+          {isTicket?message?.text:message?.content}
+        </Typography>
       )}
     </Stack>
   );
@@ -90,31 +95,41 @@ export function ChatMessageItem({ message }: Props) {
       })}
     >
       <IconButton size="small">
-        <Iconify icon="arrowBack" sx={{width:15,height:15}} />
+        <Iconify icon="arrowBack" sx={{ width: 15, height: 15 }} />
       </IconButton>
 
       <IconButton size="small">
-        <Iconify icon="smile" sx={{width:15,height:15}} />
+        <Iconify icon="smile" sx={{ width: 15, height: 15 }} />
       </IconButton>
 
       <IconButton size="small">
-        <Iconify icon="trash" sx={{width:15,height:15}} />
+        <Iconify icon="trash" sx={{ width: 15, height: 15 }} />
       </IconButton>
     </Box>
   );
 
-  if (!message.text) {
+  if (isTicket?!message.text:!message.content) {
     return null;
   }
-  const distance = formatDistance(message?.createdAt, new Date(), {
-    addSuffix: true, // adds "ago" (پیش)
-    locale: faIR     // use Persian locale
-  });
+
+  const distance =formatDistance(new Date(isTicket?message?.createdAt:message?.timestamp), new Date(),
+  {
+    addSuffix: true,
+      locale
+  :
+    faIR,
+  }
+);
+
   return (
-    <Box sx={{ mb: 5, display: 'flex', justifyContent: message?.responderType!=="user" ? 'flex-end' : 'unset' }}>
-      {/*{!me && <Avatar alt={firstName} src={img.src} sx={{ width: 32, height: 32, mr: 2 }} />}*/}
-      {/*<Image src={img} alt='img' style={{ width: 40,height:40,borderRadius:50 }} />*/}
-      <Stack alignItems={message?.responderType === "user" ? 'flex-end' : 'flex-start'}>
+    <Box
+      sx={{
+        mb: 5,
+        display: 'flex',
+        justifyContent: isUser ? 'unset' : 'flex-end',
+      }}
+    >
+      <Stack alignItems={isUser ? 'flex-end' : 'flex-start'}>
         {renderInfo()}
 
         <Box
@@ -122,13 +137,18 @@ export function ChatMessageItem({ message }: Props) {
             display: 'flex',
             alignItems: 'center',
             position: 'relative',
-            '&:hover': {'& .message-actions': {opacity: 1}},
+            '&:hover': {
+              '& .message-actions': { opacity: 1 },
+            },
           }}
         >
           {renderBody()}
           {/*{renderActions()}*/}
         </Box>
-        <Typography mt={1} textAlign='right' color='grey' variant='caption'>{distance}</Typography>
+
+        <Typography mt={1} textAlign="right" color="grey" variant="caption">
+          {distance}
+        </Typography>
       </Stack>
     </Box>
   );

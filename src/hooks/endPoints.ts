@@ -17,5 +17,9 @@ export const endpoints = Object.freeze({
   PROFILE:{
     GET_INFO:'api/user/info',
     DETAIL_INFO:'api/user/details',
+  },
+  CHAT:{
+    CHAT_HISTORY:'chat-history',
+    CHAT:'chat'
   }
 });
