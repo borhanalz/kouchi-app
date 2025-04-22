@@ -1,24 +1,23 @@
 'use client';
 
 import {toast} from "sonner";
-import { z as zod } from 'zod';
-import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { zodResolver } from '@hookform/resolvers/zod';
+import {z as zod} from 'zod';
+import {useForm} from 'react-hook-form';
+import {useMutation} from '@tanstack/react-query';
+import {zodResolver} from '@hookform/resolvers/zod';
 
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useAuthContext } from '../hooks';
-import { paths } from '../../routes/paths';
-import { setSession } from '../context/jwt';
-import { endpoints } from '../../hooks/endPoints';
-import { EditCreateRequest } from '../../lib/axios';
-import { Form, Field } from '../../components/hook-form';
+import {useAuthContext} from '../hooks';
+import {setSession} from '../context/jwt';
+import {endpoints} from '../../hooks/endPoints';
+import {EditCreateRequest} from '../../lib/axios';
+import {Form, Field} from '../../components/hook-form';
 import OtpTimer from '../../components/hook-form/otp-timer';
-import { FormReturnLink } from '../components/form-return-link';
+import {FormReturnLink} from '../components/form-return-link';
 
-import type {IApiSendOtp, IApiOtpLogin, ISendOtpFormData} from '../../types/auth';
+import type {IApiLogin, IApiSendOtp, ISendOtpFormData} from '../../types/auth';
 
 // ------------------------------------------------------------------------------------------
 interface IOtpLoginFormData {
@@ -27,11 +26,11 @@ interface IOtpLoginFormData {
 }
 
 export const OtpLoginSchema = zod.object({
-  otp: zod.string().min(6, { message: 'کد ارسالی به شماره همراه خود را وارد کنید' }),
+  otp: zod.string().min(6, {message: 'کد ارسالی به شماره همراه خود را وارد کنید'}),
 });
 // ----------------------------------------------------------------------------------------------
-const OtpSignInStep = () => {
-  const { checkUserSession } = useAuthContext();
+const OtpSignInStep = ({onClose}: { onClose: () => void }) => {
+  const {checkUserSession} = useAuthContext();
   const mobileNumber = sessionStorage.getItem("mobileNumber") as string
 
   const methods = useForm<IOtpLoginFormData>({
@@ -41,34 +40,37 @@ const OtpSignInStep = () => {
       otp: '',
     },
   });
-  const { handleSubmit } = methods;
+  const {handleSubmit} = methods;
 
-  const { mutateAsync, isPending } = useMutation({
+  const {mutateAsync, isPending} = useMutation({
     mutationKey: ['otp-login'],
     mutationFn: (payload: IOtpLoginFormData) =>
-      EditCreateRequest<IOtpLoginFormData, IApiOtpLogin>(endpoints.AUTH.VERIFY_OTP, payload),
+      EditCreateRequest<IOtpLoginFormData, IApiLogin>(endpoints.AUTH.VERIFY_OTP, payload),
   });
 
-  const { mutateAsync: sendOtp } = useMutation({
+  const {mutateAsync: sendOtp} = useMutation({
     mutationKey: ['resent-otp-reset-password'],
     mutationFn: () =>
-      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {mobileNumber:mobileNumber,otpType:'login'}),
+      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {
+        mobileNumber: mobileNumber,
+        otpType: 'login'
+      }),
   });
 
   const HandleSubmit = handleSubmit(async (data) => {
-    try{
-      const response = await mutateAsync({...data,mobileNumber });
-      setSession(response?.token);
+    try {
+      const response = await mutateAsync({...data, mobileNumber});
+      setSession(response?.data?.token);
       await checkUserSession?.();
-    }catch (e:any){
+    } catch (e: any) {
       toast.error(e?.message);
     }
   });
 
-  const handleTimeReset = async() => {
-    try{
-       await sendOtp();
-    }catch (e:any){
+  const handleTimeReset = async () => {
+    try {
+      await sendOtp();
+    } catch (e: any) {
       toast?.error(e?.message);
     }
   };
@@ -76,8 +78,8 @@ const OtpSignInStep = () => {
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
       <Stack spacing={2}>
-        <OtpTimer time={120} onReset={handleTimeReset} />
-        <Field.Code name="otp" />
+        <OtpTimer time={120} onReset={handleTimeReset}/>
+        <Field.Code name="otp"/>
         <LoadingButton
           fullWidth
           color="primary"
@@ -88,7 +90,7 @@ const OtpSignInStep = () => {
         >
           ورود
         </LoadingButton>
-        <FormReturnLink href={paths.auth.password} />
+        <FormReturnLink onClick={onClose}/>
       </Stack>
     </Form>
   );

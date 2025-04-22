@@ -3,27 +3,23 @@
 import {toast} from 'sonner';
 import {z as zod} from 'zod';
 import {useForm} from 'react-hook-form';
-import {useRouter} from 'next/navigation';
+import {useEffect, useState} from 'react';
 import {useBoolean} from 'minimal-shared/hooks';
-import {useEffect, useRef, useState} from 'react';
 import {useMutation} from '@tanstack/react-query';
 import {zodResolver} from '@hookform/resolvers/zod';
 
 import Stack from '@mui/material/Stack';
-import Dialog from '@mui/material/Dialog';
-import {DialogContent} from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-
-import {paths} from 'src/routes/paths';
 
 import {Form, Field} from 'src/components/hook-form';
 
 import {GetRequest} from '../../lib/axios';
+import StepRegister from "./step-register";
+import StepOtpSignIn from "./step-otp-sign-in";
 import {endpoints} from '../../hooks/endPoints';
+import {useURLSearchParams} from "../../hooks/use-search-params";
 
 import type {IApiCheckUser} from '../../types/auth';
-import StepRegister from "./step-register";
-import {useURLSearchParams} from "../../hooks/use-search-params";
 
 // --------------------------------------------------------------
 export interface PhoneNumberSchemaType {
@@ -46,47 +42,42 @@ const PhoneNumberStep = () => {
     },
   });
   const {handleSubmit} = methods;
-  const router = useRouter();
   const dialog = useBoolean();
   const [signUpStatus, setSignUpStatus] = useState(false);
-  // const [mobileNumberVal, setMobileNumberVal] = useState<string>('');
-  const {getParam}=useURLSearchParams();
+  const [otpStatus, setOtpStatus] = useState(false);
+  const {getParam} = useURLSearchParams();
 
-  const ref = useRef<HTMLDivElement | null>(null);
-  const captcha = useRef<any>(null);
-  const [keyRender, resetKeyRender] = useState<number>(0);
+  // const ref = useRef<HTMLDivElement | null>(null);
+  // const captcha = useRef<any>(null);
+  // const [keyRender, resetKeyRender] = useState<number>(0);
 
   const {mutateAsync, isPending} = useMutation({
     mutationKey: ['check-user-signup-status'],
     mutationFn: (payload: PhoneNumberSchemaType) => GetRequest<IApiCheckUser>(endpoints.AUTH.CHECK_USER_SIGNUP_STATUS(payload?.mobileNumber as string)),
   });
 
-  const CheckUser = async(data:PhoneNumberSchemaType)=>{
+  const CheckUser = async (data: PhoneNumberSchemaType) => {
     try {
       const response = await mutateAsync({mobileNumber: data?.mobileNumber});
-      if (response?.hasPassword) {
-        sessionStorage.setItem("mobileNumber", data?.mobileNumber)
-        router.replace(paths.auth.password);
+      sessionStorage.setItem("mobileNumber", data?.mobileNumber);
+      if (response?.exists) {
+        setOtpStatus(true);
       } else {
-        sessionStorage.setItem("mobileNumber", data?.mobileNumber)
-        // router.replace(paths.auth.signUp);
         setSignUpStatus(true);
       }
-    } catch (error:any) {
+    } catch (error: any) {
+      console.log(error)
       toast.error(error?.message);
     }
   }
 
   const HandleSubmit = handleSubmit(async (data) => {
-    // setMobileNumberVal(data?.mobileNumber);
-    // dialog.onTrue();
-    CheckUser(data);
+    await CheckUser(data);
   });
 
   useEffect(() => {
-    if(getParam("name")!==''){
-      console.log(getParam("mobileNumber"))
-      CheckUser({mobileNumber:getParam("mobileNumber")})
+    if (getParam("name") !== '') {
+      CheckUser({mobileNumber: getParam("mobileNumber")})
     }
   }, []);
 
@@ -123,19 +114,26 @@ const PhoneNumberStep = () => {
 
   return (
     <>
-      {signUpStatus?<StepRegister onClose={()=>setSignUpStatus(false)}/>:<Form methods={methods} onSubmit={HandleSubmit}>
-        <Stack spacing={2}>
-          <Field.Text label="شماره موبایل" name="mobileNumber"/>
-          <LoadingButton fullWidth color="primary" size="large" type="submit" variant="contained" loading={isPending}>
-            ادامه
-          </LoadingButton>
-        </Stack>
-      </Form>}
-      <Dialog open={dialog.value}>
-        <DialogContent sx={{p: 3}}>
-          <div key={keyRender} ref={ref}/>
-        </DialogContent>
-      </Dialog>
+      {signUpStatus ? <StepRegister onClose={() => {
+        setSignUpStatus(false);
+        setOtpStatus(false);
+      }}/> : otpStatus ? <StepOtpSignIn onClose={() => {
+          setSignUpStatus(false);
+          setOtpStatus(false);
+        }}/> :
+        <Form methods={methods} onSubmit={HandleSubmit}>
+          <Stack spacing={2}>
+            <Field.Text label="شماره موبایل" name="mobileNumber"/>
+            <LoadingButton fullWidth color="primary" size="large" type="submit" variant="contained" loading={isPending}>
+              ادامه
+            </LoadingButton>
+          </Stack>
+        </Form>}
+      {/*<Dialog open={dialog.value}>*/}
+      {/*  <DialogContent sx={{p: 3}}>*/}
+      {/*    <div key={keyRender} ref={ref}/>*/}
+      {/*  </DialogContent>*/}
+      {/*</Dialog>*/}
     </>
   );
 };

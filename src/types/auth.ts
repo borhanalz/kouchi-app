@@ -1,7 +1,7 @@
 export interface IApiCheckUser {
   success: boolean;
   message: string;
-  hasPassword?: boolean;
+  exists?: boolean;
 }
 
 export interface IApiSendOtp {
@@ -10,21 +10,19 @@ export interface IApiSendOtp {
   action: string;
 }
 
-export interface IApiResetPassword {
-  success: boolean;
-  message: string;
-}
-
-export interface IApiOtpLogin {
-  token: string;
-  refreshToken: string;
-}
-
-export interface IApiRegister {
+export interface IApiLogin {
   "success": boolean,
   "message": string,
-  "token": string
+  "data": {
+    "token": string,
+    "user": {
+      "id": string,
+      "mobileNumber": string,
+      "name": string
+    }
+  }
 }
+
 
 export interface ISendOtpFormData {
   mobileNumber: string;
