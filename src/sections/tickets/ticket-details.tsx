@@ -1,14 +1,13 @@
 'use client'
 
+import {useQuery} from "@tanstack/react-query";
+
 import {Chat} from "src/components/chat";
 
-import {DashboardContent} from "../../layouts/dashboard";
-import {useQuery} from "@tanstack/react-query";
-import {EditCreateRequest} from "../../lib/axios";
 import {endpoints} from "../../hooks/endPoints";
+import {EditCreateRequest} from "../../lib/axios";
+import {DashboardContent} from "../../layouts/dashboard";
 import {IApiGetTicket, ITicketResponse} from "../../types/tickets";
-import Skeleton from "@mui/material/Skeleton";
-import Box from "@mui/material/Box";
 import ChatSkeleton from "../../components/Skeleton/chat-skeleton";
 
 // -------------------------------------------------------------------------------------------
@@ -29,7 +28,7 @@ const TicketDetail = ({ticketId}: ITicketDetail) => {
       title="تیکت"
     >
       {isPending ? <ChatSkeleton/> :
-        <Chat title={data?.ticket?.title as string} messages={data?.ticket.responses as ITicketResponse[]} isTicket/>}
+        <Chat title={data?.ticket?.title as string} messages={data?.ticket.responses as ITicketResponse[]} IsTicket/>}
     </DashboardContent>
   );
 };

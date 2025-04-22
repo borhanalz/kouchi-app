@@ -19,16 +19,16 @@ export interface IUserDetailFormData {
     university: string;
     degree: string;
     field: string;
-    GPA: number;
+    average: number|null;
     graduated: boolean;
   }[];
   languageCertificates: {
-    language: string;
-    totalScore: number;
-    speakingScore: number;
-    listeningScore: number;
-    writingScore: number;
-    readingScore: number;
+    language: string|null;
+    totalScore: number|null;
+    speakingScore: number|null;
+    listeningScore: number|null;
+    writingScore: number|null;
+    readingScore: number|null;
   }[];
 }
 

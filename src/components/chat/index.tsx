@@ -27,15 +27,12 @@ import type {IApiCreateTicket, ICreateTicketFormData, ITicketResponse} from "../
 // ----------------------------------------------------------------------
 type ChatType = {
   messages: ITicketResponse[] | IChat[],
-  title?: string
-}
-
-function IsTicket(messages: ITicketResponse[] | IChat[]): messages is ITicketResponse[] {
-  return messages.length > 0 && 'contentType' in messages[0];
+  title?: string,
+  IsTicket?:boolean,
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title, messages}: ChatType) {
+export function Chat({title, messages,IsTicket=false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -115,7 +112,7 @@ export function Chat({title, messages}: ChatType) {
         await queryClient?.invalidateQueries({queryKey: ['get-chat-history']});
         console.log(messages)
         setIsChatLoading(false);
-        if (!IsTicket(messages)) {
+        if (!IsTicket) {
           if (lastMessage?.status === "processed" && lastMessage?.role === "user") {
             setResendButtonStatus(true);
           } else {
@@ -132,27 +129,27 @@ export function Chat({title, messages}: ChatType) {
   const hasConversation = messages?.length > 0;
   return (
     <>
-      {!IsTicket(messages)?<ChatLayout
+      {!IsTicket?<ChatLayout
         slots={{
           header: <Stack mx={2}><Typography fontWeight='bold'
                                             variant='h4'>گفت و گو با دستیار کوچی</Typography></Stack>,
           nav: null,
           main: (
             <>
-                <ChatMessageList
-                  handleSendChatResponse={HandleChatResponse}
-                  resendButtonStatus={resendButtonStatus}
-                  isChatLoading={isChatLoading}
-                  isTicket={IsTicket(messages)}
-                  messages={messages ?? []}
-                />
+              <ChatMessageList
+                handleSendChatResponse={HandleChatResponse}
+                resendButtonStatus={resendButtonStatus}
+                isChatLoading={isChatLoading}
+                isTicket={IsTicket}
+                messages={messages ?? []}
+              />
               <ChatMessageInput
                 chatMessage={chatMessage}
                 setChatMessage={setChatMessage}
                 isChatLoading={isChatLoading}
                 addChatResponsePending={addChatResponsePending}
                 HandleChatResponse={HandleChatResponse}
-                isTicket={IsTicket(messages)}
+                isTicket={IsTicket}
                 isNewTicket={messages?.length < 1}
               />
             </>
@@ -171,7 +168,7 @@ export function Chat({title, messages}: ChatType) {
                   handleSendChatResponse={HandleChatResponse}
                   resendButtonStatus={resendButtonStatus}
                   isChatLoading={isChatLoading}
-                  isTicket={IsTicket(messages)}
+                  isTicket={IsTicket}
                   messages={messages ?? []}
                 />
               )}
@@ -181,7 +178,7 @@ export function Chat({title, messages}: ChatType) {
                 isChatLoading={isChatLoading}
                 addChatResponsePending={addChatResponsePending}
                 HandleChatResponse={HandleChatResponse}
-                isTicket={IsTicket(messages)}
+                isTicket={IsTicket}
                 isNewTicket={messages?.length < 1}
               />
             </>

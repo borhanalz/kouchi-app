@@ -1,10 +1,10 @@
 export interface ITicketResponse {
-    "responderType": string,
-    "responderName": string,
-    "text": string,
-    "attachments": any[],
-    "createdAt": string,
-     contentType: string;
+  "responderType": string,
+  "responderName": string,
+  "text": string,
+  "attachments": any[],
+  "createdAt": string,
+  "contentType": string;
 }
 
 export interface ITicketFormData {
@@ -17,7 +17,7 @@ export interface ITicketFormData {
   "status": string,
   "attachments": any[],
   "priority": string,
-  "assignedAgents":any [],
+  "assignedAgents": any [],
   "requiresPayment": boolean,
   "paymentStatus": string,
   "price": number,
@@ -27,19 +27,19 @@ export interface ITicketFormData {
   "responses": ITicketResponse[],
   "createdAt": string,
   "updatedAt": string,
-  id?:number|undefined,
+  id?: number | undefined,
   "__v": number
 }
 
 export interface IApiTicketsList {
   "success": boolean,
   "tickets": ITicketFormData[],
-  totalCount:number
+  totalCount: number
 }
 
 export interface IApiGetTicket {
   success: boolean,
-  ticket:ITicketFormData,
+  ticket: ITicketFormData,
 }
 
 export interface IApiCreateTicket {
@@ -49,13 +49,13 @@ export interface IApiCreateTicket {
 }
 
 export interface ICreateTicketFormData {
-  "title" : string,
+  "title": string,
   "description": string,
   // "category" : string,
   // "priority" : string,
-  "requiresPayment" : boolean,
+  "requiresPayment": boolean,
   "price": number,
-  attachments?:null|undefined|any
+  attachments?: null | undefined | any
 }
 
 export interface IAddResponseFormData {
@@ -66,7 +66,7 @@ export interface IAddResponseFormData {
   "attachments": any
 }
 
-export interface IApiAddResponse{
+export interface IApiAddResponse {
   "success": boolean,
   "message": string
 }
