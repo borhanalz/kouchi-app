@@ -1,8 +1,4 @@
-import type { IChatMessage } from 'src/types/chat-component';
-
 import { useRef, useEffect, useCallback } from 'react';
-import {ITicketResponse} from "../../../types/tickets";
-import {IChatHistory} from "../../../types/chat";
 
 // ----------------------------------------------------------------------
 
