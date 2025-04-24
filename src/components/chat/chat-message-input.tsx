@@ -11,11 +11,12 @@ import IconButton from '@mui/material/IconButton';
 import {Iconify} from 'src/components/iconify';
 import {DeleteButton, SingleFilePreview} from 'src/components/upload/components/preview-single-file';
 
-import {IApiChat, IChatFormData} from "../../types/chat";
+import {IChat} from "../../types/chat";
 import {endpoints} from "../../hooks/endPoints";
 import {CustomPopover} from '../custom-popover';
 import {EditCreateRequest} from "../../lib/axios";
-import {IAddResponseFormData, IApiAddResponse} from "../../types/tickets";
+
+import type {IAddResponseFormData, IApiAddResponse, ITicketResponse} from "../../types/tickets";
 
 //----------------------------------------------------------------------------------
 type Props = {
@@ -24,8 +25,9 @@ type Props = {
   HandleChatResponse: () => void;
   addChatResponsePending: boolean;
   isChatLoading: boolean;
-  setChatMessage?:any;
-  chatMessage?:string;
+  setChatMessage?: any;
+  chatMessage?: string;
+  messages: ITicketResponse[] | IChat[];
 };
 
 // --------------------------------------------------------------------------------
@@ -36,7 +38,8 @@ export function ChatMessageInput({
                                    isTicket,
                                    HandleChatResponse,
                                    setChatMessage,
-  chatMessage
+                                   chatMessage,
+                                   messages
                                  }: Props) {
   const pathname = usePathname();
   const queryClient = useQueryClient();
@@ -47,6 +50,8 @@ export function ChatMessageInput({
   const [message, setMessage] = useState('');
   const [file, setFile] = useState<File | null>();
   const [popoverAnchor, setPopoverAnchor] = useState<null | HTMLElement>(null);
+  const latestMessage:any = messages[messages?.length - 1];
+  const disableInput = !isTicket && latestMessage?.options?.length > 0
 
   const {mutateAsync: AddResponse, isPending: addResponsePending} = useMutation({
     mutationKey: ['add-response-ticket'],
@@ -70,15 +75,15 @@ export function ChatMessageInput({
   }, []);
 
   const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if(isTicket) {
+    if (isTicket) {
       setMessage(event.target.value);
-    }else {
+    } else {
       setChatMessage(event.target.value)
     }
   }, []);
 
   const handleSendResponse = useCallback(async () => {
-    if (message.trim()||chatMessage?.trim() !== '') {
+    if (message.trim() || chatMessage?.trim() !== '') {
       try {
         if (isTicket) {
           await AddResponse({
@@ -127,9 +132,9 @@ export function ChatMessageInput({
       <InputBase
         name="chat-message"
         id="chat-message-input"
-        value={isTicket?message:chatMessage}
+        value={isTicket ? message : chatMessage}
         onChange={handleChangeMessage}
-        disabled={isChatLoading}
+        disabled={isChatLoading || disableInput}
         onKeyDown={handleKeyDown}
         placeholder="پاسخ خود را بنویسید…"
         startAdornment={
@@ -151,7 +156,7 @@ export function ChatMessageInput({
                 <IconButton
                   ref={attachmentButtonRef}
                   onClick={handleAttach}
-                  disabled={addResponsePending || addChatResponsePending}
+                  disabled={addResponsePending || addChatResponsePending || disableInput}
                 >
                   <Iconify icon="attachment"/>
                 </IconButton>

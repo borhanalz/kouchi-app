@@ -11,11 +11,13 @@ import { Iconify } from 'src/components/iconify';
 
 import type {IChat} from '../../types/chat';
 import type { ITicketResponse } from '../../types/tickets';
+import Button from "@mui/material/Button";
 
 // ----------------------------------------------------------------------
 
 type Props = {
   message: ITicketResponse | IChat;
+  handleSendChatResponse:(message?:string)=>void;
 };
 
 // Type guard to identify ITicketResponse
@@ -23,7 +25,7 @@ function isTicketResponse(message: ITicketResponse | IChat): message is ITicketR
   return 'responderType' in message;
 }
 
-export function ChatMessageItem({ message }: Props) {
+export function ChatMessageItem({ message,handleSendChatResponse }: Props) {
   const theme = useTheme();
 
   const isTicket = isTicketResponse(message);
@@ -145,7 +147,11 @@ export function ChatMessageItem({ message }: Props) {
           {renderBody()}
           {/*{renderActions()}*/}
         </Box>
-
+        <Stack spacing={2} mt={1.5} sx={{width:'100%'}}>
+          {!isTicket&&message.options&&message?.options?.map((option)=>{
+            return <Button onClick={(e)=>handleSendChatResponse(e?.currentTarget?.textContent as string)} fullWidth color='secondary' variant='outlined'>{option}</Button>
+          })}
+        </Stack>
         <Typography mt={1} textAlign="right" color="grey" variant="caption">
           {distance}
         </Typography>

@@ -23,7 +23,7 @@ type Props = {
   isTicket: boolean;
   isChatLoading: boolean;
   resendButtonStatus: boolean;
-  handleSendChatResponse: () => void;
+  handleSendChatResponse: (message?:string) => void;
 };
 
 // ------------------------------------------------------------------
@@ -89,14 +89,14 @@ export function ChatMessageList({
           </Typography>
         </Stack>}
         {messages.map((message: any) => (
-          <ChatMessageItem key={message?.id} message={message}/>
+          <ChatMessageItem handleSendChatResponse={handleSendChatResponse} key={message?.id} message={message}/>
         ))}
         {isChatLoading && <Stack direction='row' justifyContent='right'>
           <LgAnimateLoading/>
         </Stack>}
         <Stack>
           {resendButtonStatus && <LoadingButton startIcon={<Iconify icon='return' sx={{width: 15}}/>} fullWidth={false}
-                                                onClick={handleSendChatResponse} color='secondary'>تلاش
+                                                onClick={()=>handleSendChatResponse()} color='secondary'>تلاش
             مجدد</LoadingButton>}
         </Stack>
       </Scrollbar>
@@ -108,6 +108,7 @@ export function ChatMessageList({
           index={lightbox.selected}
         />
       )}
+
     </>
   );
 }

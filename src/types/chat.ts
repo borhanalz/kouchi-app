@@ -5,7 +5,8 @@ export interface IChat {
   "status": string,
   "timestamp": string,
   "flow": {},
-  "_id":string
+  "_id":string,
+  options?:string[]
 }
 
 export interface IApiChatHistory {

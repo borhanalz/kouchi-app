@@ -28,11 +28,11 @@ import type {IApiCreateTicket, ICreateTicketFormData, ITicketResponse} from "../
 type ChatType = {
   messages: ITicketResponse[] | IChat[],
   title?: string,
-  IsTicket?:boolean,
+  IsTicket?: boolean,
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title, messages,IsTicket=false}: ChatType) {
+export function Chat({title, messages, IsTicket = false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -102,34 +102,53 @@ export function Chat({title, messages,IsTicket=false}: ChatType) {
     mutationKey: ['add-chat-response'],
     mutationFn: (data: IChatFormData) => EditCreateRequest<IChatFormData, IApiChat>(endpoints.CHAT.CHAT, data, {}, 'post', {baseURL: 'https://koochichat.liara.run'})
   });
-  const HandleChatResponse = async () => {
-    const lastMessage: IChat = messages[messages.length - 1] as IChat;
-    const response = await AddChatResponse({message: chatMessage});
-    if (response.status === "ok") {
-      setIsChatLoading(true);
-      await queryClient?.invalidateQueries({queryKey: ['get-chat-history']});
-      setTimeout(async () => {
-        await queryClient?.invalidateQueries({queryKey: ['get-chat-history']});
-        console.log(messages)
-        setIsChatLoading(false);
-        if (!IsTicket) {
-          if (lastMessage?.status === "processed" && lastMessage?.role === "user") {
-            setResendButtonStatus(true);
-          } else {
-            setChatMessage("");
+  const HandleChatResponse = async (message = "") => {
+    let retryCount = 0;
+    const maxRetries = 5;
+
+    const sendMessage = async () => {
+      const response = await AddChatResponse({ message: message || chatMessage });
+
+      if (response.status === "ok") {
+        setIsChatLoading(true);
+        await queryClient?.invalidateQueries({ queryKey: ["get-chat-history"] });
+
+        const checkResponse = async () => {
+          await queryClient?.invalidateQueries({ queryKey: ["get-chat-history"] });
+
+          const lastMessage: IChat = messages[messages.length - 1] as IChat;
+
+          if (!IsTicket) {
+            const isUserMsg = lastMessage?.role === "user";
+            const isUnprocessed = lastMessage?.status !== "processed";
+
+            if (isUserMsg && isUnprocessed && retryCount < maxRetries) {
+              retryCount++;
+              setTimeout(checkResponse, 10000); // Retry after 10 sec
+            } else if (isUserMsg && isUnprocessed) {
+              setResendButtonStatus(true);
+            } else {
+              setChatMessage("");
+            }
           }
-        }
-        if (lastMessage?.status !== "processed" && lastMessage?.role === "user") {
-          setResendButtonStatus(true);
-        }
-      }, 10000)
-    }
-  }
+
+          setIsChatLoading(false);
+        };
+
+        // Start checking loop
+        setTimeout(checkResponse, 10000);
+      }
+    };
+
+    await sendMessage();
+  };
+
+
 
   const hasConversation = messages?.length > 0;
   return (
     <>
-      {!IsTicket?<ChatLayout
+      {!IsTicket ? <ChatLayout
         slots={{
           header: <Stack mx={2}><Typography fontWeight='bold'
                                             variant='h4'>گفت و گو با دستیار کوچی</Typography></Stack>,
@@ -151,12 +170,13 @@ export function Chat({title, messages,IsTicket=false}: ChatType) {
                 HandleChatResponse={HandleChatResponse}
                 isTicket={IsTicket}
                 isNewTicket={messages?.length < 1}
+                messages={messages}
               />
             </>
           ),
           details: hasConversation && null,
         }}
-      />:messages?.length > 0 ? <ChatLayout
+      /> : messages?.length > 0 ? <ChatLayout
         slots={{
           header: <Stack mx={2}><Typography fontWeight='bold'
                                             variant='h4'>{title}</Typography></Stack>,
@@ -173,6 +193,7 @@ export function Chat({title, messages,IsTicket=false}: ChatType) {
                 />
               )}
               <ChatMessageInput
+                messages={messages}
                 chatMessage={chatMessage}
                 setChatMessage={setChatMessage}
                 isChatLoading={isChatLoading}
@@ -203,6 +224,7 @@ export function Chat({title, messages,IsTicket=false}: ChatType) {
           </Stack>
         </Form>
       </Stack>}
+
     </>
   );
 }
