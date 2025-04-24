@@ -17,13 +17,14 @@ import { grey } from '../../theme';
 import Stack from "@mui/material/Stack";
 import {Iconify} from "../../components/iconify";
 import IconButton from "@mui/material/IconButton";
+import {ReactNode} from "react";
 
 // ----------------------------------------------------------------------
 
 export type DashboardContentProps = ContainerProps & {
   layoutQuery?: Breakpoint;
   disablePadding?: boolean;
-  title?: string;
+  title?: string|ReactNode;
 };
 
 export function DashboardContent({

@@ -21,5 +21,8 @@ export const endpoints = Object.freeze({
   CHAT:{
     CHAT_HISTORY:'chat-history',
     CHAT:'chat'
+  },
+  SERVICES:{
+    LIST:'/api/user/services'
   }
 });
