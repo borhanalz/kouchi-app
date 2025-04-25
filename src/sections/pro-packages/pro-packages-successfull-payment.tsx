@@ -29,21 +29,21 @@ const ProPackagesSuccessfullPayment = () => {
               justifyContent="center"
               alignItems="center"
             >
-              {getParam("Status") === "ok" ? <Image src={illustrationSuccessful} alt="illustration"
+              {getParam("Status") === "OK" ? <Image src={illustrationSuccessful} alt="illustration"
                                                     style={{width: 220, height: 'auto', marginRight: 70}}/> :
                 <Iconify icon='danger' sx={{color: 'red',height:'150px',width:'100px'}}/>}
               <Typography variant="h5" fontWeight='bold'
-                          color={getParam("Status") === "ok" ? "green" : "red"}>{getParam("Status") === "ok" ? "بسته با موفقیت فعال شد!" : "پرداخت با موفقیت انجام نشد"}</Typography>
-              {getParam("Status") === "ok" && <Typography variant="body2">
+                          color={getParam("Status") === "OK" ? "green" : "red"}>{getParam("Status") === "OK" ? "بسته با موفقیت فعال شد!" : "پرداخت با موفقیت انجام نشد"}</Typography>
+              {getParam("Status") === "OK" && <Typography variant="body2">
                 از بخش بسته‌ها می‌تونی سوابق تراکنش ها و وضعیت بسته‌هات رو ببینی.
               </Typography>}
               <Button
                 variant="contained"
                 color="primary"
                 fullWidth
-                onClick={() => router.push(getParam("Status")==="ok"?paths.dashboard.roadMap.root:paths?.dashboard.root)}
+                onClick={() => router.push(getParam("Status")==="OK"?paths.dashboard.roadMap.root:paths?.dashboard.root)}
               >
-                {getParam("Status") === "ok" ? "بزن بریم" : "برو به صفحه اصلی"}
+                {getParam("Status") === "OK" ? "بزن بریم" : "برو به صفحه اصلی"}
               </Button>
             </Stack>
           </Stack>
