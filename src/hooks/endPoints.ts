@@ -23,6 +23,7 @@ export const endpoints = Object.freeze({
     CHAT:'chat'
   },
   SERVICES:{
-    LIST:'/api/user/services'
+    LIST:'/api/user/services',
+    PAYMENT:'/api/payment/request'
   }
 });

@@ -1,5 +1,6 @@
 'use client';
 
+import {useState} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {useBoolean} from 'minimal-shared/hooks';
 
@@ -20,17 +21,20 @@ import {endpoints} from "../../../hooks/endPoints";
 import ProPackagesPeyment from '../pro-packages-peyment';
 import {DashboardContent} from "../../../layouts/dashboard";
 
-import type {IApiServices} from "../../../types/services";
+import type {IApiServices, IService} from "../../../types/services";
 
 // ------------------------------------------------------------------------------
 
 export const ProPackages = () => {
   const theme = useTheme();
   const peymentDialog = useBoolean();
+  const [paymentInfo, setPaymentInfo] = useState<IService|null>(null);
+
   const {data: ServicesList, isPending} = useQuery({
     queryKey: ['services-list'],
     queryFn: () => GetRequest<IApiServices>(endpoints.SERVICES.LIST)
   })
+  console.log(ServicesList)
   return (
     <DashboardContent
         maxWidth={false}
@@ -109,7 +113,10 @@ export const ProPackages = () => {
                   </Stack>
                   <Grid container spacing={2}>
                     {item?.buttons?.map((button) => (<Grid size={6}>
-                      <Button fullWidth variant="contained" color="primary" onClick={peymentDialog.onTrue}>
+                      <Button fullWidth variant="contained" color="primary" onClick={()=>{
+                        setPaymentInfo({...item,buttons:[button]})
+                        peymentDialog.onTrue();
+                      }}>
                         {button?.text}
                       </Button></Grid>))}
                   </Grid>
@@ -118,7 +125,7 @@ export const ProPackages = () => {
             ))}
           </Grid>
         </Stack>
-        <ProPackagesPeyment dialog={peymentDialog}/>
+        <ProPackagesPeyment dialog={peymentDialog} data={paymentInfo as IService}/>
       </DashboardContent>
   );
 };

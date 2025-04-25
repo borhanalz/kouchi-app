@@ -1,15 +1,17 @@
 'use client';
 
-import type { UseBooleanReturn } from 'minimal-shared';
+import type {UseBooleanReturn} from 'minimal-shared';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import {useState} from 'react';
+import {useMutation} from "@tanstack/react-query";
 
 import Stack from '@mui/material/Stack';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import LoadingButton from "@mui/lab/LoadingButton";
 import {
   DialogActions,
   DialogContent,
@@ -18,54 +20,49 @@ import {
   ToggleButtonGroup,
 } from '@mui/material';
 
-import { grey } from '../../theme';
+import {grey} from '../../theme';
+import {endpoints} from "../../hooks/endPoints";
+import {EditCreateRequest} from "../../lib/axios";
+import {IApiPaymentRequest, IPaymentRequest, IService} from "../../types/services";
 
 import zarinLogo from '/public/assets/images/zarin-logo.png';
-import samanLogo from '/public/assets/images/saman-logo.png';
-import { paths } from '../../routes/paths';
-import { useRouter } from 'next/navigation';
 
 // -------------------------------------------------------------------------------------------
 
-const ProPackagesPeyment = ({ dialog }: { dialog: UseBooleanReturn }) => {
-  const [peymentBank, setPeymentBank] = useState<string>('saman');
-  const router = useRouter();
+const ProPackagesPeyment = ({dialog, data}: { dialog: UseBooleanReturn, data: IService }) => {
+  const [peymentBank, setPeymentBank] = useState<string>('zarin');
 
-  const handlePeymentBankChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newPeymentBank: string | null
-  ) => {
-    setPeymentBank(newPeymentBank as string);
-  };
+  const {mutateAsync, isPending} = useMutation({
+    mutationKey: ['payment-request'],
+    mutationFn: (payload:IPaymentRequest) => EditCreateRequest<IPaymentRequest, IApiPaymentRequest>(endpoints?.SERVICES?.PAYMENT, payload)
+  })
 
   return (
     <Dialog open={dialog.value} onClose={dialog.onFalse} fullWidth>
       <DialogTitle>
         <Typography variant="h4">فاکتور پرداخت</Typography>
       </DialogTitle>
-      <DialogContent sx={{ p: 3 }}>
+      <DialogContent sx={{p: 3}}>
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography color={grey[600]}>مبلغ</Typography>
-            <Typography fontWeight="bold">790,000 تومان</Typography>
+            <Typography fontWeight="bold">{data?.prices?.regular?.toLocaleString()} تومان </Typography>
           </Stack>
-          <Divider sx={{ borderStyle: 'dashed' }} />
+          <Divider sx={{borderStyle: 'dashed'}}/>
           <Stack direction="row" justifyContent="space-between">
             <Typography color={grey[600]}>بسته</Typography>
-            <Typography fontWeight="bold">کوچ راه</Typography>
+            <Typography fontWeight="bold">{data?.title}</Typography>
           </Stack>
-          <Divider sx={{ borderStyle: 'dashed' }} />
+          <Divider sx={{borderStyle: 'dashed'}}/>
           <Stack direction="row" justifyContent="space-between">
             <Typography color={grey[600]}>روش پرداخت</Typography>
             <Typography fontWeight="bold">انلاین</Typography>
           </Stack>
-          <ToggleButtonGroup exclusive value={peymentBank} onChange={handlePeymentBankChange}>
-            <Stack direction="row" justifyContent="space-between" mt={5} sx={{ width: '100%' }}>
-              <ToggleButton value="zarin" sx={{ width: '100%' }}>
-                <Image src={zarinLogo} alt="zarin-logo" width={40} />
-              </ToggleButton>
-              <ToggleButton value="saman" sx={{ width: '100%' }}>
-                <Image src={samanLogo} alt="saman-logo" width={40} />
+          <ToggleButtonGroup exclusive value={peymentBank}>
+            <Stack direction="row" justifyContent="space-between" mt={5} sx={{width: '100%'}}>
+              <ToggleButton value="zarin" sx={{width: '100%'}}>
+                <Image src={zarinLogo} alt="zarin-logo" width={100}/>
+                <Typography>زرین پال</Typography>
               </ToggleButton>
             </Stack>
           </ToggleButtonGroup>
@@ -75,13 +72,25 @@ const ProPackagesPeyment = ({ dialog }: { dialog: UseBooleanReturn }) => {
         <Button variant="outlined" onClick={dialog.onFalse} color="error">
           لغو
         </Button>
-        <Button
+        <LoadingButton
+          loading={isPending}
           variant="contained"
-          onClick={() => router.push(paths.dashboard.proPackages.successfulPayment)}
+          onClick={async () => {
+            const payload:IPaymentRequest = {...data?.buttons[0]?.params, type: data?.buttons[0]?.action}
+            console.log(payload)
+
+            try {
+             const response = await mutateAsync(payload);
+              console.log(payload)
+             window.location.href=response?.paymentUrl;
+            } catch (e) {
+              console.log(e)
+            }
+          }}
           color="primary"
         >
           پرداخت
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );

@@ -12,8 +12,8 @@ export interface IService {
       "text": string,
       "action": string,
       "params": {
-        "serviceType": string,
-        "packageType": string,
+        "serviceType"?: string,
+        "packageType"?: string,
       },
       "disabled": boolean
     }[],
@@ -25,4 +25,18 @@ export interface IService {
 export interface IApiServices {
   "success": true,
   "services": IService[]
+}
+
+export interface IPaymentRequest {
+  type:string,
+  serviceType?:string,
+  documentType?:string,
+  packageType?:string,
+  ticketId?:string
+}
+
+export interface IApiPaymentRequest {
+  "success": boolean,
+  "paymentUrl": string,
+  "ticketId": string
 }
