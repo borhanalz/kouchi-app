@@ -153,15 +153,15 @@ const ItemRoot = styled(ButtonBase, { shouldForwardProp })<StyledState>(({
   const rootItemStyles: CSSObject = {
     minHeight: 'var(--nav-item-root-height)',
     ...(open && {
-      color: 'var(--nav-item-root-open-color)',
+      color: theme?.palette?.mode==="light"?theme?.palette?.primary?.main:theme?.palette?.secondary?.main,
       backgroundColor: 'var(--nav-item-root-open-bg)',
     }),
     ...(active && {
-      color: 'var(--nav-item-root-active-color)',
+      color: theme?.palette?.mode==="light"?theme?.palette?.primary?.main:theme?.palette?.secondary?.main,
       backgroundColor: 'var(--nav-item-root-active-bg)',
       '&:hover': { backgroundColor: 'var(--nav-item-root-active-hover-bg)' },
       ...theme.applyStyles('dark', {
-        color: 'var(--nav-item-root-active-color-on-dark)',
+        color: theme?.palette?.mode==="light"?theme?.palette?.primary?.main:theme?.palette?.secondary?.main,
       }),
     }),
   };
@@ -187,7 +187,7 @@ const ItemRoot = styled(ButtonBase, { shouldForwardProp })<StyledState>(({
     paddingBottom: 'var(--nav-item-pb)',
     borderRadius: 'var(--nav-item-radius)',
     color: 'var(--nav-item-color)',
-    '&:hover': { backgroundColor: 'var(--nav-item-hover-bg)' },
+    '&:hover': { backgroundColor: 'var(--nav-item-hover-bg)',color:theme?.palette?.secondary?.light },
     variants: [
       { props: { variant: 'rootItem' }, style: rootItemStyles },
       { props: { variant: 'subItem' }, style: subItemStyles },
