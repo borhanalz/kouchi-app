@@ -20,7 +20,7 @@ import type {ITicketFormData} from "../../types/tickets";
 // ------------------------------------------------------------------
 
 const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) => {
-  const { title, status,createdAt,id } = row;
+  const { title, status,createdAt,id,requiresPayment } = row;
   const theme = useTheme();
   const router = useRouter();
   return (
@@ -45,9 +45,13 @@ const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) =
       </TableCell>
       <TableCell align="center">{createdAt&&format(createdAt,"yyyy-MM-dd")}</TableCell>
       <TableCell align="center">
-        <Tooltip title="مشاهده جزئیات">
-          <IconButton onClick={()=>router.push(paths.dashboard.tickets.details(String(id)))}>
-            <Iconify icon="eye" sx={{ cursor: 'pointer', color: grey[500] }} />
+        <Tooltip title={requiresPayment?"نیازمند خرید سرویس اشتراکی":"مشاهده جزئیات"}>
+          <IconButton onClick={()=> {
+            if(!requiresPayment) {
+              router.push(paths.dashboard.tickets.details(String(id)))
+            }
+          }}>
+            <Iconify icon={requiresPayment?"lock":"eye"} sx={{ cursor: 'pointer', color: grey[500] }} />
           </IconButton>
         </Tooltip>
       </TableCell>

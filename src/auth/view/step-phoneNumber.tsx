@@ -123,7 +123,7 @@ const PhoneNumberStep = () => {
         }}/> :
         <Form methods={methods} onSubmit={HandleSubmit}>
           <Stack spacing={2}>
-            <Field.Text label="شماره موبایل" name="mobileNumber"/>
+            <Field.Text maxLength={11} label="شماره موبایل" name="mobileNumber" placeholder='**** *** **09'/>
             <LoadingButton fullWidth color="primary" size="large" type="submit" variant="contained" loading={isPending}>
               ادامه
             </LoadingButton>

@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import {useTheme} from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
+import {Iconify} from "../iconify";
 import {ChatLayout} from './layout';
 import {Field, Form} from "../hook-form";
 import {paths} from "../../routes/paths";
@@ -121,13 +122,12 @@ export function Chat({title, messages, IsTicket = false}: ChatType) {
           const updatedMessages = queryClient.getQueryData<IChat[]>(["get-chat-history"]) || [];
           const lastMessage = updatedMessages[updatedMessages.length - 1];
 
-          if (!lastMessage) {
-            setIsChatLoading(false);
-            return;
+          if (lastMessage?.role!=="user"){
+            setIsChatLoading(false)
           }
 
           if (!IsTicket) {
-            const isUserMsg = lastMessage.role === "user";
+            const isUserMsg = lastMessage?.role === "user";
             const isUnprocessed = lastMessage.status !== "processed";
             const isAssistant = lastMessage.role === "assistant";
 
@@ -158,13 +158,12 @@ export function Chat({title, messages, IsTicket = false}: ChatType) {
   };
 
 
-  console.log(messages)
   const hasConversation = messages?.length > 0;
   return (
     <>
       {!IsTicket ? <ChatLayout
         slots={{
-          header: <Stack mx={2}><Typography fontWeight='bold'
+          header: <Stack mx={2} direction='row' spacing={2} alignItems='center'><Iconify icon='CHATBOT' sx={{color:theme.palette.secondary.main}}/><Typography fontWeight='bold'
                                             variant='h6'>گفت و گو با دستیار کوچی</Typography></Stack>,
           nav: null,
           main: (
@@ -233,7 +232,7 @@ export function Chat({title, messages, IsTicket = false}: ChatType) {
             <Field.Text multiline rows={4} type='text' name='description' label='پیغام ...'/>
             <Field.Upload name='attachments' onDelete={() => setValue("attachments", null)}/>
             <Stack direction='row' justifyContent='right'>
-              <Button type='submit' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
+              <Button type='submit' color='primary' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
             </Stack>
           </Stack>
         </Form>

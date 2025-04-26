@@ -30,11 +30,11 @@ export function UploadPlaceholder({ sx, className, ...other }: UploadPlaceholder
       {/*<UploadIllustration hideBackground sx={{ width: 200 }} />*/}
       <PlaceholderContent>
         <div className={uploadPlaceholderClasses.title}>فایل خود را در اینجا رها کنید یا کلیک کنید !</div>
-        <div className={uploadPlaceholderClasses.description}>
-         از سیستم خود
-          <span> انتخاب </span>
-          کنید !
-        </div>
+        {/*<div className={uploadPlaceholderClasses.description}>*/}
+        {/* از سیستم خود*/}
+        {/*  <span> انتخاب </span>*/}
+        {/*  کنید !*/}
+        {/*</div>*/}
       </PlaceholderContent>
     </PlaceholderRoot>
   );

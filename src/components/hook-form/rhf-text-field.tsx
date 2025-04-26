@@ -8,10 +8,12 @@ import TextField from '@mui/material/TextField';
 
 export type RHFTextFieldProps = TextFieldProps & {
   name: string;
+  maxLength?:number;
 };
 
 export function RHFTextField({
                                name,
+                               maxLength,
                                helperText,
                                type = 'text',
                                ...other
@@ -55,6 +57,7 @@ export function RHFTextField({
           helperText={error?.message ?? helperText}
           inputProps={{
             autoComplete: "off",
+            ...(maxLength&& {maxLength: maxLength}),
             ...(isNumberType && { inputMode: "decimal", pattern: "[0-9]*\\.?[0-9]*" }),
           }}
           {...other}

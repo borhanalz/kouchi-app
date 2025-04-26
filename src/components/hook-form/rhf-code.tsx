@@ -10,20 +10,19 @@ import { inputBaseClasses } from '@mui/material/InputBase';
 
 import { HelperText } from './help-text';
 
-// ----------------------------------------------------------------------
-
-export interface RHFCodesProps extends Omit<MuiOtpInputProps, 'sx'> {
+// ------------------------------------------------------------------------------
+interface RHFCodeProps extends Omit<MuiOtpInputProps, 'onChange' | 'value'> {
   name: string;
+  helperText?: string;
   maxSize?: number;
   placeholder?: string;
-  helperText?: React.ReactNode;
   slotProps?: {
     wrapper?: BoxProps;
+    textfield?: Partial<MuiOtpInputProps['TextFieldsProps']>;
     helperText?: FormHelperTextProps;
-    textfield?: MuiOtpInputProps['TextFieldsProps'];
   };
 }
-
+//-------------------------------------------------------------------------------
 export function RHFCode({
                           name,
                           slotProps,
@@ -31,8 +30,16 @@ export function RHFCode({
                           maxSize = 56,
                           placeholder = '-',
                           ...other
-                        }: RHFCodesProps) {
+                        }: RHFCodeProps) {
   const { control } = useFormContext();
+
+  // A function to block non-number characters
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const isNumber = /^[0-9]$/.test(event.key);
+    if (!isNumber) {
+      event.preventDefault();
+    }
+  };
 
   return (
     <Controller
@@ -42,7 +49,7 @@ export function RHFCode({
         <>
           <Box
             {...slotProps?.wrapper}
-            dir="rtl" // Set RTL direction here
+            dir="rtl"
             sx={[
               {
                 display: 'flex',
@@ -68,11 +75,15 @@ export function RHFCode({
               TextFieldsProps={{
                 placeholder,
                 error: !!error,
+                inputMode: 'numeric', // for mobile keyboards
+                type: 'tel',
+                onKeyPress: handleKeyPress, // 💥 prevent letters
                 ...slotProps?.textfield,
               }}
               {...other}
             />
           </Box>
+
           <HelperText
             {...slotProps?.helperText}
             errorMessage={error?.message}
