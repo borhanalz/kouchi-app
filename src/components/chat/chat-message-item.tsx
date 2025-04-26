@@ -74,7 +74,7 @@ export function ChatMessageItem({ message,handleSendChatResponse }: Props) {
         </Stack>
       ) : (
         <Typography lineHeight={1.8} variant="body2" color='#fff'>
-          {isTicket?message?.text:message?.content}
+          `${isTicket?message?.text:message?.content}`
         </Typography>
       )}
     </Stack>

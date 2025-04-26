@@ -136,6 +136,10 @@ export function ChatMessageInput({
         onChange={handleChangeMessage}
         disabled={isChatLoading || disableInput}
         onKeyDown={handleKeyDown}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
         placeholder="پاسخ خود را بنویسید…"
         startAdornment={
           <IconButton

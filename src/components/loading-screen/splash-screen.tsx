@@ -5,7 +5,8 @@ import type { Theme, SxProps } from '@mui/material/styles';
 import Portal from '@mui/material/Portal';
 import { styled } from '@mui/material/styles';
 
-import { AnimateLogoZoom } from 'src/components/animate';
+
+import LgAnimateLoading from "./animate";
 
 // ----------------------------------------------------------------------
 
@@ -17,8 +18,8 @@ export type SplashScreenProps = React.ComponentProps<'div'> & {
 export function SplashScreen({ portal = true, sx, ...other }: SplashScreenProps) {
   const content = (
     <div style={{ overflow: 'hidden' }}>
-      <LoadingContent sx={sx} {...other}>
-        <AnimateLogoZoom />
+      <LoadingContent>
+        <LgAnimateLoading/>
       </LoadingContent>
     </div>
   );

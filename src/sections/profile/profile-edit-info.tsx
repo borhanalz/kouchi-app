@@ -89,12 +89,11 @@ const ProfileEditInfo = () => {
       GetRequest<IApiUserDetails>(endpoints.PROFILE.DETAIL_INFO),
   });
 
-  // Default gender set to "male"
   const methods = useForm<IUserDetailFormData>({
     resolver: zodResolver(profileEditInfoSchema),
     defaultValues: {
       age: null,
-      gender: "male",  // Setting default gender here
+      gender: "male",
       married: false,
       militaryStatus: "",
       graduations: [],
@@ -104,13 +103,12 @@ const ProfileEditInfo = () => {
 
   const { handleSubmit, control, reset, setValue } = methods;
 
-  useEffect(() => {
-    if (userDetails?.details?.userData) {
-      reset(userDetails.details.userData);
-    }
-  }, [userDetails, reset, setValue]);
-
-  const { fields: graduationFields, append, remove } = useFieldArray({
+  const {
+    fields: graduationFields,
+    append,
+    remove,
+    replace: graduationReplace,
+  } = useFieldArray({
     control,
     name: "graduations",
   });
@@ -119,10 +117,24 @@ const ProfileEditInfo = () => {
     fields: languageFields,
     append: appendLanguage,
     remove: removeLanguage,
+    replace: languageReplace,
   } = useFieldArray({
     control,
     name: "languageCertificates",
   });
+
+  useEffect(() => {
+    if (userDetails?.details?.userData) {
+      reset(userDetails.details.userData);
+
+      if (userDetails.details.userData.graduations) {
+        graduationReplace(userDetails.details.userData.graduations);
+      }
+      if (userDetails.details.userData.languageCertificates) {
+        languageReplace(userDetails.details.userData.languageCertificates);
+      }
+    }
+  }, [userDetails, reset, graduationReplace, languageReplace, setValue]);
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ["edit-info-details"],
@@ -234,7 +246,7 @@ const ProfileEditInfo = () => {
                 fullWidth={false}
                 startIcon={<Iconify icon="plus" sx={{ width: 15 }} />}
               >
-                {graduationFields?.length > 0 ? "افرودن مدرک تحصیلی دیگر" : "افزودن مدرک تحصیلی"}
+                {graduationFields.length > 0 ? "افزودن مدرک تحصیلی دیگر" : "افزودن مدرک تحصیلی"}
               </LoadingButton>
             </Stack>
             <Divider />
@@ -280,12 +292,12 @@ const ProfileEditInfo = () => {
               <LoadingButton
                 onClick={() =>
                   appendLanguage({
-                    language: "",
-                    totalScore: 0,
-                    speakingScore: 0,
-                    listeningScore: 0,
-                    writingScore: 0,
-                    readingScore: 0,
+                    language:null,
+                    totalScore: null,
+                    speakingScore: null,
+                    listeningScore: null,
+                    writingScore: null,
+                    readingScore: null,
                   })
                 }
                 variant="outlined"
@@ -293,7 +305,7 @@ const ProfileEditInfo = () => {
                 fullWidth={false}
                 startIcon={<Iconify icon="plus" sx={{ width: 15 }} />}
               >
-                {languageFields?.length >= 1 ? "افرودن مدرک زبان دیگر" : "افزودن مدرک زبان"}
+                {languageFields.length > 0 ? "افزودن مدرک زبان دیگر" : "افزودن مدرک زبان"}
               </LoadingButton>
             </Stack>
             <Stack direction="row" justifyContent="right">

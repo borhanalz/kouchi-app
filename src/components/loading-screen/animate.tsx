@@ -2,7 +2,8 @@ import Lottie from 'lottie-react';
 
 import { Box, useTheme } from '@mui/material';
 
-import animate from './loading.json';
+import lightLoading from 'src/components/loading-screen/light-loading.json'
+import darkLoading from 'src/components/loading-screen/dark-loading.json'
 
 // -------------------------------------------------------------
 
@@ -21,7 +22,7 @@ const LgAnimateLoading = () => {
           zIndex: 9999,
         }}
       >
-        <Lottie size={200} animationData={animate} loop />
+        <Lottie size={150} animationData={theme?.palette.mode==="dark"?darkLoading:lightLoading} loop />
       </Box>
     </>
   );

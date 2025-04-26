@@ -105,38 +105,52 @@ export function Chat({title, messages, IsTicket = false}: ChatType) {
   const HandleChatResponse = async (message = "") => {
     let retryCount = 0;
     const maxRetries = 5;
+    const waitTime = 10000; // 10 seconds
 
     const sendMessage = async () => {
       const response = await AddChatResponse({ message: message || chatMessage });
-
       if (response.status === "ok") {
+        await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
         setIsChatLoading(true);
-        await queryClient?.invalidateQueries({ queryKey: ["get-chat-history"] });
-
+        setChatMessage("");
+        setResendButtonStatus(false);
         const checkResponse = async () => {
-          await queryClient?.invalidateQueries({ queryKey: ["get-chat-history"] });
+          await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
+          await new Promise((resolve) => setTimeout(resolve, 500));
 
-          const lastMessage: IChat = messages[messages.length - 1] as IChat;
+          const updatedMessages = queryClient.getQueryData<IChat[]>(["get-chat-history"]) || [];
+          const lastMessage = updatedMessages[updatedMessages.length - 1];
 
-          if (!IsTicket) {
-            const isUserMsg = lastMessage?.role === "user";
-            const isUnprocessed = lastMessage?.status !== "processed";
-
-            if (isUserMsg && isUnprocessed && retryCount < maxRetries) {
-              retryCount++;
-              setTimeout(checkResponse, 10000); // Retry after 10 sec
-            } else if (isUserMsg && isUnprocessed) {
-              setResendButtonStatus(true);
-            } else {
-              setChatMessage("");
-            }
+          if (!lastMessage) {
+            setIsChatLoading(false);
+            return;
           }
 
-          setIsChatLoading(false);
+          if (!IsTicket) {
+            const isUserMsg = lastMessage.role === "user";
+            const isUnprocessed = lastMessage.status !== "processed";
+            const isAssistant = lastMessage.role === "assistant";
+
+            if (isUserMsg && isUnprocessed) {
+              if (retryCount < maxRetries) {
+                retryCount++;
+                setTimeout(checkResponse, waitTime);
+              } else {
+                setResendButtonStatus(true);
+                setIsChatLoading(false);
+              }
+            } else if (isAssistant || (isUserMsg && !isUnprocessed)) {
+              setChatMessage("");
+              setIsChatLoading(false);
+            } else {
+              setIsChatLoading(false);
+            }
+          } else {
+            setIsChatLoading(false);
+          }
         };
 
-        // Start checking loop
-        setTimeout(checkResponse, 10000);
+        setTimeout(checkResponse, waitTime);
       }
     };
 
@@ -144,14 +158,14 @@ export function Chat({title, messages, IsTicket = false}: ChatType) {
   };
 
 
-
+  console.log(messages)
   const hasConversation = messages?.length > 0;
   return (
     <>
       {!IsTicket ? <ChatLayout
         slots={{
           header: <Stack mx={2}><Typography fontWeight='bold'
-                                            variant='h4'>گفت و گو با دستیار کوچی</Typography></Stack>,
+                                            variant='h6'>گفت و گو با دستیار کوچی</Typography></Stack>,
           nav: null,
           main: (
             <>

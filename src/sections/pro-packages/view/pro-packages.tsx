@@ -34,7 +34,6 @@ export const ProPackages = () => {
     queryKey: ['services-list'],
     queryFn: () => GetRequest<IApiServices>(endpoints.SERVICES.LIST)
   })
-  console.log(ServicesList)
   return (
     <DashboardContent
         maxWidth={false}
@@ -80,8 +79,8 @@ export const ProPackages = () => {
                       </Typography>
                     </Stack>
                     <Iconify
-                      icon='gem'
-                      sx={{color: theme.vars.palette.primary.main, width: 35, height: 35}}
+                      icon={item?.id}
+                      sx={{color: theme.vars.palette.secondary.main, width: 35, height: 35}}
                     />
                   </Stack>
                   <Stack direction="row" justifyContent="end" spacing={0.5}>
@@ -106,13 +105,13 @@ export const ProPackages = () => {
                         key={feature}
                         icon="tick"
                         label={feature}
-                        typographyProps={{color: theme.vars.palette.primary.main}}
+                        typographyProps={{color: theme.vars.palette.primary.main,textAlign:'left'}}
                         iconifySx={{color: theme.vars.palette.primary.main}}
                       />
                     ))}
                   </Stack>
                   <Grid container spacing={2}>
-                    {item?.buttons?.map((button) => (<Grid size={6}>
+                    {item?.buttons?.map((button) => (<Grid size={12}>
                       <Button fullWidth variant="contained" color="primary" onClick={()=>{
                         setPaymentInfo({...item,buttons:[button]})
                         peymentDialog.onTrue();
