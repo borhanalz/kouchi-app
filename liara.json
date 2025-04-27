@@ -1,5 +1,5 @@
 {
-  "app": "kouchi-app",
+  "app": "koochi-app",
   "port": 3000,
   "build": {
     "location": "germany"
