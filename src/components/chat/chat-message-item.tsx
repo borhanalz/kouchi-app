@@ -85,7 +85,7 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
           ))}
         </Typography>
       )}
-      <Typography variant='subtitle2' fontSize={12} mt={1.5} color={theme.palette.grey[400]}>{format(isTicket ? message?.createdAt : message?.timestamp, 'HH:mm')} , {format(isTicket ? message?.createdAt : message?.timestamp, 'yyyy-MM-dd')}</Typography>
+      <Typography variant='subtitle2' fontSize={12} mt={1.5} color={theme.palette.grey[200]}>{format(isTicket ? message?.createdAt : message?.timestamp, 'HH:mm')} , {format(isTicket ? message?.createdAt : message?.timestamp, 'yyyy-MM-dd')}</Typography>
     </Stack>
   );
 

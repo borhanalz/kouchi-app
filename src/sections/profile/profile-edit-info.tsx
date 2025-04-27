@@ -25,7 +25,18 @@ import type {
   IUserDetailFormData,
   IEditUserDetailFormData,
 } from "../../types/user";
-
+import {AccountButton} from "../../layouts/components/account-button";
+import {useAppSelector} from "../../lib/redux/hooks";
+import Typography from "@mui/material/Typography";
+// -----------------------------------------------------------------------
+function TitleValue({ title, value }: { title: string; value: string }) {
+  return (
+    <Stack direction="row" spacing={2} justifyContent="space-between">
+      <Typography variant='body1'>{title} : </Typography>
+      <Typography variant='body1' color="grey">{value || "--"}</Typography>
+    </Stack>
+  );
+}
 // -----------------------------------------------------------------------
 
 const profileEditInfoSchema = zod.object({
@@ -82,6 +93,7 @@ const profileEditInfoSchema = zod.object({
 
 const ProfileEditInfo = () => {
   const queryClient = useQueryClient();
+  const selectUserData = useAppSelector((state) => state.userReducer.info);
 
   const { data: userDetails, isPending: userDetailsPending } = useQuery({
     queryKey: ["get-user-info-detail"],
@@ -163,6 +175,25 @@ const ProfileEditInfo = () => {
         <LoadingScreen />
       ) : (
         <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Stack justifyContent="center" mt={5} alignItems="center" spacing={5}>
+            <AccountButton
+              width={80}
+              height={80}
+              displayName={selectUserData?.name as string}
+              size="large"
+            />
+            <Stack spacing={2}>
+              <TitleValue title="نام" value={selectUserData?.name as string} />
+              <TitleValue
+                title="شماره همراه"
+                value={selectUserData?.mobileNumber as string}
+              />
+              <TitleValue
+                title="ایمیل"
+                value={selectUserData?.email as string}
+              />
+            </Stack>
+          </Stack>
           <Stack direction="column" spacing={3}>
             <IconText
               typographyProps={{ fontWeight: "bold", variant: "h6" }}

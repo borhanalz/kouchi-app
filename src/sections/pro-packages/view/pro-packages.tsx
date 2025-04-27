@@ -58,7 +58,7 @@ export const ProPackages = () => {
             sx={{height: '100%'}}
           >
             {ServicesList?.services?.map((item) => (
-              <Grid size={4} sx={{display:'flex'}}>
+              <Grid size={{xs:12,md:6,lg:4}}>
                 <Stack
                   spacing={3}
                   sx={{
