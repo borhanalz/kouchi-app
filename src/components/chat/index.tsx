@@ -9,6 +9,7 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import Avatar from "@mui/material/Avatar";
 import {useTheme} from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
@@ -23,17 +24,24 @@ import {ChatMessageList} from './chat-message-list';
 import {ChatMessageInput} from './chat-message-input';
 import {IApiChat, IChat, IChatFormData} from "../../types/chat";
 
-import type {IApiCreateTicket, ICreateTicketFormData, ITicketResponse} from "../../types/tickets";
+import type {
+  AgentType,
+  IApiCreateTicket,
+  ICreateTicketFormData,
+  ITicketFormData,
+  ITicketResponse
+} from "../../types/tickets";
 
 // ----------------------------------------------------------------------
 type ChatType = {
   messages: ITicketResponse[] | IChat[],
   title?: string,
   IsTicket?: boolean,
+  assignmentInfo?: AgentType
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title, messages, IsTicket = false}: ChatType) {
+export function Chat({title,assignmentInfo, messages, IsTicket = false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -128,8 +136,8 @@ export function Chat({title, messages, IsTicket = false}: ChatType) {
 
           if (!IsTicket) {
             const isUserMsg = lastMessage?.role === "user";
-            const isUnprocessed = lastMessage.status !== "processed";
-            const isAssistant = lastMessage.role === "assistant";
+            const isUnprocessed = lastMessage?.status !== "processed";
+            const isAssistant = lastMessage?.role === "assistant";
 
             if (isUserMsg && isUnprocessed) {
               if (retryCount < maxRetries) {
@@ -156,12 +164,10 @@ export function Chat({title, messages, IsTicket = false}: ChatType) {
 
     await sendMessage();
   };
-
-
   const hasConversation = messages?.length > 0;
   return (
     <>
-      {!IsTicket ? <ChatLayout
+      {!IsTicket ? <ChatLayout sx={{mb:2}}
         slots={{
           header: <Stack mx={2} direction='row' spacing={2} alignItems='center'><Iconify icon='CHATBOT' sx={{color:theme.palette.secondary.main}}/><Typography fontWeight='bold'
                                             variant='h6'>گفت و گو با دستیار کوچی</Typography></Stack>,
@@ -191,8 +197,8 @@ export function Chat({title, messages, IsTicket = false}: ChatType) {
         }}
       /> : messages?.length > 0 ? <ChatLayout
         slots={{
-          header: <Stack mx={2}><Typography fontWeight='bold'
-                                            variant='h4'>{title}</Typography></Stack>,
+          header: <Stack mx={2} direction='row' spacing={1} alignItems='center'><Avatar color='primary' sx={{width:30,height:30}}/><Typography fontWeight='bold'
+                                            variant='body1'>{assignmentInfo?.name ?? '--'} ( پشتیبان مهاجرتی ) </Typography></Stack>,
           nav: null,
           main: (
             <>

@@ -28,6 +28,7 @@ import type {
 import {AccountButton} from "../../layouts/components/account-button";
 import {useAppSelector} from "../../lib/redux/hooks";
 import Typography from "@mui/material/Typography";
+import {toPersianNumber} from "../../utils/persian-number";
 // -----------------------------------------------------------------------
 function TitleValue({ title, value }: { title: string; value: string }) {
   return (
@@ -186,7 +187,7 @@ const ProfileEditInfo = () => {
               <TitleValue title="نام" value={selectUserData?.name as string} />
               <TitleValue
                 title="شماره همراه"
-                value={selectUserData?.mobileNumber as string}
+                value={toPersianNumber(selectUserData?.mobileNumber as string)}
               />
               <TitleValue
                 title="ایمیل"

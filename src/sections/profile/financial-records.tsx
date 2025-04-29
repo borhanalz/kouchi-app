@@ -5,17 +5,18 @@ import {useQuery} from "@tanstack/react-query";
 
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
+import Divider from "@mui/material/Divider";
 import {useTheme} from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 import {GetRequest} from "../../lib/axios";
 import {endpoints} from "../../hooks/endPoints";
+import {Iconify} from "../../components/iconify";
+import {toPersianNumber} from "../../utils/persian-number";
+import {EmptyContent} from "../../components/empty-content";
 import RectangleSkeleton from "../../components/Skeleton/rectangle-skeleton";
 
 import type {IApiUserDetails} from "../../types/user";
-import Divider from "@mui/material/Divider";
-import {EmptyContent} from "../../components/empty-content";
-import {Iconify} from "../../components/iconify";
 // ----------------------------------------------------------------------------
 const FinancialRecords = () => {
   const theme = useTheme();
@@ -28,9 +29,8 @@ const FinancialRecords = () => {
   console.log(userDetails)
   return <>
     {userDetailsPending&&<RectangleSkeleton/>}
-    {!userDetails?.details?.payments&&<EmptyContent title='سوابق مالی برای شما یافت نشد'/>}
     <Stack mt={2} spacing={2}>
-    {userDetails?.details?.payments?.map((payment) => <Stack
+    {!userDetails?.details?.payments?.length?<EmptyContent sx={{mt:10}} title='سوابق مالی برای شما یافت نشد'/>:userDetails?.details?.payments?.map((payment) => <Stack
                     sx={{border: 1, borderRadius: 2, p: 2, borderColor: theme?.palette?.grey[theme?.palette?.mode==="dark"?800:200]}}>
         <Stack direction='row' justifyContent='space-between' alignItems='center'>
           <Stack direction='row' spacing={1} alignItems='center'>
@@ -47,12 +47,12 @@ const FinancialRecords = () => {
         <Stack direction='row' spacing={1} alignItems='center'>
           <Typography variant='subtitle1' color={theme?.palette?.grey[500]}>تاریخ ثبت : </Typography>
           <Typography variant='subtitle1' fontWeight={800}>
-            {payment?.createdAt && format(payment?.createdAt, 'yyyy-MM-dd')}
+            {payment?.createdAt && toPersianNumber(format(payment?.createdAt, 'yyyy-MM-dd'))}
           </Typography>
         </Stack>
         <Divider orientation="vertical" flexItem />
         <Typography variant='subtitle1' fontWeight={800}>
-          {payment?.amount?.toLocaleString()} <span style={{fontSize:'13px',color:theme?.palette?.grey[500]}}>تومان</span>
+          {toPersianNumber(payment?.amount?.toLocaleString())} <span style={{fontSize:'13px',color:theme?.palette?.grey[500]}}>تومان</span>
         </Typography>
       </Stack>
       </Stack>)}

@@ -23,13 +23,29 @@ export interface ITicketFormData {
   "price": number,
   "transactionId": string,
   "closedAt": string,
-  "assignmentHistory": any[],
+  "assignmentHistory": {
+    agent: {
+      city:string,
+      country: string,
+      email: string,
+      id: string,
+      name: string,
+      phone: string,
+      profilePicture: string,
+      role: string,
+      successfulClientsCount: number,
+      yearsOfExperience: number
+    },
+    assignedAt:string
+  }[],
   "responses": ITicketResponse[],
   "createdAt": string,
   "updatedAt": string,
   id?: number | undefined,
   "__v": number
 }
+type AssignmentHistoryItem = ITicketFormData["assignmentHistory"][number];
+export type AgentType = AssignmentHistoryItem["agent"];
 
 export interface IApiTicketsList {
   "success": boolean,

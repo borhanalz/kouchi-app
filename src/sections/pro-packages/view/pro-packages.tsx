@@ -22,6 +22,7 @@ import ProPackagesPeyment from '../pro-packages-peyment';
 import {DashboardContent} from "../../../layouts/dashboard";
 
 import type {IApiServices, IService} from "../../../types/services";
+import {toPersianNumber} from "../../../utils/persian-number";
 
 // ------------------------------------------------------------------------------
 
@@ -58,7 +59,7 @@ export const ProPackages = () => {
             sx={{height: '100%'}}
           >
             {ServicesList?.services?.map((item) => (
-              <Grid size={{xs:12,md:6,lg:4}}>
+              <Grid size={{xs:12,md:6,lg:4}} sx={{display:'flex'}}>
                 <Stack
                   spacing={3}
                   sx={{
@@ -85,7 +86,7 @@ export const ProPackages = () => {
                   </Stack>
                   <Stack direction="row" justifyContent="end" spacing={0.5}>
                     <Typography fontWeight="bolder" variant="h4">
-                      {item?.prices?.regular?.toLocaleString()}
+                      {toPersianNumber(item?.prices?.regular?.toLocaleString())}
                     </Typography>
                     <Typography variant="body2" sx={{mt: 1}}>
                        تومان

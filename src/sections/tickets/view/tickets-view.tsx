@@ -35,31 +35,34 @@ const TableHead = [
 interface ITicketListFormData {
   page: number,
   limit: number,
-  mobileNumber: string
+  mobileNumber: string,
 }
-
-const TicketsView = () => {
+// ------------------------------------------------------------------------------------------------------
+const TicketsView = ({isProServices = false}: { isProServices: boolean }) => {
   const table = useTable();
   const router = useRouter();
   const theme = useTheme();
 
   const {data: TicketsList, isPending} = useQuery({
-    queryKey: ['tickets-list',table.page,table.rowsPerPage],
-    queryFn: () => EditCreateRequest<ITicketListFormData,IApiTicketsList>(endpoints.TICKETS.LIST, {
+    queryKey: [`tickets-list-${isProServices}`, table.page, table.rowsPerPage],
+    queryFn: () => EditCreateRequest<ITicketListFormData, IApiTicketsList>(endpoints.TICKETS.LIST, {
       page: table.page,
       limit: table.rowsPerPage,
       mobileNumber: '09127017331'
+    }).then((res) => {
+      const filteredTickets = res.tickets?.filter(ticket => ticket?.requiresPayment == isProServices);
+      return {...res, tickets: filteredTickets}
     })
   });
- const rowNumber = (index:number) => table.page * table.rowsPerPage + index + 1;
+  const rowNumber = (index: number) => table.page * table.rowsPerPage + index + 1;
   return (
     <DashboardContent
       maxWidth={false}
       sx={{display: 'flex', flex: '1 1 auto', flexDirection: 'column'}}
-      title="تیکت ها"
+      title={isProServices ? "سرویس های من" : "تیکت ها"}
     >
-      {isPending?<LoadingScreen/>:<Stack direction="column" spacing={2}>
-        <Stack direction="row" justifyContent="right">
+      {isPending ? <LoadingScreen/> : <Stack direction="column" spacing={2}>
+        {!isProServices && <Stack direction="row" justifyContent="right">
           <Button
             startIcon={<Iconify icon="circularPlus" sx={{width: 25, height: 25}}/>}
             color="primary"
@@ -68,10 +71,15 @@ const TicketsView = () => {
           >
             تیکت جدید
           </Button>
-        </Stack>
-        {!TicketsList?.tickets?.length ? <Stack mt={8}><EmptyContent title='تیکتی برای شما یافت نشد'
-                                                                     description='برای ساخت تیکت از قسمت تیکت جدید اقدام فرمایید'/></Stack> :
-          <Card sx={{borderRadius: 2, border: 1.5,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300]}}>
+        </Stack>}
+        {!TicketsList?.tickets?.length ?
+          <Stack mt={8}><EmptyContent title={isProServices ? "سرویسی برای شما یافت نشد" : 'تیکتی برای شما یافت نشد'}
+                                      description={isProServices ? "" : 'برای ساخت تیکت از قسمت تیکت جدید اقدام فرمایید'}/></Stack> :
+          <Card sx={{
+            borderRadius: 2,
+            border: 1.5,
+            borderColor: theme.palette.mode === "dark" ? theme.vars.palette.grey[800] : theme.vars.palette.grey[300]
+          }}>
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{minWidth: 960}}>
                 <TableHeadCustom headCells={TableHead} sx={{whiteSpace: 'nowrap'}}/>
@@ -82,7 +90,7 @@ const TicketsView = () => {
               </Table>
             </Scrollbar>
           </Card>}
-        {TicketsList?.tickets && TicketsList?.tickets?.length > 0 && <TablePaginationCustom
+        {TicketsList && TicketsList?.tickets?.length > 0 && <TablePaginationCustom
           page={table.page}
           count={TicketsList?.totalCount as number}
           rowsPerPage={table.rowsPerPage}

@@ -16,6 +16,7 @@ import {paths} from "../../routes/paths";
 import { Iconify } from '../../components/iconify';
 
 import type {ITicketFormData} from "../../types/tickets";
+import {toPersianNumber} from "../../utils/persian-number";
 
 // ------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) =
           </Typography>
         </Box>
       </TableCell>
-      <TableCell align="center">{createdAt&&format(createdAt,"yyyy-MM-dd")}</TableCell>
+      <TableCell align="center">{createdAt&&toPersianNumber(format(createdAt,"yyyy-MM-dd"))}</TableCell>
       <TableCell align="center">
         <Tooltip title={requiresPayment?"نیازمند خرید سرویس اشتراکی":"مشاهده جزئیات"}>
           <IconButton onClick={()=> {

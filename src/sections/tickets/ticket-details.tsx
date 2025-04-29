@@ -7,7 +7,7 @@ import {Chat} from "src/components/chat";
 import {endpoints} from "../../hooks/endPoints";
 import {EditCreateRequest} from "../../lib/axios";
 import {DashboardContent} from "../../layouts/dashboard";
-import {IApiGetTicket, ITicketResponse} from "../../types/tickets";
+import {AgentType, IApiGetTicket, type ITicketFormData, ITicketResponse} from "../../types/tickets";
 import ChatSkeleton from "../../components/Skeleton/chat-skeleton";
 
 // -------------------------------------------------------------------------------------------
@@ -20,16 +20,13 @@ const TicketDetail = ({ticketId}: ITicketDetail) => {
     queryKey: ['get-ticket-by-id'],
     queryFn: () => EditCreateRequest<ITicketDetail, IApiGetTicket>(endpoints.TICKETS.GET_BY_ID, {ticketId})
   });
-
-  return (
-    <DashboardContent
-      maxWidth={false}
-      sx={{display: 'flex', flex: '1 1 auto', flexDirection: 'column'}}
-      title="تیکت"
-    >
+  console.log(data)
+  return (<>
       {isPending ? <ChatSkeleton/> :
-        <Chat title={data?.ticket?.title as string} messages={data?.ticket.responses as ITicketResponse[]} IsTicket/>}
-    </DashboardContent>
+        <Chat title={data?.ticket?.title as string}
+              assignmentInfo={data?.ticket?.assignmentHistory[0]?.agent as AgentType}
+              messages={data?.ticket.responses as ITicketResponse[]} IsTicket/>}
+    </>
   );
 };
 export default TicketDetail;

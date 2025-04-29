@@ -30,9 +30,11 @@ export const paths = {
     documents: {
       root: `${ROOTS.DASHBOARD}/documents`,
     },
-    proPackages: {
-      root: `${ROOTS.DASHBOARD}/pro-packages`,
-      successfulPayment: `${ROOTS.DASHBOARD}/pro-packages/successful-payment`,
+    services: {
+      root: `${ROOTS.DASHBOARD}/services`,
+      successfulPayment: `${ROOTS.DASHBOARD}/services/pro-services/successful-payment`,
+      proServices:`${ROOTS.DASHBOARD}/services/pro-services`,
+      userServices: `${ROOTS.DASHBOARD}/services/user-services`
     },
     tickets: {
       root: `${ROOTS.DASHBOARD}/tickets`,
@@ -40,7 +42,7 @@ export const paths = {
       details:(id:string)=>`${ROOTS.DASHBOARD}/tickets/${id}`
     },
     profile:{
-      root:`${ROOTS.DASHBOARD}/profile`,
+      root:`${ROOTS.DASHBOARD}/profile/edit-profile`,
     },
   },
 };

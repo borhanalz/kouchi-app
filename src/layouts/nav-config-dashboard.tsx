@@ -21,6 +21,8 @@ const ICONS = {
   tickets: icon('messages'),
   userInfo: icon('userInfo'),
   services: icon('shieldPlus'),
+  myServices: icon('list'),
+  proServices: icon('star-medal'),
 };
 
 // ----------------------------------------------------------------------
@@ -74,8 +76,20 @@ export const navData: NavSectionProps['data'] = [
       },
       {
         title: 'سرویس ها',
-        path: paths.dashboard.proPackages.root,
+        path: paths.dashboard.services.root,
         icon: ICONS.services,
+        children:[
+          {
+            title: 'سرویس های اشتراکی',
+            path: paths.dashboard.services.proServices,
+            icon: ICONS.proServices,
+          },
+          {
+            title: 'سرویس های من',
+            path: paths.dashboard.services.userServices,
+            icon: ICONS.myServices,
+          },
+        ]
       },
       // { title: 'Two', path: paths.app.two, icon: ICONS.ecommerce },
       // { title: 'Three', path: paths.app.three, icon: ICONS.analytics },

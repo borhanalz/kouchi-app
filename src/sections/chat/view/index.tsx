@@ -17,15 +17,10 @@ const ChatView = () => {
     queryKey: ['get-chat-history'],
     queryFn: () => EditCreateRequest<any,IApiChatHistory>(endpoints.CHAT.CHAT_HISTORY,{},{},'post',{baseURL:'https://koochichat.liara.run'}),
   });
-  return (
-    <DashboardContent
-      maxWidth={false}
-      sx={{display: 'flex', flex: '1 1 auto', flexDirection: 'column'}}
-      title=""
-    >
+  return (<>
       {isPending ? <ChatSkeleton/> :
        <Chat title='' messages={data?.chats as IChat[]} />}
-    </DashboardContent>
+    </>
   );
 };
 export default ChatView;
