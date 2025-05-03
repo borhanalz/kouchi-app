@@ -41,7 +41,7 @@ type ChatType = {
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title,assignmentInfo, messages, IsTicket = false}: ChatType) {
+export function Chat({title, assignmentInfo, messages, IsTicket = false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -117,20 +117,20 @@ export function Chat({title,assignmentInfo, messages, IsTicket = false}: ChatTyp
     const waitTime = 10000; // 10 seconds
 
     const sendMessage = async () => {
-      const response = await AddChatResponse({ message: message || chatMessage });
+      const response = await AddChatResponse({message: message || chatMessage});
       if (response.status === "ok") {
-        await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
+        await queryClient.invalidateQueries({queryKey: ["get-chat-history"]});
         setIsChatLoading(true);
         setChatMessage("");
         setResendButtonStatus(false);
         const checkResponse = async () => {
-          await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
+          await queryClient.invalidateQueries({queryKey: ["get-chat-history"]});
           await new Promise((resolve) => setTimeout(resolve, 500));
 
           const updatedMessages = queryClient.getQueryData<IChat[]>(["get-chat-history"]) || [];
           const lastMessage = updatedMessages[updatedMessages.length - 1];
 
-          if (lastMessage?.role!=="user"){
+          if (lastMessage?.role !== "user") {
             setIsChatLoading(false)
           }
 
@@ -167,38 +167,45 @@ export function Chat({title,assignmentInfo, messages, IsTicket = false}: ChatTyp
   const hasConversation = messages?.length > 0;
   return (
     <>
-      {!IsTicket ? <ChatLayout sx={{mb:2}}
-        slots={{
-          header: <Stack mx={2} direction='row' spacing={2} alignItems='center'><Iconify icon='CHATBOT' sx={{color:theme.palette.secondary.main}}/><Typography fontWeight='bold'
-                                            variant='h6'>گفت و گو با دستیار کوچی</Typography></Stack>,
-          nav: null,
-          main: (
-            <>
-              <ChatMessageList
-                handleSendChatResponse={HandleChatResponse}
-                resendButtonStatus={resendButtonStatus}
-                isChatLoading={isChatLoading}
-                isTicket={IsTicket}
-                messages={messages ?? []}
-              />
-              <ChatMessageInput
-                chatMessage={chatMessage}
-                setChatMessage={setChatMessage}
-                isChatLoading={isChatLoading}
-                addChatResponsePending={addChatResponsePending}
-                HandleChatResponse={HandleChatResponse}
-                isTicket={IsTicket}
-                isNewTicket={messages?.length < 1}
-                messages={messages}
-              />
-            </>
-          ),
-          details: hasConversation && null,
-        }}
+      {!IsTicket ? <ChatLayout sx={{mb: 2}}
+                               slots={{
+                                 header: <Stack mx={2} direction='row' spacing={2} alignItems='center'><Iconify
+                                   icon='CHATBOT' sx={{color: theme.palette.secondary.main}}/><Typography
+                                   fontWeight='bold'
+                                   variant='h6'>گفت و گو با دستیار کوچی</Typography></Stack>,
+                                 nav: null,
+                                 main: (
+                                   <>
+                                     <ChatMessageList
+                                       handleSendChatResponse={HandleChatResponse}
+                                       resendButtonStatus={resendButtonStatus}
+                                       isChatLoading={isChatLoading}
+                                       isTicket={IsTicket}
+                                       messages={messages ?? []}
+                                     />
+                                     <ChatMessageInput
+                                       chatMessage={chatMessage}
+                                       setChatMessage={setChatMessage}
+                                       isChatLoading={isChatLoading}
+                                       addChatResponsePending={addChatResponsePending}
+                                       HandleChatResponse={HandleChatResponse}
+                                       isTicket={IsTicket}
+                                       isNewTicket={messages?.length < 1}
+                                       messages={messages}
+                                     />
+                                   </>
+                                 ),
+                                 details: hasConversation && null,
+                               }}
       /> : messages?.length > 0 ? <ChatLayout
         slots={{
-          header: <Stack mx={2} direction='row' spacing={1} alignItems='center'><Avatar color='primary' sx={{width:30,height:30}}/><Typography fontWeight='bold'
-                                            variant='body1'>{assignmentInfo?.name ?? '--'} ( پشتیبان مهاجرتی ) </Typography></Stack>,
+          header: <Stack mx={2} my={2} mt={3} spacing={0.5} alignItems='center'>
+            <Stack spacing={1} direction='row'>
+              <Avatar color='primary' sx={{width: 30, height: 30}}/>
+              <Typography fontWeight='bold' variant='body1'>{assignmentInfo?.name || '--'} ( {assignmentInfo?.country} ) </Typography>
+            </Stack>
+          <Typography variant='subtitle2' color={theme?.palette?.grey[400]}>{assignmentInfo?.successfulClientsCount} پرونده موفق </Typography>
+          </Stack>,
           nav: null,
           main: (
             <>
@@ -238,7 +245,8 @@ export function Chat({title,assignmentInfo, messages, IsTicket = false}: ChatTyp
             <Field.Text multiline rows={4} type='text' name='description' label='پیغام ...'/>
             <Field.Upload name='attachments' onDelete={() => setValue("attachments", null)}/>
             <Stack direction='row' justifyContent='right'>
-              <Button type='submit' color='primary' variant='contained' loading={createTicketPending}>ایجاد تیکت</Button>
+              <Button type='submit' color='primary' variant='contained' loading={createTicketPending}>ایجاد
+                تیکت</Button>
             </Stack>
           </Stack>
         </Form>

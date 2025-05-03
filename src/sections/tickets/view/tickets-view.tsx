@@ -38,7 +38,7 @@ interface ITicketListFormData {
   mobileNumber: string,
 }
 // ------------------------------------------------------------------------------------------------------
-const TicketsView = ({isProServices = false}: { isProServices: boolean }) => {
+const TicketsView = ({isProServices = false}: { isProServices?: boolean }) => {
   const table = useTable();
   const router = useRouter();
   const theme = useTheme();

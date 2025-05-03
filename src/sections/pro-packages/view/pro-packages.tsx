@@ -20,9 +20,9 @@ import {GetRequest} from "../../../lib/axios";
 import {endpoints} from "../../../hooks/endPoints";
 import ProPackagesPeyment from '../pro-packages-peyment';
 import {DashboardContent} from "../../../layouts/dashboard";
+import {toPersianNumber} from "../../../utils/persian-number";
 
 import type {IApiServices, IService} from "../../../types/services";
-import {toPersianNumber} from "../../../utils/persian-number";
 
 // ------------------------------------------------------------------------------
 
@@ -93,7 +93,6 @@ export const ProPackages = () => {
                     </Typography>
                   </Stack>
                   <Divider sx={{borderStyle: 'dashed'}}/>
-                  <Link fontSize={14}>نمایش کامل</Link>
                   <Stack
                     direction="column"
                     spacing={2}
