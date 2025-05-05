@@ -32,7 +32,7 @@ export function RejectionFiles({ files, sx, className, ...other }: RejectionFile
             </ItemTitle>
 
             {errors.map((error) => (
-              <ItemCaption key={error.code}>- {error.message}</ItemCaption>
+              <ItemCaption key={error.code}>- فرمت فایل باید یکی از موارد jpg، png یا pdf باشد.</ItemCaption>
             ))}
           </ListItem>
         );

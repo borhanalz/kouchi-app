@@ -35,6 +35,7 @@ export const ProPackages = () => {
     queryKey: ['services-list'],
     queryFn: () => GetRequest<IApiServices>(endpoints.SERVICES.LIST)
   })
+  console.log(ServicesList)
   return (
     <DashboardContent
         maxWidth={false}
@@ -84,14 +85,20 @@ export const ProPackages = () => {
                       sx={{color: theme.vars.palette.secondary.main, width: 35, height: 35}}
                     />
                   </Stack>
-                  <Stack direction="row" justifyContent="end" spacing={0.5}>
-                    <Typography fontWeight="bolder" variant="h4">
-                      {toPersianNumber(item?.prices?.regular?.toLocaleString())}
-                    </Typography>
-                    <Typography variant="body2" sx={{mt: 1}}>
-                       تومان
-                    </Typography>
+                  <Stack>
+                    {item?.prices?.map((priceItem)=><Stack alignItems='center' direction='row' justifyContent='space-between'>
+                      <Typography color={theme?.palette?.grey[600]}>{priceItem?.text}</Typography>
+                      <Stack direction="row" justifyContent="end" spacing={0.5}>
+                        <Typography fontWeight="bolder" variant="h6">
+                          {toPersianNumber(Number(priceItem?.price).toLocaleString())}
+                        </Typography>
+                        <Typography variant="body2" sx={{mt: 1}}>
+                          تومان
+                        </Typography>
+                      </Stack>
+                    </Stack>)}
                   </Stack>
+
                   <Divider sx={{borderStyle: 'dashed'}}/>
                   <Stack
                     direction="column"
@@ -112,12 +119,14 @@ export const ProPackages = () => {
                   </Stack>
                   <Grid container spacing={2}>
                     {item?.buttons?.map((button) => (<Grid size={12}>
-                      <Button fullWidth variant="contained" color="primary" onClick={()=>{
-                        setPaymentInfo({...item,buttons:[button]})
-                        peymentDialog.onTrue();
-                      }}>
-                        {button?.text}
-                      </Button></Grid>))}
+                     <Stack direction='row'>
+                       <Button fullWidth variant="contained" color="primary" onClick={()=>{
+                         setPaymentInfo({...item,buttons:[button]})
+                         peymentDialog.onTrue();
+                       }}>
+                         {button?.text}
+                       </Button>
+                     </Stack> </Grid>))}
                   </Grid>
                 </Stack>
               </Grid>

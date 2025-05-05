@@ -23,20 +23,21 @@ import {
 import {grey} from '../../theme';
 import {endpoints} from "../../hooks/endPoints";
 import {EditCreateRequest} from "../../lib/axios";
+import {toPersianNumber} from "../../utils/persian-number";
 import {IApiPaymentRequest, IPaymentRequest, IService} from "../../types/services";
 
 import zarinLogo from '/public/assets/images/zarin-logo.png';
 
 // -------------------------------------------------------------------------------------------
 
-const ProPackagesPeyment = ({dialog, data}: { dialog: UseBooleanReturn, data: IService }) => {
+const ProPackagesPeyment = ({dialog,isTicketService=false, data}: { dialog: UseBooleanReturn,isTicketService?:boolean, data: IService|any }) => {
   const [peymentBank, setPeymentBank] = useState<string>('zarin');
 
   const {mutateAsync, isPending} = useMutation({
     mutationKey: ['payment-request'],
     mutationFn: (payload:IPaymentRequest) => EditCreateRequest<IPaymentRequest, IApiPaymentRequest>(endpoints?.SERVICES?.PAYMENT, payload)
   })
-
+  console.log(data)
   return (
     <Dialog open={dialog.value} onClose={dialog.onFalse} fullWidth>
       <DialogTitle>
@@ -46,7 +47,7 @@ const ProPackagesPeyment = ({dialog, data}: { dialog: UseBooleanReturn, data: IS
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography color={grey[600]}>مبلغ</Typography>
-            <Typography fontWeight="bold">{data?.prices?.regular?.toLocaleString()} تومان </Typography>
+            <Typography fontWeight="bold">{isTicketService?data?.regularPrice?.toLocaleString():toPersianNumber(Number(data?.prices?.[0]?.price)?.toLocaleString())} تومان </Typography>
           </Stack>
           <Divider sx={{borderStyle: 'dashed'}}/>
           <Stack direction="row" justifyContent="space-between">
@@ -76,12 +77,14 @@ const ProPackagesPeyment = ({dialog, data}: { dialog: UseBooleanReturn, data: IS
           loading={isPending}
           variant="contained"
           onClick={async () => {
-            const payload:IPaymentRequest = {...data?.buttons[0]?.params, type: data?.buttons[0]?.action}
+            const payload: IPaymentRequest = {
+              ...(!isTicketService && data?.buttons[0]?.params),
+              type: isTicketService ? 'ticket' : data?.buttons[0]?.action,
+              ...(isTicketService && { ticketId: data?.id }),
+            };
             console.log(payload)
-
             try {
              const response = await mutateAsync(payload);
-              console.log(payload)
              window.location.href=response?.paymentUrl;
             } catch (e) {
               console.log(e)

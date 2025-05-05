@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import {useTheme} from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 
 import {Iconify} from "../iconify";
 import {ChatLayout} from './layout';
@@ -199,12 +200,21 @@ export function Chat({title, assignmentInfo, messages, IsTicket = false}: ChatTy
                                }}
       /> : messages?.length > 0 ? <ChatLayout
         slots={{
-          header: <Stack mx={2} my={2} mt={3} spacing={0.5} alignItems='center'>
-            <Stack spacing={1} direction='row'>
-              <Avatar color='primary' sx={{width: 30, height: 30}}/>
-              <Typography fontWeight='bold' variant='body1'>{assignmentInfo?.name || '--'} ( {assignmentInfo?.country} ) </Typography>
+          header: <Stack mx={2} my={2} mt={3} spacing={0.5} alignItems='center' sx={{width:'100%'}}>
+            <Stack justifyContent='space-between' direction='row' sx={{width:'100%'}}>
+            <Stack spacing={1} textAlign='center'>
+              <Stack spacing={1} direction='row'>
+                <Avatar color='primary' sx={{width: 30, height: 30}}/>
+                <Typography fontWeight='bold' variant='body1'>{assignmentInfo?.name || 'در حال بررسی برای ارسال به کوچ‌یار مناسب'} {assignmentInfo?.country &&`( ${assignmentInfo?.country} )`} </Typography>
+              </Stack>
+              {assignmentInfo?.name&&<Typography variant='subtitle2'
+                           color={theme?.palette?.grey[400]}>{assignmentInfo?.successfulClientsCount} پرونده
+                موفق </Typography>}
             </Stack>
-          <Typography variant='subtitle2' color={theme?.palette?.grey[400]}>{assignmentInfo?.successfulClientsCount} پرونده موفق </Typography>
+              <IconButton onClick={()=>router.push(paths.dashboard.tickets.root)}>
+                <Iconify icon='arrowHeadLeft' sx={{width:16}}/>
+              </IconButton>
+            </Stack>
           </Stack>,
           nav: null,
           main: (

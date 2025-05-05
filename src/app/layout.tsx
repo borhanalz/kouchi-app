@@ -18,8 +18,9 @@ import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/component
 
 import { AuthProvider } from 'src/auth/context/jwt';
 
-import ReactQueryProvider from '../lib/react-query/react-query-provider';
+import ClientRoot from "./client-root";
 import StoreProvider from "../lib/redux/store-provider";
+import ReactQueryProvider from '../lib/react-query/react-query-provider';
 
 // ----------------------------------------------------------------------
 
@@ -83,12 +84,14 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                   defaultMode={themeConfig.defaultMode}
                   modeStorageKey={themeConfig.modeStorageKey}
                 >
-                  <Toaster position="top-center" richColors />
-                  <MotionLazy>
-                    <ProgressBar />
-                    <SettingsDrawer defaultSettings={defaultSettings} />
-                    {children}
-                  </MotionLazy>
+                  <ClientRoot>
+                    <Toaster position="top-center" richColors />
+                    <MotionLazy>
+                      <ProgressBar />
+                      <SettingsDrawer defaultSettings={defaultSettings} />
+                      {children}
+                    </MotionLazy>
+                  </ClientRoot>
                 </ThemeProvider>
               </AppRouterCacheProvider>
             </SettingsProvider>

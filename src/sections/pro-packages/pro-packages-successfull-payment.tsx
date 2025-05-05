@@ -41,7 +41,7 @@ const ProPackagesSuccessfullPayment = () => {
                 variant="contained"
                 color="primary"
                 fullWidth
-                onClick={() => router.push(getParam("Status")==="OK"?paths.dashboard.roadMap.root:paths?.dashboard.root)}
+                onClick={() => router.push(getParam(paths?.dashboard?.root))}
               >
                 {getParam("Status") === "OK" ? "بزن بریم" : "برو به صفحه اصلی"}
               </Button>

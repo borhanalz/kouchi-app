@@ -20,6 +20,8 @@ import {endpoints} from '../../hooks/endPoints';
 import {useURLSearchParams} from "../../hooks/use-search-params";
 
 import type {IApiCheckUser} from '../../types/auth';
+import PhoneNumberField from "../../components/phone-number-input";
+import {isValidPhoneNumber} from "react-phone-number-input";
 
 // --------------------------------------------------------------
 export interface PhoneNumberSchemaType {
@@ -27,11 +29,10 @@ export interface PhoneNumberSchemaType {
 }
 
 export const MobileNumberSchema = zod.object({
-  mobileNumber: zod
-    .string()
-    .regex(/^09\d{9}$/, {message: 'شماره موبایل معتبر نیست'})
-    .min(11, {message: 'شماره موبایل باید 11 رقم باشد'})
-    .max(11, {message: 'شماره موبایل باید 11 رقم باشد'}),
+  mobileNumber: zod.string()
+    .refine((val) => isValidPhoneNumber(val || ''), {
+      message: 'لطفا شماره تلفن معتبر وارد کنید',
+    }),
 });
 // --------------------------------------------------------------
 const PhoneNumberStep = () => {
@@ -57,9 +58,10 @@ const PhoneNumberStep = () => {
   });
 
   const CheckUser = async (data: PhoneNumberSchemaType) => {
+    const mobileNumberCorrectFormat=data?.mobileNumber?.replace(/^(\+98)/, "0")
     try {
-      const response = await mutateAsync({mobileNumber: data?.mobileNumber});
-      sessionStorage.setItem("mobileNumber", data?.mobileNumber);
+      const response = await mutateAsync({mobileNumber:mobileNumberCorrectFormat});
+      sessionStorage.setItem("mobileNumber", mobileNumberCorrectFormat);
       if (response?.exists) {
         setOtpStatus(true);
       } else {
@@ -123,7 +125,7 @@ const PhoneNumberStep = () => {
         }}/> :
         <Form methods={methods} onSubmit={HandleSubmit}>
           <Stack spacing={2}>
-            <Field.Text maxLength={11} label="شماره موبایل" name="mobileNumber" placeholder='**** *** **09'/>
+            <PhoneNumberField name="mobileNumber"/>
             <LoadingButton fullWidth color="primary" size="large" type="submit" variant="contained" loading={isPending}>
               ادامه
             </LoadingButton>

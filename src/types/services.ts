@@ -3,11 +3,11 @@ export interface IService {
   "title": string,
   "subtitle": string,
   "features": string[],
-  "prices": {
-    "regular": number,
-    "sale": number,
-    "discount": number
-  },
+  "prices":{
+    "text": string,
+    "sale": string,
+    "price": string
+  }[],
   "buttons": {
       "text": string,
       "action": string,
