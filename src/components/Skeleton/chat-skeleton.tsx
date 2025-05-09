@@ -32,6 +32,10 @@ return <Box
       <Skeleton variant="circular" width={40} height={40} />
       <Skeleton variant="rectangular" width={200} height={80} />
     </Box>
+    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+      <Skeleton variant="rectangular" width={200} height={80} />
+      <Skeleton variant="circular" width={40} height={40} />
+    </Box>
   </Box>
 
   <Box mt={28} sx={{ display: "flex", alignItems: "center", gap: 2 }}>

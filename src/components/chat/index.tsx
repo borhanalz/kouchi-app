@@ -99,9 +99,9 @@ export function Chat({title, assignmentInfo, messages, IsTicket = false}: ChatTy
         attachments: payloads?.attachments
       });
       toast.success("تیکت با موفقیت ایجاد شد");
-      router.push(paths.dashboard.tickets.details(String(response.ticketId)));
       await queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
       await queryClient.invalidateQueries({queryKey: ["tickets-list"]});
+      router.push(paths.dashboard.tickets.details(String(response.ticketId)));
     } catch (e) {
       console.log(e)
     }

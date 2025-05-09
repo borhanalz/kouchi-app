@@ -20,7 +20,6 @@ const TicketDetail = ({ticketId}: ITicketDetail) => {
     queryKey: ['get-ticket-by-id'],
     queryFn: () => EditCreateRequest<ITicketDetail, IApiGetTicket>(endpoints.TICKETS.GET_BY_ID, {ticketId})
   });
-  console.log(data)
   return (<>
       {isPending ? <ChatSkeleton/> :
         <Chat title={data?.ticket?.title as string}

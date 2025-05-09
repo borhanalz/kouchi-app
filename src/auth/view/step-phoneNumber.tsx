@@ -29,10 +29,11 @@ export interface PhoneNumberSchemaType {
 }
 
 export const MobileNumberSchema = zod.object({
-  mobileNumber: zod.string()
-    .refine((val) => isValidPhoneNumber(val || ''), {
-      message: 'لطفا شماره تلفن معتبر وارد کنید',
-    }),
+  mobileNumber: zod
+    .string()
+    .regex(/^09\d{9}$/, {message: 'شماره موبایل معتبر نیست'})
+    .min(11, {message: 'شماره موبایل باید 11 رقم باشد'})
+    .max(11, {message: 'شماره موبایل باید 11 رقم باشد'}),
 });
 // --------------------------------------------------------------
 const PhoneNumberStep = () => {
@@ -125,7 +126,7 @@ const PhoneNumberStep = () => {
         }}/> :
         <Form methods={methods} onSubmit={HandleSubmit}>
           <Stack spacing={2}>
-            <PhoneNumberField name="mobileNumber"/>
+            <Field.Text maxLength={11} label="شماره موبایل" name="mobileNumber" placeholder='**** *** **09'/>
             <LoadingButton fullWidth color="primary" size="large" type="submit" variant="contained" loading={isPending}>
               ادامه
             </LoadingButton>
