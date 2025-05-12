@@ -13,13 +13,13 @@ import LgAnimateLoading from "../../../components/loading-screen/animate";
 
 // -------------------------------------------------------------------------------------------
 const ChatView = () => {
-  const {data, isPending} = useQuery({
+  const {data, isPending,refetch} = useQuery({
     queryKey: ['get-chat-history'],
     queryFn: () => EditCreateRequest<any,IApiChatHistory>(endpoints.CHAT.CHAT_HISTORY,{},{},'post',{baseURL:'https://koochichat.liara.run'}),
-  });
+  refetchInterval:6000});
   return (<>
       {isPending ? <ChatSkeleton/> :
-       <Chat title='' messages={data?.chats as IChat[]} />}
+       <Chat title='' refetch messages={data?.chats as IChat[]} />}
     </>
   );
 };

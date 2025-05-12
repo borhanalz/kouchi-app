@@ -38,11 +38,12 @@ type ChatType = {
   messages: ITicketResponse[] | IChat[],
   title?: string,
   IsTicket?: boolean,
-  assignmentInfo?: AgentType
+  assignmentInfo?: AgentType,
+  refetch?:any
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title, assignmentInfo, messages, IsTicket = false}: ChatType) {
+export function Chat({title, assignmentInfo,refetch, messages, IsTicket = false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -113,58 +114,46 @@ export function Chat({title, assignmentInfo, messages, IsTicket = false}: ChatTy
     mutationFn: (data: IChatFormData) => EditCreateRequest<IChatFormData, IApiChat>(endpoints.CHAT.CHAT, data, {}, 'post', {baseURL: 'https://koochichat.liara.run'})
   });
   const HandleChatResponse = async (message = "") => {
-    let retryCount = 0;
     const maxRetries = 5;
-    const waitTime = 10000; // 10 seconds
+    let retryCount = 0;
 
-    const sendMessage = async () => {
-      const response = await AddChatResponse({message: message || chatMessage});
-      if (response.status === "ok") {
-        await queryClient.invalidateQueries({queryKey: ["get-chat-history"]});
-        setIsChatLoading(true);
-        setChatMessage("");
-        setResendButtonStatus(false);
-        const checkResponse = async () => {
-          await queryClient.invalidateQueries({queryKey: ["get-chat-history"]});
-          await new Promise((resolve) => setTimeout(resolve, 500));
+    const response = await AddChatResponse({ message: message || chatMessage });
+    if (response.status === "ok") {
+      await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
+      setIsChatLoading(true);
+      setChatMessage("");
+      setResendButtonStatus(false);
 
-          const updatedMessages = queryClient.getQueryData<IChat[]>(["get-chat-history"]) || [];
-          const lastMessage = updatedMessages[updatedMessages.length - 1];
+      const interval = setInterval(async () => {
+        try {
+          retryCount++;
 
-          if (lastMessage?.role !== "user") {
-            setIsChatLoading(false)
-          }
+          const updatedMessages: any = await queryClient.fetchQuery<IChat[]>({
+            queryKey: ["get-chat-history"],
+            staleTime: 0,
+          });
 
-          if (!IsTicket) {
-            const isUserMsg = lastMessage?.role === "user";
-            const isUnprocessed = lastMessage?.status !== "processed";
-            const isAssistant = lastMessage?.role === "assistant";
+          const chats = updatedMessages?.chats ?? updatedMessages;
+          const lastMessage = chats[chats.length - 1];
 
-            if (isUserMsg && isUnprocessed) {
-              if (retryCount < maxRetries) {
-                retryCount++;
-                setTimeout(checkResponse, waitTime);
-              } else {
-                setResendButtonStatus(true);
-                setIsChatLoading(false);
-              }
-            } else if (isAssistant || (isUserMsg && !isUnprocessed)) {
-              setChatMessage("");
-              setIsChatLoading(false);
-            } else {
-              setIsChatLoading(false);
-            }
-          } else {
+          if (lastMessage?.role === "assistant") {
+            clearInterval(interval);
             setIsChatLoading(false);
+          } else if (retryCount >= maxRetries) {
+            clearInterval(interval);
+            setIsChatLoading(false);
+            setResendButtonStatus(true);
           }
-        };
-
-        setTimeout(checkResponse, waitTime);
-      }
-    };
-
-    await sendMessage();
+        } catch (error) {
+          console.error("Error fetching chat history", error);
+          clearInterval(interval);
+          setIsChatLoading(false);
+          setResendButtonStatus(true);
+        }
+      }, 4000);
+    }
   };
+
   const hasConversation = messages?.length > 0;
   return (
     <>

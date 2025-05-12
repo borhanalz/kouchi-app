@@ -14,6 +14,11 @@ import type { AuthSplitSectionProps } from './section';
 import type { AuthSplitContentProps } from './content';
 import type { MainSectionProps } from '../core/main-section';
 import type { LayoutSectionProps } from '../core/layout-section';
+import Box from "@mui/material/Box";
+import {ArrowLeftIcon} from "@mui/x-date-pickers";
+import {Iconify} from "../../components/iconify";
+import IconButton from "@mui/material/IconButton";
+import {paths} from "../../routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -51,11 +56,13 @@ export function AuthSplitLayout({
       //     <Logo />
       //   </>
       // ),
-      // rightArea: (
-      //   <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
-      //    <ArrowLeftIcon/>
-      //   </Box>
-      // ),
+      rightArea: (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
+          <IconButton onClick={() => window.location.href = "https://koochi.app/"}>
+            <Iconify icon='arrowLeft'/>
+          </IconButton>
+        </Box>
+      ),
     };
 
     return (

@@ -40,3 +40,9 @@ export interface IApiPaymentRequest {
   "paymentUrl": string,
   "ticketId": string
 }
+
+export interface IPaymentVerifyApi {
+  success:boolean,
+  status:string,
+  message:string
+}

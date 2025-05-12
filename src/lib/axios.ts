@@ -26,14 +26,19 @@ export default axiosInstance;
 // -------------------------- Get Request ---------------------------------------
 export async function GetRequest<APIResponseType>(
   url: string,
-  id?: string|null,
+  id?: string | null,
+  params?: Record<string, any>
 ): Promise<APIResponseType> {
-  const response = await axiosInstance.get<APIResponseType>(url + `${id ? `/${id}` : ''}`);
+  const fullUrl = id ? `${url}/${id}` : url;
+  const response = await axiosInstance.get<APIResponseType>(fullUrl, {
+    params,
+  });
   if (response.status !== 200) {
-    throw new Error('Error get');
+    throw new Error('Error in GET request');
   }
   return response.data;
 }
+
 // -------------------------- Edit\Create Request ---------------------------------------
 export async function EditCreateRequest<APIBodyType, APIResponseType = any>(
   url: string,

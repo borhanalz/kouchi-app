@@ -20,8 +20,6 @@ import {endpoints} from '../../hooks/endPoints';
 import {useURLSearchParams} from "../../hooks/use-search-params";
 
 import type {IApiCheckUser} from '../../types/auth';
-import PhoneNumberField from "../../components/phone-number-input";
-import {isValidPhoneNumber} from "react-phone-number-input";
 
 // --------------------------------------------------------------
 export interface PhoneNumberSchemaType {
@@ -68,9 +66,8 @@ const PhoneNumberStep = () => {
       } else {
         setSignUpStatus(true);
       }
-    } catch (error: any) {
-      console.log(error)
-      toast.error(error?.message);
+    } catch (e) {
+      toast.error("مشکلی در سرور پیش آمده لطفا دقایقی دیگر امتحان کنید !");
     }
   }
 
