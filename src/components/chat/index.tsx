@@ -162,7 +162,7 @@ export function Chat({title, assignmentInfo,refetch, messages, IsTicket = false}
                                  header: <Stack mx={2} direction='row' spacing={2} alignItems='center'><Iconify
                                    icon='CHATBOT' sx={{color: theme.palette.secondary.main}}/><Typography
                                    fontWeight='bold'
-                                   variant='h6'>گفت و گو با دستیار کوچی</Typography></Stack>,
+                                   variant='h6'>گفتگو با کوچی‌بات</Typography></Stack>,
                                  nav: null,
                                  main: (
                                    <>

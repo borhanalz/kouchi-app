@@ -59,7 +59,7 @@ const TicketsView = ({isProServices = false}: { isProServices?: boolean }) => {
     <DashboardContent
       maxWidth={false}
       sx={{display: 'flex', flex: '1 1 auto', flexDirection: 'column'}}
-      title={isProServices ? "سرویس های من" : "تیکت ها"}
+      title={isProServices ? "سرویس های من" : "تیکت‌ها"}
     >
       {isPending ? <LoadingScreen/> : <Stack direction="column" spacing={2}>
         {!isProServices && <Stack direction="row" justifyContent="right">

@@ -34,7 +34,7 @@ export const navData: NavSectionProps['data'] = [
   {
     items: [
       {
-        title: 'گفت و گو با کوچی',
+        title: 'گفتگو با کوچی‌بات',
         path: paths.dashboard.root,
         icon: ICONS.send,
         info: <Label>دستیار</Label>,
@@ -65,7 +65,7 @@ export const navData: NavSectionProps['data'] = [
       //   icon: ICONS.files,
       // },
       {
-        title: 'تیکت ها',
+        title: 'تیکت‌ها',
         path: paths.dashboard.tickets.root,
         icon: ICONS.tickets,
       },
@@ -80,12 +80,12 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.services,
         children:[
           {
-            title: 'سرویس های اشتراکی',
+            title: 'سرویس‌های کوچی',
             path: paths.dashboard.services.proServices,
             icon: ICONS.proServices,
           },
           {
-            title: 'سرویس های من',
+            title: 'سرویس‌های من',
             path: paths.dashboard.services.userServices,
             icon: ICONS.myServices,
           },

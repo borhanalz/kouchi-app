@@ -1,22 +1,23 @@
-import {toast} from "sonner";
-import {usePathname} from "next/navigation";
-import {useRef, useState, useCallback} from 'react';
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import { toast } from "sonner";
+import { usePathname } from "next/navigation";
+import { useRef, useState, useCallback } from 'react';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
 
-import {Iconify} from 'src/components/iconify';
-import {DeleteButton, SingleFilePreview} from 'src/components/upload/components/preview-single-file';
+import { Iconify } from 'src/components/iconify';
+import { DeleteButton, SingleFilePreview } from 'src/components/upload/components/preview-single-file';
 
-import {IChat} from "../../types/chat";
-import {endpoints} from "../../hooks/endPoints";
-import {CustomPopover} from '../custom-popover';
-import {EditCreateRequest} from "../../lib/axios";
+import { IChat } from "../../types/chat";
+import { endpoints } from "../../hooks/endPoints";
+import { CustomPopover } from '../custom-popover';
+import { EditCreateRequest } from "../../lib/axios";
 
-import type {IAddResponseFormData, IApiAddResponse, ITicketResponse} from "../../types/tickets";
+import type { IAddResponseFormData, IApiAddResponse, ITicketResponse } from "../../types/tickets";
 
 //----------------------------------------------------------------------------------
 type Props = {
@@ -48,18 +49,18 @@ export function ChatMessageInput({
   const attachmentButtonRef = useRef<HTMLButtonElement | null>(null);
   const ticketId = pathname?.split("/")[3];
   const [message, setMessage] = useState('');
-  const [file, setFile] = useState<File | null>();
+  const [file, setFile] = useState<File | null>(null);
   const [popoverAnchor, setPopoverAnchor] = useState<null | HTMLElement>(null);
-  const latestMessage:any = messages[messages?.length - 1];
-  const disableInput = !isTicket && latestMessage?.options?.length > 0
+  const latestMessage: any = messages[messages?.length - 1];
+  const disableInput = !isTicket && latestMessage?.options?.length > 0;
 
-  const {mutateAsync: AddResponse, isPending: addResponsePending} = useMutation({
+  const { mutateAsync: AddResponse, isPending: addResponsePending } = useMutation({
     mutationKey: ['add-response-ticket'],
     mutationFn: (data: IAddResponseFormData) =>
       EditCreateRequest<IAddResponseFormData, IApiAddResponse>(
         endpoints.TICKETS.ADD_RESPONSE,
         data,
-        {"Content-Type": "multipart/form-data"}
+        { "Content-Type": "multipart/form-data" }
       )
   });
 
@@ -74,13 +75,13 @@ export function ChatMessageInput({
     setPopoverAnchor(null);
   }, []);
 
-  const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeMessage = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (isTicket) {
       setMessage(event.target.value);
     } else {
-      setChatMessage(event.target.value)
+      setChatMessage(event.target.value);
     }
-  }, []);
+  }, [isTicket, setChatMessage]);
 
   const handleSendResponse = useCallback(async () => {
     if (message.trim() || chatMessage?.trim() !== '') {
@@ -93,7 +94,7 @@ export function ChatMessageInput({
             "text": message,
             "attachments": file ?? null
           });
-          queryClient.invalidateQueries({queryKey: ["get-ticket-by-id"]});
+          queryClient.invalidateQueries({ queryKey: ["get-ticket-by-id"] });
         } else {
           await HandleChatResponse();
         }
@@ -106,10 +107,10 @@ export function ChatMessageInput({
     } else {
       toast.error("لطفا پیغام خود را وارد کنید");
     }
-  }, [message, isTicket, ticketId, AddResponse, queryClient, HandleChatResponse, file]);
+  }, [message, isTicket, ticketId, AddResponse, queryClient, HandleChatResponse, file, chatMessage]);
 
-  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' && event.shiftKey) {
       event.preventDefault();
       handleSendResponse();
     }
@@ -129,54 +130,65 @@ export function ChatMessageInput({
 
   return (
     <>
-      <InputBase
-        name="chat-message"
-        id="chat-message-input"
-        value={isTicket ? message : chatMessage}
-        onChange={handleChangeMessage}
-        disabled={isChatLoading || disableInput}
-        onKeyDown={handleKeyDown}
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="off"
-        spellCheck="false"
-        placeholder="پاسخ خود را بنویسید…"
-        startAdornment={
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+          px: 1,
+          py: 0.5,
+        }}
+      >
+        <IconButton
+          onClick={handleSendResponse}
+          disabled={isChatLoading || addResponsePending || addChatResponsePending}
+        >
+          {addResponsePending || addChatResponsePending ? (
+            <Iconify icon="circularLoading" />
+          ) : (
+            <Iconify icon="send" />
+          )}
+        </IconButton>
+
+        <TextField
+          multiline
+          maxRows={4}
+          fullWidth
+          variant="standard"
+          value={isTicket ? message : chatMessage}
+          onChange={handleChangeMessage}
+          onKeyDown={handleKeyDown}
+          disabled={isChatLoading || disableInput}
+          placeholder="سوالت رو اینجا بنویس..."
+          InputProps={{
+            disableUnderline: true,
+            sx: {
+              px: 1,
+              py: 0.5,
+              display: 'flex',
+              alignItems: 'center',
+              '& textarea': {
+                resize: 'none',
+                minHeight: '40px',
+                maxHeight: '120px',
+                overflowY: 'auto !important',
+                paddingTop: '10px', // this helps center it vertically
+              },
+            },
+          }}
+        />
+
+
+        {isTicket && (
           <IconButton
-            onClick={handleSendResponse}
-            disabled={isChatLoading || addResponsePending || addChatResponsePending}
+            ref={attachmentButtonRef}
+            onClick={handleAttach}
+            disabled={addResponsePending || addChatResponsePending || disableInput}
           >
-            {addResponsePending || addChatResponsePending ? (
-              <Iconify icon="circularLoading"/>
-            ) : (
-              <Iconify icon="send"/>
-            )}
+            <Iconify icon="attachment" />
           </IconButton>
-        }
-        endAdornment={
-          <Box sx={{flexShrink: 0, display: 'flex'}}>
-            {isTicket && (
-              <Stack>
-                <IconButton
-                  ref={attachmentButtonRef}
-                  onClick={handleAttach}
-                  disabled={addResponsePending || addChatResponsePending || disableInput}
-                >
-                  <Iconify icon="attachment"/>
-                </IconButton>
-              </Stack>
-            )}
-          </Box>
-        }
-        sx={[
-          (theme) => ({
-            px: 1,
-            height: 56,
-            flexShrink: 0,
-            borderTop: `solid 1px ${theme.vars.palette.divider}`,
-          }),
-        ]}
-      />
+        )}
+      </Box>
 
       <CustomPopover
         open={Boolean(popoverAnchor)}
@@ -190,23 +202,23 @@ export function ChatMessageInput({
           vertical: 'bottom',
           horizontal: 'center',
         }}
-        sx={{mt: -2}}
-        slotProps={{arrow: {placement: 'bottom-center'}}}
+        sx={{ mt: -2 }}
+        slotProps={{ arrow: { placement: 'bottom-center' } }}
       >
         {file ? (
-          <Box sx={{position: 'relative', p: 1, width: 100, height: 100}}>
-            <SingleFilePreview file={file}/>
-            <DeleteButton onClick={handleRemoveFile}/>
+          <Box sx={{ position: 'relative', p: 1, width: 100, height: 100 }}>
+            <SingleFilePreview file={file} />
+            <DeleteButton onClick={handleRemoveFile} />
           </Box>
         ) : (
-          <Box sx={{p: 2, fontSize: '14px'}}>فایلی انتخاب نشده است !</Box>
+          <Box sx={{ p: 2, fontSize: '14px' }}>فایلی انتخاب نشده است !</Box>
         )}
       </CustomPopover>
 
       <input
         type="file"
         ref={fileRef}
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
         onChange={handleFileChange}
         disabled={addResponsePending || addChatResponsePending}
       />

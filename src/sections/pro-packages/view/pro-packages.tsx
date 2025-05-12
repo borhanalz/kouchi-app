@@ -44,7 +44,7 @@ export const ProPackages = () => {
           flex: "1 1 auto",
           flexDirection: "column"
         }}
-        title='بسته های کوچی'
+        title='سرویس‌های کوچی'
       >
         <Stack
           sx={{
@@ -86,17 +86,43 @@ export const ProPackages = () => {
                     />
                   </Stack>
                   <Stack>
-                    {item?.prices?.map((priceItem)=><Stack alignItems='center' direction='row' justifyContent='space-between'>
-                      <Typography color={theme?.palette?.grey[600]}>{priceItem?.text}</Typography>
-                      <Stack direction="row" justifyContent="end" spacing={0.5}>
-                        <Typography fontWeight="bolder" variant="h6">
-                          {toPersianNumber(Number(priceItem?.price).toLocaleString())}
+                    {item?.prices?.map((priceItem) => (
+                      <Stack
+                        alignItems="center"
+                        direction="row"
+                        justifyContent="space-between"
+                      >
+                        <Typography color={theme?.palette?.grey[600]}>
+                          {priceItem?.text}
                         </Typography>
-                        <Typography variant="body2" sx={{mt: 1}}>
-                          تومان
-                        </Typography>
+
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                          {/* Final price (bold) */}
+                          <Typography fontWeight="bold" variant="h6">
+                            {toPersianNumber(Number(priceItem?.sale).toLocaleString())}
+                          </Typography>
+                          <Typography variant="body2">تومان</Typography>
+
+                          {/* If there's a discount price */}
+                          {priceItem?.price && (
+                            <Stack direction="row" alignItems="center" spacing={0.5}>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  textDecoration: 'line-through',
+                                  color: theme.palette.grey[500],
+                                }}
+                              >
+                                {toPersianNumber(Number(priceItem.price).toLocaleString())}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary" sx={{ mt: 0.3 }}>
+                                تومان
+                              </Typography>
+                            </Stack>
+                          )}
+                        </Stack>
                       </Stack>
-                    </Stack>)}
+                    ))}
                   </Stack>
 
                   <Divider sx={{borderStyle: 'dashed'}}/>
