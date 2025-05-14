@@ -85,7 +85,7 @@ export const ProPackages = () => {
                       sx={{color: theme.vars.palette.secondary.main, width: 35, height: 35}}
                     />
                   </Stack>
-                  <Stack>
+                  <Stack spacing={4}>
                     {item?.prices?.map((priceItem) => (
                       <Stack
                         alignItems="center"
@@ -96,14 +96,7 @@ export const ProPackages = () => {
                           {priceItem?.text}
                         </Typography>
 
-                        <Stack direction="row" alignItems="center" spacing={1}>
-                          {/* Final price (bold) */}
-                          <Typography fontWeight="bold" variant="h6">
-                            {toPersianNumber(Number(priceItem?.sale).toLocaleString())}
-                          </Typography>
-                          <Typography variant="body2">تومان</Typography>
-
-                          {/* If there's a discount price */}
+                        <Stack direction={{xs:'column',md:"row"}} alignItems="center" spacing={1}>
                           {priceItem?.price && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                               <Typography
@@ -120,6 +113,12 @@ export const ProPackages = () => {
                               </Typography>
                             </Stack>
                           )}
+                        <Stack direction='row' alignItems='center' justifyContent='center'>
+                          <Typography fontWeight="bold" variant="h6">
+                            {toPersianNumber(Number(priceItem?.sale).toLocaleString())}
+                          </Typography>
+                          <Typography variant="body2">تومان</Typography>
+                        </Stack>
                         </Stack>
                       </Stack>
                     ))}

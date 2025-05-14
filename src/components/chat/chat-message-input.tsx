@@ -110,11 +110,12 @@ export function ChatMessageInput({
   }, [message, isTicket, ticketId, AddResponse, queryClient, HandleChatResponse, file, chatMessage]);
 
   const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter' && event.shiftKey) {
+    if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       handleSendResponse();
     }
   }, [handleSendResponse]);
+
 
   const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files ? event.target.files[0] : null;

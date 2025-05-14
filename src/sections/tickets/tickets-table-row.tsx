@@ -27,7 +27,7 @@ import type {IService} from "../../types/services";
 // ------------------------------------------------------------------
 
 const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) => {
-  const { title, status,createdAt,id,requiresPayment } = row;
+  const { title, status,createdAt,id,requiresPayment,paymentStatus } = row;
   const theme = useTheme();
   const router = useRouter();
   const {open,onOpen,onClose,anchorEl}=usePopover();
@@ -55,12 +55,16 @@ const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) =
         </TableCell>
         <TableCell align="center">{createdAt&&toPersianNumber(format(createdAt,"yyyy-MM-dd"))}</TableCell>
         <TableCell align="center">
-            <IconButton onClick={requiresPayment?onOpen:()=> {
+            <IconButton onClick={(event)=> {
               if(!requiresPayment) {
                 router.push(paths.dashboard.tickets.details(String(id)))
+              }else if(requiresPayment&&paymentStatus==="paid") {
+                router.push(paths.dashboard.tickets.details(String(id)))
+              }else{
+                onOpen(event);
               }
             }}>
-              <Iconify icon={requiresPayment?"lock":"eye"} sx={{ cursor: 'pointer', color: grey[500] }} />
+              <Iconify icon={requiresPayment&&paymentStatus!=="paid"?"lock":"eye"} sx={{ cursor: 'pointer', color: grey[500] }} />
             </IconButton>
         </TableCell>
       </TableRow>

@@ -17,7 +17,6 @@ const ChatView = () => {
     queryKey: ['get-chat-history'],
     queryFn: () => EditCreateRequest<any,IApiChatHistory>(endpoints.CHAT.CHAT_HISTORY,{page:1,limit:10},{},'post',{baseURL:'https://koochichat.liara.run'}),
   refetchInterval:6000});
-  console.log(data)
   return (<>
       {isPending ? <ChatSkeleton/> :
        <Chat title='' refetch messages={data?.chats as IChat[]} />}

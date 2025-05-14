@@ -25,7 +25,7 @@ const ProPackagesSuccessfullPayment = () => {
   const {getParam} = useURLSearchParams();
 
   const {data,isPending}=useQuery({queryKey:['verify-payment'],queryFn:()=>GetRequest<IPaymentVerifyApi>(endpoints?.SERVICES?.PAYMENY_VERIFY,undefined,{Authority:getParam("Authority"),Status:getParam("Status")})})
-
+  console.log(data)
   return (
     <Dialog open fullWidth>
         <DialogContent>
