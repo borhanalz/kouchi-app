@@ -35,6 +35,7 @@
     "@fontsource-variable/nunito-sans": "^5.1.0",
     "@fontsource-variable/public-sans": "^5.1.1",
     "@fontsource/barlow": "^5.1.0",
+    "@hcaptcha/react-hcaptcha": "^1.12.0",
     "@hookform/resolvers": "^3.9.1",
     "@iconify/react": "^5.0.2",
     "@mui/lab": "^6.0.0-beta.18",

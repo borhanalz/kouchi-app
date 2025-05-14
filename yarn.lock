@@ -852,7 +852,7 @@
     "@babel/plugin-transform-modules-commonjs" "^7.25.9"
     "@babel/plugin-transform-typescript" "^7.25.9"
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.25.7", "@babel/runtime@^7.26.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.17.9", "@babel/runtime@^7.18.3", "@babel/runtime@^7.25.7", "@babel/runtime@^7.26.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
   version "7.26.0"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.26.0.tgz"
   integrity sha512-FDSOghenHTiToteC/QRlv2q3DhPZ/oOXTBoirfWNx1Cx3TMVcGWQtMMmQcSvb/JjpNeGzx8Pq/b4fKEJuWm1sw==
@@ -1105,6 +1105,19 @@
   version "5.1.0"
   resolved "https://registry.npmjs.org/@fontsource/barlow/-/barlow-5.1.0.tgz"
   integrity sha512-HXpoWJQX3RzVrUOpuZUBfWaoruLJ69B7Z3T9lZCWySEiEjvJ1FEwLz6BDJXx0lCrW8dEIf4UMq/xFs5IEn09ag==
+
+"@hcaptcha/loader@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/@hcaptcha/loader/-/loader-2.0.0.tgz"
+  integrity sha512-fFQH6ApU/zCCl6Y1bnbsxsp1Er/lKX+qlgljrpWDeFcenpEtoP68hExlKSXECospzKLeSWcr06cbTjlR/x3IJA==
+
+"@hcaptcha/react-hcaptcha@^1.12.0":
+  version "1.12.0"
+  resolved "https://registry.npmjs.org/@hcaptcha/react-hcaptcha/-/react-hcaptcha-1.12.0.tgz"
+  integrity sha512-QiHnQQ52k8SJJSHkc3cq4TlYzag7oPd4f5ZqnjVSe4fJDSlZaOQFtu5F5AYisVslwaitdDELPVLRsRJxiiI0Aw==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@hcaptcha/loader" "^2.0.0"
 
 "@hookform/resolvers@^3.9.1":
   version "3.9.1"
