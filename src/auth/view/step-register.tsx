@@ -24,6 +24,7 @@ interface IRegisterFormData {
   mobileNumber: string;
   otp: string;
   name: string;
+  instaId?:string|number;
 }
 
 export const SignUpSchema = zod.object({
@@ -44,7 +45,10 @@ const RegisterStep = ({onClose}:{onClose?:()=>void}) => {
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['sign-up'],
-    mutationFn: (payload: IRegisterFormData) => EditCreateRequest<IRegisterFormData,IApiLogin>(endpoints.AUTH.REGISTER, payload),
+    mutationFn: (payload: IRegisterFormData) => EditCreateRequest<IRegisterFormData,IApiLogin>(endpoints.AUTH.REGISTER, {
+      ...payload,
+      ...(sessionStorage.getItem("instaId") && { instaId: sessionStorage.getItem("instaId") as string })
+    }),
   });
 
   const methods = useForm<IRegisterFormData>({

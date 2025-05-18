@@ -23,6 +23,7 @@ import type {IApiCheckUser} from '../../types/auth';
 
 export interface PhoneNumberSchemaType {
   mobileNumber: string;
+  instaId?:string|number;
 }
 
 export const MobileNumberSchema = zod.object({
@@ -53,22 +54,25 @@ const PhoneNumberStep = () => {
     mutationKey: ['check-user-signup-status'],
     mutationFn: (payload: PhoneNumberSchemaType) =>
       GetRequest<IApiCheckUser>(
-        endpoints.AUTH.CHECK_USER_SIGNUP_STATUS(payload?.mobileNumber)
+        endpoints.AUTH.CHECK_USER_SIGNUP_STATUS,undefined,payload
       ),
   });
 
   const CheckUser = async (data: PhoneNumberSchemaType) => {
-    const mobileNumberCorrectFormat = data?.mobileNumber?.replace(/^(\+98)/, "0");
+    const instaId = getParam("instaId");
     try {
-      const response = await mutateAsync({ mobileNumber: mobileNumberCorrectFormat });
-      sessionStorage.setItem("mobileNumber", mobileNumberCorrectFormat);
+      const response = await mutateAsync({...data, ...(instaId && { instaId:instaId })});
+      sessionStorage.setItem("mobileNumber", data?.mobileNumber);
+      if(getParam("instaId")) {
+        sessionStorage.setItem("instaId", String(instaId));
+      }
       if (response?.exists) {
         setOtpStatus(true);
       } else {
         setSignUpStatus(true);
       }
-    } catch (e) {
-      toast.error("مشکلی در سرور پیش آمده لطفا دقایقی دیگر امتحان کنید !");
+    } catch (e:any) {
+      toast.error(e?.message);
     }
   };
 
@@ -81,8 +85,10 @@ const PhoneNumberStep = () => {
   });
 
   useEffect(() => {
-    if (getParam("name") !== '') {
-      CheckUser({mobileNumber: getParam("mobileNumber")});
+    const mobileNumber = getParam("mobileNumber");
+    if (mobileNumber) {
+      methods.setValue("mobileNumber", mobileNumber);
+      HandleSubmit();
     }
   }, []);
 
