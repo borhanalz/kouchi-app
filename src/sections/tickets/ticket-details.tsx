@@ -13,16 +13,17 @@ import ChatSkeleton from "../../components/Skeleton/chat-skeleton";
 // -------------------------------------------------------------------------------------------
 interface ITicketDetail {
   ticketId: string;
+  isProService:boolean;
 }
 
-const TicketDetail = ({ticketId}: ITicketDetail) => {
+const TicketDetail = ({ticketId,isProService=false}: ITicketDetail) => {
   const {data, isPending} = useQuery({
     queryKey: ['get-ticket-by-id'],
-    queryFn: () => EditCreateRequest<ITicketDetail, IApiGetTicket>(endpoints.TICKETS.GET_BY_ID, {ticketId})
+    queryFn: () => EditCreateRequest<{ticketId:number|string}, IApiGetTicket>(endpoints.TICKETS.GET_BY_ID, {ticketId})
   });
   return (<>
       {isPending ? <ChatSkeleton/> :
-        <Chat title={data?.ticket?.title as string}
+        <Chat isProService={isProService} title={data?.ticket?.title as string}
               assignmentInfo={data?.ticket?.assignmentHistory[0]?.agent as AgentType}
               messages={data?.ticket.responses as ITicketResponse[]} IsTicket/>}
     </>

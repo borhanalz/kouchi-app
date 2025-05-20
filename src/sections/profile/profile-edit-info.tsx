@@ -195,7 +195,7 @@ const ProfileEditInfo = () => {
               />
             </Stack>
           </Stack>
-          <Stack direction="column" spacing={3}>
+          <Stack direction="column" spacing={3} mt={7}>
             <IconText
               typographyProps={{ fontWeight: "bold", variant: "h6" }}
               iconifySx={{ width: 25, height: 25 }}

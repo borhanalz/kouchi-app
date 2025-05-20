@@ -25,7 +25,6 @@ const ProPackagesSuccessfullPayment = () => {
   const {getParam} = useURLSearchParams();
 
   const {data,isPending}=useQuery({queryKey:['verify-payment'],queryFn:()=>GetRequest<IPaymentVerifyApi>(endpoints?.SERVICES?.PAYMENY_VERIFY,undefined,{Authority:getParam("Authority"),Status:getParam("Status")})})
-  console.log(data)
   return (
     <Dialog open fullWidth>
         <DialogContent>
@@ -41,9 +40,9 @@ const ProPackagesSuccessfullPayment = () => {
                 <Iconify icon='danger' sx={{color: 'red', height: '150px', width: '100px'}}/>}
               <Typography variant="h5" fontWeight='bold'
                           color={data?.success ? "green" : "red"}>{data?.success ? "بسته با موفقیت فعال شد!" : "پرداخت با موفقیت انجام نشد"}</Typography>
-              {data?.success && <Typography variant="body2">
-                از بخش بسته‌ها می‌تونی سوابق تراکنش ها و وضعیت بسته‌هات رو ببینی.
-              </Typography>}
+              {/*{data?.success && <Typography variant="body2">*/}
+              {/*  از بخش بسته‌ها می‌تونی سوابق تراکنش ها و وضعیت بسته‌هات رو ببینی.*/}
+              {/*</Typography>}*/}
               <Button
                 variant="contained"
                 color="primary"

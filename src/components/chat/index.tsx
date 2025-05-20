@@ -39,11 +39,12 @@ type ChatType = {
   title?: string,
   IsTicket?: boolean,
   assignmentInfo?: AgentType,
-  refetch?:any
+  refetch?:any,
+  isProService?:boolean
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title, assignmentInfo,refetch, messages, IsTicket = false}: ChatType) {
+export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTicket = false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -200,7 +201,7 @@ export function Chat({title, assignmentInfo,refetch, messages, IsTicket = false}
                            color={theme?.palette?.grey[400]}>{assignmentInfo?.successfulClientsCount} پرونده
                 موفق </Typography>}
             </Stack>
-              <IconButton onClick={()=>router.push(paths.dashboard.tickets.root)}>
+              <IconButton onClick={()=>router.push(isProService?paths.dashboard.services.userServices:paths.dashboard.tickets.root)}>
                 <Iconify icon='arrowHeadLeft' sx={{width:16}}/>
               </IconButton>
             </Stack>

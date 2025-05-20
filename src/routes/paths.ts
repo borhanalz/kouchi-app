@@ -34,7 +34,8 @@ export const paths = {
       root: `${ROOTS.DASHBOARD}/services`,
       successfulPayment: `${ROOTS.DASHBOARD}/services/pro-services/successful-payment`,
       proServices:`${ROOTS.DASHBOARD}/services/pro-services`,
-      userServices: `${ROOTS.DASHBOARD}/services/user-services`
+      userServices: `${ROOTS.DASHBOARD}/services/user-services`,
+      userServicesDetails:(id:string)=>`${ROOTS.DASHBOARD}/services/user-services/${id}`
     },
     tickets: {
       root: `${ROOTS.DASHBOARD}/tickets`,
