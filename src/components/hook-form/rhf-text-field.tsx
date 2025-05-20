@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 export type RHFTextFieldProps = TextFieldProps & {
   name: string;
   maxLength?:number;
+  isMobileNumber?:boolean;
 };
 
 export function RHFTextField({
@@ -16,6 +17,7 @@ export function RHFTextField({
                                maxLength,
                                helperText,
                                type = 'text',
+                               isMobileNumber = false, // 👈 Default to false
                                ...other
                              }: RHFTextFieldProps) {
   const { control } = useFormContext();
@@ -31,34 +33,39 @@ export function RHFTextField({
           {...field}
           fullWidth
           value={
-            isNumberType
+            isNumberType || isMobileNumber
               ? field.value === null || field.value === undefined || field.value === 0
-                ? ""
+                ? ''
                 : field.value.toString()
-              : field.value ?? ""
+              : field.value ?? ''
           }
           onChange={(event) => {
             const value = event.target.value;
-            if (isNumberType) {
-              if (value === "" || /^\d*\.?\d*$/.test(value)) {
-                field.onChange(value === "" ? null : parseFloat(value));
+
+            if (isMobileNumber) {
+              const onlyDigits = value.replace(/[^\d]/g, '');
+              field.onChange(onlyDigits);
+            } else if (isNumberType) {
+              if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                field.onChange(value === '' ? null : parseFloat(value));
               }
             } else {
               field.onChange(value);
             }
           }}
           onBlur={() => {
-            if (isNumberType && field.value === "") {
+            if ((isNumberType || isMobileNumber) && field.value === '') {
               field.onChange(null);
             }
           }}
-          type={isNumberType ? "text" : type}
+          type={isNumberType || isMobileNumber ? 'text' : type}
           error={!!error}
           helperText={error?.message ?? helperText}
           inputProps={{
-            autoComplete: "off",
-            ...(maxLength&& {maxLength: maxLength}),
-            ...(isNumberType && { inputMode: "decimal", pattern: "[0-9]*\\.?[0-9]*" }),
+            autoComplete: 'off',
+            ...(maxLength && { maxLength }),
+            ...(isNumberType && { inputMode: 'decimal', pattern: '[0-9]*\\.?[0-9]*' }),
+            ...(isMobileNumber && { inputMode: 'numeric', pattern: '[0-9]*' }),
           }}
           {...other}
         />

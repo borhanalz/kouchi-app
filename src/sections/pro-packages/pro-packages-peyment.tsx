@@ -37,7 +37,7 @@ const ProPackagesPeyment = ({dialog,isTicketService=false, data}: { dialog: UseB
     mutationKey: ['payment-request'],
     mutationFn: (payload:IPaymentRequest) => EditCreateRequest<IPaymentRequest, IApiPaymentRequest>(endpoints?.SERVICES?.PAYMENT, payload)
   })
-  console.log(data)
+
   return (
     <Dialog open={dialog.value} onClose={dialog.onFalse} fullWidth>
       <DialogTitle>
@@ -47,7 +47,7 @@ const ProPackagesPeyment = ({dialog,isTicketService=false, data}: { dialog: UseB
         <Stack spacing={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography color={grey[600]}>مبلغ</Typography>
-            <Typography fontWeight="bold">{isTicketService?data?.regularPrice?.toLocaleString():toPersianNumber(Number(data?.prices?.[0]?.price)?.toLocaleString())} تومان </Typography>
+            <Typography fontWeight="bold">{isTicketService?data?.regularPrice?.toLocaleString():toPersianNumber(Number(data?.buttons?.[0]?.prices?.sale!==0?data?.buttons?.[0]?.prices?.sale:data?.buttons?.[0]?.prices?.regular)?.toLocaleString())} تومان </Typography>
           </Stack>
           <Divider sx={{borderStyle: 'dashed'}}/>
           <Stack direction="row" justifyContent="space-between">

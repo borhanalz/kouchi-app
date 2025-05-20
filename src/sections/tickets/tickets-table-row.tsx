@@ -70,7 +70,7 @@ const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) =
       </TableRow>
       <CustomPopover open={open} anchorEl={anchorEl} onClose={onClose}>
         <Stack p={2} spacing={2}>
-          <Typography variant='subtitle1'>نیازمند خرید سرویس اشتراکی</Typography>
+          <Typography variant='subtitle1'>در انتظار پرداخت</Typography>
           <LoadingButton size='small' onClick={paymentDialog?.onTrue} color='primary' variant='contained'>پرداخت</LoadingButton>
         </Stack>
       </CustomPopover>

@@ -12,12 +12,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import {useAuthContext} from '../hooks';
 import {setSession} from '../context/jwt';
 import {endpoints} from '../../hooks/endPoints';
-import {EditCreateRequest} from '../../lib/axios';
+import {EditCreateRequest, GetRequest} from '../../lib/axios';
 import {Form, Field} from '../../components/hook-form';
 import OtpTimer from '../../components/hook-form/otp-timer';
 import {FormReturnLink} from '../components/form-return-link';
 
-import type {IApiLogin, IApiSendOtp, ISendOtpFormData} from '../../types/auth';
+import type {IApiCheckUser, IApiLogin, IApiSendOtp, ISendOtpFormData} from '../../types/auth';
+import {PhoneNumberSchemaType} from "./step-phoneNumber";
 
 // ------------------------------------------------------------------------------------------
 interface IOtpLoginFormData {
@@ -48,13 +49,12 @@ const OtpSignInStep = ({onClose}: { onClose: () => void }) => {
       EditCreateRequest<IOtpLoginFormData, IApiLogin>(endpoints.AUTH.VERIFY_OTP, payload),
   });
 
-  const {mutateAsync: sendOtp} = useMutation({
-    mutationKey: ['resent-otp-reset-password'],
+  const {mutateAsync:ResendOtp, isPending:resendOtpPending} = useMutation({
+    mutationKey: ['resend-check-user-signup-status'],
     mutationFn: () =>
-      EditCreateRequest<ISendOtpFormData, IApiSendOtp>(endpoints.AUTH.SEND_OTP, {
-        mobileNumber: mobileNumber,
-        otpType: 'login'
-      }),
+      GetRequest<IApiCheckUser>(
+        endpoints.AUTH.CHECK_USER_SIGNUP_STATUS,undefined,{mobileNumber}
+      ),
   });
 
   const HandleSubmit = handleSubmit(async (data) => {
@@ -69,7 +69,7 @@ const OtpSignInStep = ({onClose}: { onClose: () => void }) => {
 
   const handleTimeReset = async () => {
     try {
-      await sendOtp();
+      await ResendOtp();
     } catch (e: any) {
       toast?.error(e?.message);
     }

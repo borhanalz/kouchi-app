@@ -104,6 +104,7 @@ const PhoneNumberStep = () => {
             <Field.Text
               maxLength={11}
               label="شماره موبایل"
+              isMobileNumber
               name="mobileNumber"
               placeholder='**** *** **09'
             />
