@@ -37,13 +37,13 @@ export const FileThumbnail = forwardRef<HTMLDivElement, FileThumbnailProps>((pro
         <ItemIcon src={fileThumb(format)} className={fileThumbnailClasses.icon} {...icon} />
       )}
 
-      {onRemove && (
-        <RemoveButton
-          onClick={onRemove}
-          className={fileThumbnailClasses.removeBtn}
-          {...removeBtn}
-        />
-      )}
+      {/*{onRemove && (*/}
+      {/*  <RemoveButton*/}
+      {/*    onClick={onRemove}*/}
+      {/*    className={fileThumbnailClasses.removeBtn}*/}
+      {/*    {...removeBtn}*/}
+      {/*  />*/}
+      {/*)}*/}
 
       {onDownload && (
         <DownloadButton

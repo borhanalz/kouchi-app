@@ -13,7 +13,7 @@ import ChatSkeleton from "../../components/Skeleton/chat-skeleton";
 // -------------------------------------------------------------------------------------------
 interface ITicketDetail {
   ticketId: string;
-  isProService:boolean;
+  isProService?:boolean;
 }
 
 const TicketDetail = ({ticketId,isProService=false}: ITicketDetail) => {

@@ -36,6 +36,23 @@ const TicketsTableRow = ({ row,index }: { row: ITicketFormData,index:number }) =
         <TableCell align="center">{index}</TableCell>
         <TableCell align="center">{title}</TableCell>
         <TableCell align="center">
+          <Box
+            sx={{
+              textAlign: 'center',
+              borderRadius: 2,
+              color: status ? theme.palette.success.darker : theme.palette.warning.darker,
+              display: 'inline-block',
+              p: 1.5,
+              backgroundColor: status ? theme.palette.success.lighter : theme.palette.warning.lighter,
+            }}
+          >
+            <Typography fontWeight={500} variant="caption">
+              {status}
+            </Typography>
+          </Box>
+        </TableCell>
+        <TableCell align="center">{createdAt&&toPersianNumber(format(createdAt,"yyyy-MM-dd"))}</TableCell>
+        <TableCell align="center">
             <IconButton onClick={(event)=> {
               if(!requiresPayment) {
                 router.push(paths.dashboard.tickets.details(String(id)))

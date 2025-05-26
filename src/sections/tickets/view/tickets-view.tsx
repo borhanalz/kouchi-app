@@ -27,6 +27,8 @@ import {useTheme} from "@mui/material/styles";
 const TableHead = [
   {id: 'id', label: 'شماره'},
   {id: 'title', label: 'عنوان'},
+  {id: 'status', label: 'وضعیت'},
+  {id: 'creationDate', label: 'تاریخ ایجاد'},
   {id: 'detail', label: ''},
 ];
 
