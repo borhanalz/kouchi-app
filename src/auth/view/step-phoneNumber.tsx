@@ -20,6 +20,7 @@ import {endpoints} from '../../hooks/endPoints';
 import {useURLSearchParams} from "../../hooks/use-search-params";
 
 import type {IApiCheckUser} from '../../types/auth';
+import log from "eslint-plugin-react/lib/util/log";
 
 export interface PhoneNumberSchemaType {
   mobileNumber: string;
@@ -46,9 +47,6 @@ const PhoneNumberStep = () => {
   const [signUpStatus, setSignUpStatus] = useState(false);
   const [otpStatus, setOtpStatus] = useState(false);
   const {getParam} = useURLSearchParams();
-
-  const [captchaToken, setCaptchaToken] = useState('');
-  const captchaRef = useRef<HCaptcha>(null);
 
   const {mutateAsync, isPending} = useMutation({
     mutationKey: ['check-user-signup-status'],
@@ -77,11 +75,7 @@ const PhoneNumberStep = () => {
   };
 
   const HandleSubmit = handleSubmit(async (data) => {
-    if (!captchaToken) {
-      toast.error("لطفاً کپچا را کامل کنید");
-      return;
-    }
-    await CheckUser(data);
+     await CheckUser(data);
   });
 
   useEffect(() => {
@@ -107,14 +101,6 @@ const PhoneNumberStep = () => {
               isMobileNumber
               name="mobileNumber"
               placeholder='**** *** **09'
-            />
-
-            <HCaptcha
-              sitekey="b8c8e580-841e-4580-9ea0-23747f0e6c22"
-              onVerify={(token) => setCaptchaToken(token)}
-              onExpire={() => setCaptchaToken('')}
-              ref={captchaRef}
-              languageOverride="fa"
             />
 
             <LoadingButton

@@ -1,20 +1,19 @@
-import {useSelector} from "react-redux";
-import {faIR} from 'date-fns-jalali/locale';
-import {format, formatDistance} from 'date-fns-jalali';
+import { useSelector } from "react-redux";
+import { faIR } from 'date-fns-jalali/locale';
+import { format, formatDistance } from 'date-fns-jalali';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Button from "@mui/material/Button";
-import {useTheme} from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
+import { RootState } from "../../lib/redux/store";
+import { toPersianNumber } from "../../utils/persian-number";
 
-import {RootState} from "../../lib/redux/store";
-import {toPersianNumber} from "../../utils/persian-number";
-
-import type {IChat} from '../../types/chat';
-import type {ITicketResponse} from '../../types/tickets';
+import type { IChat } from '../../types/chat';
+import type { ITicketResponse } from '../../types/tickets';
 
 // ----------------------------------------------------------------------
 
@@ -49,7 +48,7 @@ function isTicketResponse(message: ITicketResponse | IChat): message is ITicketR
   return 'responderType' in message;
 }
 
-export function ChatMessageItem({message, handleSendChatResponse}: Props) {
+export function ChatMessageItem({ message, handleSendChatResponse }: Props) {
   const theme = useTheme();
   const userName = useSelector((state: RootState) => state?.userReducer?.info?.name);
 
@@ -79,7 +78,14 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
     >
       {isTicket && message.attachments?.length > 0 ? (
         <Stack spacing={2}>
-          <Typography>{renderTextWithLinks(message?.text)}</Typography>
+          <Typography component="div" fontWeight="bold" lineHeight={1.8}>
+            {message?.text.split('\n').map((line, index) => (
+              <span key={index} style={{ fontSize: '15px' }}>
+                {renderTextWithLinks(line)}
+                <br />
+              </span>
+            ))}
+          </Typography>
           <Box
             sx={{
               borderRadius: 1.5,
@@ -98,20 +104,16 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
           </Box>
         </Stack>
       ) : (
-        <Typography component="div" color='#fff' fontWeight='bold' lineHeight={1.8}>
-          {isTicket ? (
-            renderTextWithLinks(message?.text)
-          ) : (
-            message?.content.split('\n').map((line, index) => (
-              <span key={index} style={{ fontSize: '15px' }}>
-                {renderTextWithLinks(line)}
-                <br />
-              </span>
-            ))
-          )}
+        <Typography component="div" color="#fff" fontWeight="bold" lineHeight={1.8}>
+          {(isTicket ? message?.text : message?.content).split('\n').map((line, index) => (
+            <span key={index} style={{ fontSize: '15px' }}>
+              {renderTextWithLinks(line)}
+              <br />
+            </span>
+          ))}
         </Typography>
       )}
-      <Typography variant='subtitle2' fontSize={12} mt={1.5} color={theme.palette.grey[200]}>
+      <Typography variant="subtitle2" fontSize={12} mt={1.5} color={theme.palette.grey[200]}>
         {toPersianNumber(format(isTicket ? message?.createdAt : message?.timestamp, 'HH:mm'))} ,{' '}
         {toPersianNumber(format(isTicket ? message?.createdAt : message?.timestamp, 'yyyy-MM-dd'))}
       </Typography>
@@ -151,12 +153,12 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
           {renderBody()}
         </Box>
         <Stack spacing={2} mt={1.5} sx={{ width: '100%' }}>
-          {!isTicket && message.options && message?.options?.map((option) => (
+          {!isTicket && message.options && message.options.map((option) => (
             <Button
               onClick={(e) => handleSendChatResponse(e?.currentTarget?.textContent as string)}
               fullWidth
-              color='secondary'
-              variant='outlined'
+              color="secondary"
+              variant="outlined"
               key={option}
             >
               {toPersianNumber(option)}
