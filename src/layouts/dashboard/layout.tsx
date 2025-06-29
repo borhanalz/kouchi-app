@@ -35,13 +35,13 @@ import { MenuButton } from '../components/menu-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
 import { AccountDrawer } from '../components/account-drawer';
-import {setUserInfo} from "../../lib/redux/slices/user-slice";
+import {setUserDetails, setUserInfo} from "../../lib/redux/slices/user-slice";
 import { SettingsButton } from '../components/settings-button';
 import { navData as dashboardNavData } from '../nav-config-dashboard';
 import { dashboardLayoutVars, dashboardNavColorVars } from './css-vars';
 import { NotificationsDrawer } from '../components/notifications-drawer';
 
-import type {IApiUserGetInfo} from "../../types/user";
+import type {IApiUserDetails, IApiUserGetInfo} from "../../types/user";
 import type { MainSectionProps } from '../core/main-section';
 import type { HeaderSectionProps } from '../core/header-section';
 import type { LayoutSectionProps } from '../core/layout-section';
@@ -78,7 +78,11 @@ export function DashboardLayout({
   const dispatch = useAppDispatch();
 
   const {data:userInfo} = useQuery({queryKey:['user-info'],queryFn:()=>GetRequest<IApiUserGetInfo>(endpoints.PROFILE.GET_INFO).then(res=>dispatch(setUserInfo({info:res.user})))});
-
+  const {data: userDetails} = useQuery({
+    queryKey: ["get-user-info-detail"],
+    queryFn: () =>
+      GetRequest<IApiUserDetails>(endpoints.PROFILE.DETAIL_INFO).then(res=>dispatch(setUserDetails({details:res.details}))),
+  });
   const navVars = dashboardNavColorVars(theme, settings.state.navColor, settings.state.navLayout);
 
   const { value: open, onFalse: onClose, onTrue: onOpen } = useBoolean();

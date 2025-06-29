@@ -53,7 +53,6 @@ export function NavList({
       onOpen();
     }
   }, [data.children, onOpen]);
-
   const renderNavItem = () => (
     <NavItem
       ref={navItemRef}

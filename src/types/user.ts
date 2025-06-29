@@ -80,6 +80,15 @@ export interface IApiUserDetails {
       "currency": string,
       "paymentMethod": string
     }[],
-    "services": []
+    "services": [],
+    activeRoadmap:{
+      progress:[],
+      currentStep:number,
+      template:{
+        name:string,
+        version:"v1",
+        track:string,
+      }
+    }[]
   }
 }

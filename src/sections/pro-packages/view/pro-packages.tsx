@@ -30,7 +30,6 @@ export const ProPackages = () => {
   const theme = useTheme();
   const peymentDialog = useBoolean();
   const [paymentInfo, setPaymentInfo] = useState<IService|null>(null);
-
   const {data: ServicesList, isPending} = useQuery({
     queryKey: ['services-list'],
     queryFn: () => GetRequest<IApiServices>(endpoints.SERVICES.LIST)
@@ -95,14 +94,13 @@ export const ProPackages = () => {
                         <Typography color={theme?.palette?.grey[600]}>
                           {priceItem?.text}
                         </Typography>
-
-                        <Stack direction={{xs:'column',md:"row"}} alignItems="center" spacing={1}>
+                        <Stack direction={'column'} alignItems="center" spacing={1}>
                           {priceItem?.price && (
                             <Stack direction="row" alignItems="center" spacing={0.5}>
                               <Typography
                                 variant="body2"
                                 sx={{
-                                  textDecoration: 'line-through',
+                                  textDecoration: Number(priceItem?.sale)!==0?'line-through':'none',
                                   color: theme.palette.grey[500],
                                 }}
                               >
@@ -113,12 +111,12 @@ export const ProPackages = () => {
                               </Typography>
                             </Stack>
                           )}
-                        <Stack direction='row' alignItems='center' justifyContent='center'>
-                          <Typography fontWeight="bold" variant="h6">
-                            {toPersianNumber(Number(priceItem?.sale).toLocaleString())}
-                          </Typography>
-                          <Typography variant="body2">تومان</Typography>
-                        </Stack>
+                          {Number(priceItem?.sale)!==0&&<Stack direction='row' alignItems='center' justifyContent='center'>
+                            <Typography fontWeight="bold" variant="h6">
+                              {toPersianNumber(Number(priceItem?.sale).toLocaleString())}
+                            </Typography>
+                            <Typography variant="body2">تومان</Typography>
+                          </Stack>}
                         </Stack>
                       </Stack>
                     ))}

@@ -17,20 +17,15 @@ import {EmptyContent} from "../../components/empty-content";
 import RectangleSkeleton from "../../components/Skeleton/rectangle-skeleton";
 
 import type {IApiUserDetails} from "../../types/user";
+import {useAppSelector} from "../../lib/redux/hooks";
 // ----------------------------------------------------------------------------
 const FinancialRecords = () => {
   const theme = useTheme();
 
-  const {data: userDetails, isPending: userDetailsPending} = useQuery({
-    queryKey: ["get-user-info-detail"],
-    queryFn: () =>
-      GetRequest<IApiUserDetails>(endpoints.PROFILE.DETAIL_INFO),
-  });
-  console.log(userDetails)
+  const userDetails = useAppSelector(state=>state?.userReducer.details);
   return <>
-    {userDetailsPending&&<RectangleSkeleton/>}
     <Stack mt={2} spacing={2}>
-    {!userDetails?.details?.payments?.length?<EmptyContent sx={{mt:10}} title='سوابق مالی برای شما یافت نشد'/>:userDetails?.details?.payments?.map((payment) => <Stack
+    {!userDetails?.payments?.length?<EmptyContent sx={{mt:10}} title='سوابق مالی برای شما یافت نشد'/>:userDetails?.payments?.map((payment) => <Stack
                     sx={{border: 1, borderRadius: 2, p: 2, borderColor: theme?.palette?.grey[theme?.palette?.mode==="dark"?800:200]}}>
         <Stack direction='row' justifyContent='space-between' alignItems='center'>
           <Stack direction='row' spacing={1} alignItems='center'>

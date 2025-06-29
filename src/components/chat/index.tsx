@@ -29,7 +29,6 @@ import type {
   AgentType,
   IApiCreateTicket,
   ICreateTicketFormData,
-  ITicketFormData,
   ITicketResponse
 } from "../../types/tickets";
 
@@ -40,11 +39,13 @@ type ChatType = {
   IsTicket?: boolean,
   assignmentInfo?: AgentType,
   refetch?:any,
-  isProService?:boolean
+  isProService?:boolean,
+  handleAddMoreMeesage?:()=>void,
+  deactiveMoreMessageButton?:boolean
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTicket = false}: ChatType) {
+export function Chat({title,deactiveMoreMessageButton,isProService,handleAddMoreMeesage, assignmentInfo,refetch, messages, IsTicket = false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -146,7 +147,6 @@ export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTi
             setResendButtonStatus(true);
           }
         } catch (error) {
-          console.error("Error fetching chat history", error);
           clearInterval(interval);
           setIsChatLoading(false);
           setResendButtonStatus(true);
@@ -168,6 +168,8 @@ export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTi
                                  main: (
                                    <>
                                      <ChatMessageList
+                                       deactiveMoreMessageButton={deactiveMoreMessageButton}
+                                       handleAddMoreMessages={handleAddMoreMeesage}
                                        handleSendChatResponse={HandleChatResponse}
                                        resendButtonStatus={resendButtonStatus}
                                        isChatLoading={isChatLoading}
@@ -192,15 +194,15 @@ export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTi
         slots={{
           header: <Stack mx={2} my={2} mt={3} spacing={0.5} alignItems='center' sx={{width:'100%'}}>
             <Stack justifyContent='space-between' direction='row' sx={{width:'100%'}}>
-            <Stack spacing={1} textAlign='center'>
-              <Stack spacing={1} direction='row'>
-                <Avatar color='primary' sx={{width: 30, height: 30}}/>
-                <Typography fontWeight='bold' variant='body1'>{assignmentInfo?.name || 'در حال بررسی برای ارسال به کوچ‌یار مناسب'} {assignmentInfo?.country &&`( ${assignmentInfo?.country} )`} </Typography>
+              <Stack spacing={1} textAlign='center'>
+                <Stack spacing={1} direction='row'>
+                  <Avatar color='primary' sx={{width: 30, height: 30}}/>
+                  <Typography fontWeight='bold' variant='body1'>{assignmentInfo?.name || 'در حال بررسی برای ارسال به کوچ‌یار مناسب'} {assignmentInfo?.country &&`( ${assignmentInfo?.country} )`} </Typography>
+                </Stack>
+                {assignmentInfo?.name&&<Typography variant='subtitle2'
+                                                   color={theme?.palette?.grey[400]}>{assignmentInfo?.successfulClientsCount} پرونده
+                  موفق </Typography>}
               </Stack>
-              {assignmentInfo?.name&&<Typography variant='subtitle2'
-                           color={theme?.palette?.grey[400]}>{assignmentInfo?.successfulClientsCount} پرونده
-                موفق </Typography>}
-            </Stack>
               <IconButton onClick={()=>router.push(isProService?paths.dashboard.services.userServices:paths.dashboard.tickets.root)}>
                 <Iconify icon='arrowHeadLeft' sx={{width:16}}/>
               </IconButton>
@@ -211,6 +213,7 @@ export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTi
             <>
               {messages?.length > 0 && (
                 <ChatMessageList
+                  handleAddMoreMessages={handleAddMoreMeesage}
                   handleSendChatResponse={HandleChatResponse}
                   resendButtonStatus={resendButtonStatus}
                   isChatLoading={isChatLoading}

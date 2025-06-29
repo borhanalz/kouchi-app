@@ -41,7 +41,7 @@ export function EmptyContent({
       <Box
         component="img"
         alt="Empty content"
-        src={imgUrl ?? `${CONFIG.assetsDir}/assets/images/empty-illustrator.png`}
+        src={`${CONFIG.assetsDir}/assets/images/${imgUrl??"empty-illustrator.png"}`}
         {...slotProps?.img}
         sx={[
           {

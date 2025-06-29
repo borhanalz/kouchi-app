@@ -39,11 +39,11 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.send,
         info: <Label>دستیار</Label>,
       },
-      // {
-      //   title: 'نقشه راه',
-      //   path: paths.dashboard.roadMap.root,
-      //   icon: ICONS.map,
-      // },
+      {
+        title: 'نقشه راه',
+        path: paths.dashboard.roadMap.root,
+        icon: ICONS.map,
+      },
       // {
       //   title: 'لیست مدارک',
       //   path: paths.dashboard.documents.root,

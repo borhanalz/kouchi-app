@@ -3,6 +3,11 @@ export interface IService {
   "title": string,
   "subtitle": string,
   "features": string[],
+  choices?:{
+    _id:string,
+    title:string,
+    templateId:string,
+  }[],
   "prices":{
     "text": string,
     "sale": string,
@@ -32,7 +37,8 @@ export interface IPaymentRequest {
   serviceType?:string,
   documentType?:string,
   packageType?:string,
-  ticketId?:string
+  ticketId?:string,
+  templateId?:string
 }
 
 export interface IApiPaymentRequest {

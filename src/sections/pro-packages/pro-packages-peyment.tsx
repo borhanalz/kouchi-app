@@ -3,7 +3,7 @@
 import type {UseBooleanReturn} from 'minimal-shared';
 
 import Image from 'next/image';
-import {useState} from 'react';
+import {ChangeEvent, useState} from 'react';
 import {useMutation} from "@tanstack/react-query";
 
 import Stack from '@mui/material/Stack';
@@ -15,7 +15,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import {
   DialogActions,
   DialogContent,
-  DialogTitle,
+  DialogTitle, InputLabel, Select, SelectChangeEvent,
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
@@ -27,17 +27,23 @@ import {toPersianNumber} from "../../utils/persian-number";
 import {IApiPaymentRequest, IPaymentRequest, IService} from "../../types/services";
 
 import zarinLogo from '/public/assets/images/zarin-logo.png';
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 
 // -------------------------------------------------------------------------------------------
-
+type choice = {
+    _id:string,
+    title:string,
+    templateId:string,
+}
 const ProPackagesPeyment = ({dialog,isTicketService=false, data}: { dialog: UseBooleanReturn,isTicketService?:boolean, data: IService|any }) => {
   const [peymentBank, setPeymentBank] = useState<string>('zarin');
+  const [tedencyId, setTedencyId] = useState<string>('');
 
   const {mutateAsync, isPending} = useMutation({
     mutationKey: ['payment-request'],
     mutationFn: (payload:IPaymentRequest) => EditCreateRequest<IPaymentRequest, IApiPaymentRequest>(endpoints?.SERVICES?.PAYMENT, payload)
   })
-
   return (
     <Dialog open={dialog.value} onClose={dialog.onFalse} fullWidth>
       <DialogTitle>
@@ -45,6 +51,19 @@ const ProPackagesPeyment = ({dialog,isTicketService=false, data}: { dialog: UseB
       </DialogTitle>
       <DialogContent sx={{p: 3}}>
         <Stack spacing={2}>
+          {data?.choices?.length>0&&<FormControl sx={{mt: 2}} fullWidth>
+            <InputLabel id="demo-simple-select-label">انتخاب مقطع و گرایش</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              label='انتخاب مقطع و گرایش'
+              value={tedencyId}
+              onChange={(e: SelectChangeEvent) => setTedencyId(e.target.value as string)}
+            >
+              {data?.choices?.map((item: choice) => (<MenuItem value={item?.templateId}>{item?.title}</MenuItem>))}
+            </Select>
+          </FormControl>}
+          <Divider sx={{borderStyle: 'dashed'}}/>
           <Stack direction="row" justifyContent="space-between">
             <Typography color={grey[600]}>مبلغ</Typography>
             <Typography fontWeight="bold">{isTicketService?data?.regularPrice?.toLocaleString():toPersianNumber(Number(data?.buttons?.[0]?.prices?.sale!==0?data?.buttons?.[0]?.prices?.sale:data?.buttons?.[0]?.prices?.regular)?.toLocaleString())} تومان </Typography>
@@ -81,8 +100,8 @@ const ProPackagesPeyment = ({dialog,isTicketService=false, data}: { dialog: UseB
               ...(!isTicketService && data?.buttons[0]?.params),
               type: isTicketService ? 'ticket' : data?.buttons[0]?.action,
               ...(isTicketService && { ticketId: data?.id }),
+              ...(data?.choices?.length>0&& {templateId: tedencyId})
             };
-            console.log(payload)
             try {
              const response = await mutateAsync(payload);
              window.location.href=response?.paymentUrl;

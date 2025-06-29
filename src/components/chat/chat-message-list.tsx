@@ -1,4 +1,10 @@
+import Image from "next/image";
+import illustration from 'public/assets/images/ilustration-map.png'
+
 import Stack from '@mui/material/Stack';
+import Button from "@mui/material/Button";
+import {useTheme} from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -12,10 +18,6 @@ import {useMessagesScroll} from './hooks/use-messages-scroll';
 
 import type {IChat} from '../../types/chat';
 import type {ITicketResponse} from '../../types/tickets';
-import Image from "next/image";
-import illustration from 'public/assets/images/ilustration-map.png'
-import Typography from "@mui/material/Typography";
-import {useTheme} from "@mui/material/styles";
 // -----------------------------------------------------------------
 type Props = {
   loading?: boolean;
@@ -24,6 +26,8 @@ type Props = {
   isChatLoading: boolean;
   resendButtonStatus: boolean;
   handleSendChatResponse: (message?:string) => void;
+  handleAddMoreMessages?:()=>void;
+  deactiveMoreMessageButton?:boolean
 };
 
 // ------------------------------------------------------------------
@@ -32,6 +36,8 @@ export function ChatMessageList({
                                   handleSendChatResponse,
                                   resendButtonStatus,
                                   isChatLoading,
+                                  deactiveMoreMessageButton,
+                                  handleAddMoreMessages,
                                   messages = [],
                                   loading
                                 }: Props) {
@@ -74,6 +80,7 @@ export function ChatMessageList({
           flex: '1 1 auto',
         }}
       >
+        {!deactiveMoreMessageButton&&<Button onClick={handleAddMoreMessages}>پیام های قبلی..</Button>}
         {!messages?.length && <Stack direction='column' justifyContent='center' alignItems='center'>
           <Image src={illustration} alt='illustration' style={{width: '200px', height: 'auto'}}/>
           <Typography
