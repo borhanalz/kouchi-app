@@ -25,5 +25,8 @@ export const endpoints = Object.freeze({
     LIST:'/api/user/services',
     PAYMENT:'/api/payment/request',
     PAYMENY_VERIFY:'/api/payment/verify',
+  },
+  ROADMAP:{
+    LIST:'api/user/roadmap'
   }
 });

@@ -1,136 +1,255 @@
 'use client';
 
-import { FC } from 'react';
 import Image from 'next/image';
+import remarkGfm from 'remark-gfm';
+import {format} from "date-fns-jalali";
+import ReactMarkdown from 'react-markdown';
 import { useRouter } from 'next/navigation';
-import italyImg from 'public/assets/images/italy.png';
+import {faIR} from "date-fns-jalali/locale";
+import { FC, useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import italyImg from 'public/assets/images/ITALY.png';
 import canadaImg from 'public/assets/images/canadaFlag.jpg';
 
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { Step, StepContent, StepLabel, Stepper } from '@mui/material';
+import {
+  Step,
+  Stepper,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Divider,
+} from '@mui/material';
 
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { grey } from '../../../theme';
-import { paths } from '../../../routes/paths';
+import { GetRequest } from '../../../lib/axios';
+import { endpoints } from '../../../hooks/endPoints';
 import { Iconify } from '../../../components/iconify';
-
-// ---------------------------------------------------------------------------
+import {IRoadmapResponse} from "../../../types/road-map";
+//------------------------------------------------------------------------------
 interface IRoadSteps {
   countryName: string;
 }
-interface IStepsData {
-  id: number;
-  label: string;
-  description: string;
-  icon: string;
-  path: string;
-}
+
+//------------------------------------------------------------------------------
 const RoadStepsView: FC<IRoadSteps> = ({ countryName }) => {
   const theme = useTheme();
-  const activeStep = 1;
-  const countryLangs = [
-    { en: 'canada', fa: 'کانادا' },
-    { en: 'italy', fa: 'ایتالیا' },
-  ];
-  const faCountryName = countryLangs
-    ?.filter((country) => country.en === countryName)
-    .map((selectedCountry) => selectedCountry.fa);
-  const router = useRouter();
-  const steps: IStepsData[] = [
-    {
-      id: 1,
-      label: 'اماده سازی مدارک',
-      description: `تا 8 بهمن - 12 روز`,
-      icon: 'file',
-      path: paths.dashboard.roadMap.prepareDocuments(countryName),
-    },
-    {
-      id: 2,
-      label: 'انتخاب دانشگاه',
-      description: 'تا 15 بهمن - 19 روز',
-      icon: 'university',
-      path: paths.dashboard.roadMap.prepareDocuments(countryName),
-    },
-    {
-      id: 3,
-      label: 'ارسال درخواست (اپلای)',
-      description: `تا 15 اسفند - 59 روز`,
-      icon: 'sendFile',
-      path: paths.dashboard.roadMap.prepareDocuments(countryName),
-    },
-    {
-      id: 4,
-      label: 'دریافت پذیرش',
-      description: `تا 30 اردیبهشت - 134 روز`,
-      icon: 'paperLetter',
-      path: paths.dashboard.roadMap.prepareDocuments(countryName),
-    },
-  ];
+
+  const { data, isPending } = useQuery<IRoadmapResponse>({
+    queryKey: ['roads-list'],
+    queryFn: () => GetRequest(endpoints.ROADMAP.LIST),
+  });
+
+  const roadmap = data?.data?.[0];
+
+  if (isPending) {
+    return <Typography>در حال بارگذاری...</Typography>;
+  }
+
+  if (!roadmap?.template?.steps?.length) {
+    return <Typography>هیچ مرحله‌ای یافت نشد.</Typography>;
+  }
+
+  const markdownComponents = {
+    table: (props: React.HTMLAttributes<HTMLTableElement>) => (
+      <table
+        {...props}
+        style={{
+          borderCollapse: 'collapse',
+          width: '100%',
+        }}
+      />
+    ),
+    th: (props: React.ThHTMLAttributes<HTMLTableCellElement>) => (
+      <th
+        {...props}
+        style={{
+          border: '1px solid #ccc',
+          padding: '8px',
+          backgroundColor: '#f5f5f5',
+          textAlign: 'center',
+        }}
+      />
+    ),
+    td: (props: React.TdHTMLAttributes<HTMLTableCellElement>) => (
+      <td
+        {...props}
+        style={{
+          border: '1px solid #ccc',
+          padding: '8px',
+        }}
+      />
+    ),
+  };
+
+  console.log(data)
   return (
     <DashboardContent
       maxWidth={false}
       sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column' }}
-      title={` نقشه راه`}
+      title={roadmap.template?.name + ' ' + roadmap.template?.track as string}
     >
-      <Stack direction="row" justifyContent="left" alignItems="center" spacing={2}>
-        <Image
-          src={countryName === 'canada' ? canadaImg : italyImg}
-          width={60}
-          height={30}
-          alt="country"
-        />
-        <Typography fontWeight="bold" variant="h3">
-          {' '}
-          نقشه راه کارشناسی {faCountryName}
-        </Typography>
-      </Stack>
       <Stack mt={5}>
-        <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((step, index) => (
-            <Step key={step.label}>
-              <StepLabel>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  sx={{ borderRadius: 2, p: 1.5, border: 1,borderColor: theme.palette.mode==="dark"?theme.vars.palette.grey[800]: theme.vars.palette.grey[300],}}
-                  spacing={1}
-                >
-                  <Stack spacing={1}>
-                    <Iconify
-                      icon={step?.icon}
-                      sx={{ width: 30, height: 30, color: theme.vars.palette.primary.main }}
-                    />
-                    <Typography fontWeight="bold">{step?.label}</Typography>
-                    <Typography fontSize={10} color="grey" variant="caption">
-                      {step?.description}
-                    </Typography>
-                    <Button
-                      sx={{ mt: 2 }}
-                      variant="contained"
-                      color="primary"
-                      onClick={() => router.push(step?.path)}
-                      disabled={step?.id !== activeStep}
-                    >
-                      شروع مسیر
-                    </Button>
+          {roadmap.template.steps.map((step, index) => (
+            <Stack key={step._id} spacing={2}>
+              <Accordion
+                defaultExpanded={index === 0}
+                sx={{
+                  mb: 2,
+                  background: theme.palette.background.paper,
+                  border: `1px solid ${grey[300]}`,
+                  borderRadius: 2,
+                }}
+              >
+                <AccordionSummary expandIcon={<Iconify icon="arrowDown" />}>
+                  <Stack direction="row" justifyContent="space-between" sx={{ width: '100%' }}>
+                    <Stack direction="row" spacing={2} alignItems="center">
+                      <Iconify
+                        icon={index === 0 ? 'university' : 'DOCUMENT_PREPARATION'}
+                        sx={{ width: 30, height: 30, color: theme.vars.palette.primary.main }}
+                      />
+                      <Typography fontWeight="bold" variant="h6" color={theme.vars.palette.secondary.main}>
+                        {step?.title}
+                      </Typography>
+                    </Stack>
+                    <Stack sx={{ borderRadius: 2, backgroundColor: theme?.palette?.primary?.main, py: 1, px: 2,mx:3 }}>
+                      <Typography variant="caption" color="white">
+                        {step?.timeRange?.description} :
+                        {format(new Date(step?.timeRange?.start), 'd MMMM', { locale: faIR })}
+                        {' تا '}
+                        {format(new Date(step?.timeRange?.end), 'd MMMM', { locale: faIR })}
+                      </Typography>
+                    </Stack>
                   </Stack>
-                  <Iconify
-                    icon="doubleChecked"
-                    sx={{
-                      color: step.id === activeStep ? theme.vars.palette.primary.main : 'grey',
-                    }}
-                  />
-                </Stack>
-              </StepLabel>
-            </Step>
+                </AccordionSummary>
+
+                <AccordionDetails>
+                  <Stack spacing={1}>
+                    <Typography fontWeight="bold">
+                      {step?.description?.title}
+                    </Typography>
+
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                      {step?.description?.description}
+                    </ReactMarkdown>
+
+                    {step?.subSteps?.map((sub) => (
+                      <Accordion
+                        key={sub._id}
+                        sx={{
+                          mt: 2,
+                          background: theme.palette.background.paper,
+                          border: `1px solid ${grey[300]}`,
+                          borderRadius: 2,
+                        }}
+                      >
+                        <AccordionSummary expandIcon={<Iconify icon="arrowDown" />}>
+                          <Typography fontWeight="bold" color={theme.vars.palette.primary.main}>
+                            {sub.title}
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Stack spacing={2}>
+                            <Typography color="text.secondary">{sub.summary}</Typography>
+
+                            <Typography variant="subtitle1">{sub.description?.title}</Typography>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                              {sub.description?.description ?? ''}
+                            </ReactMarkdown>
+
+                            <Divider />
+
+                            {sub.requiredDocs?.docs?.length > 0 && (
+                              <>
+                                <Typography variant="subtitle2" fontWeight="bold">
+                                  {sub.requiredDocs?.title}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                  {sub.requiredDocs?.description}
+                                </Typography>
+                                <ul style={{ margin: 0, paddingInlineStart: '20px' }}>
+                                  {sub.requiredDocs.docs.map((doc) => (
+                                    <li key={doc.title}>
+                                      <Typography variant="body2" fontWeight="bold">
+                                        {doc.title}
+                                      </Typography>
+                                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                                        {doc.description ?? ''}
+                                      </ReactMarkdown>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </>
+                            )}
+
+                            {sub.details?.steps?.map((d) => (
+                              <Stack key={d.title}>
+                                <Typography variant="subtitle2" fontWeight="bold">
+                                  {d.title}
+                                </Typography>
+                                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                                  {d.description}
+                                </ReactMarkdown>
+                              </Stack>
+                            ))}
+
+                            {sub.costs?.length > 0 && (
+                              <>
+                                <Divider />
+                                <Typography variant="subtitle2" fontWeight="bold">
+                                  هزینه‌ها
+                                </Typography>
+                                {sub.costs.map((cost) => (
+                                  <Stack key={cost.title}>
+                                    <Typography variant="body2" fontWeight="bold">
+                                      {cost.title}
+                                    </Typography>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                                      {`${cost?.description ?? ''} - ${cost?.amount?.toLocaleString?.() ?? ''} ${cost?.currency ?? ''}`}
+                                    </ReactMarkdown>
+                                  </Stack>
+                                ))}
+                              </>
+                            )}
+
+                            {sub.links?.length > 0 && (
+                              <>
+                                <Divider />
+                                <Typography variant="subtitle2" fontWeight="bold">
+                                  لینک‌های مفید
+                                </Typography>
+                                {sub.links.map((link) => (
+                                  <a
+                                    key={link.title}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: theme.palette.primary.main }}
+                                  >
+                                    <Typography variant="body2">{link.title}</Typography>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                                      {link.description ?? ''}
+                                    </ReactMarkdown>
+                                  </a>
+                                ))}
+                              </>
+                            )}
+                          </Stack>
+                        </AccordionDetails>
+                      </Accordion>
+                    ))}
+                  </Stack>
+                </AccordionDetails>
+              </Accordion>
+            </Stack>
           ))}
-        </Stepper>
       </Stack>
     </DashboardContent>
   );
 };
+
 export default RoadStepsView;

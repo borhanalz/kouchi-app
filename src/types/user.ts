@@ -87,6 +87,7 @@ export interface IApiUserDetails {
       template:{
         name:string,
         version:"v1",
+        thumbnail:string,
         track:string,
       }
     }[]

@@ -3,21 +3,20 @@
 import type { Breakpoint } from '@mui/material/styles';
 import type { ContainerProps } from '@mui/material/Container';
 
+import {ReactNode} from "react";
 import { mergeClasses } from 'minimal-shared/utils';
 
+import Stack from "@mui/material/Stack";
+import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import IconButton from "@mui/material/IconButton";
 
 import { useSettingsContext } from 'src/components/settings';
 
 import { layoutClasses } from '../core/classes';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import { grey } from '../../theme';
-import Stack from "@mui/material/Stack";
 import {Iconify} from "../../components/iconify";
-import IconButton from "@mui/material/IconButton";
-import {ReactNode} from "react";
 
 // ----------------------------------------------------------------------
 

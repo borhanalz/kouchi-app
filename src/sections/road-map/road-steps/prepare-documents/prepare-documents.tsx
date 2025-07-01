@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { FC, useState } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
-import italyImg from 'public/assets/images/italy.png';
+import italyImg from 'public/assets/images/ITALY.png';
 import canadaImg from 'public/assets/images/canadaFlag.jpg';
 
 import Stack from '@mui/material/Stack';
