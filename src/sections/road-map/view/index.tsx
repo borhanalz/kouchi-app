@@ -29,7 +29,7 @@ const RoadMapView = () => {
     <DashboardContent
       maxWidth={false}
       sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column' }}
-      title="نقشه راه"
+      title="نقشه های راه"
     >
       {roadsMapData?.length===0?
         <Stack mt={8}><EmptyContent imgUrl='locked.png' title='درحال حاضر نقشه راه فعالی ندارید'
