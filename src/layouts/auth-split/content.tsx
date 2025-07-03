@@ -13,6 +13,7 @@ import { layoutClasses } from '../core/classes';
 import { FormHead } from '../../auth/components/form-head';
 import illustration from 'public/assets/images/login-illustrator.png'
 import Image from "next/image";
+import Typography from "@mui/material/Typography";
 // ----------------------------------------------------------------------
 
 export type AuthSplitContentProps = BoxProps & { layoutQuery?: Breakpoint };
@@ -53,11 +54,15 @@ export function AuthSplitContent({
       >
         <Box sx={{ borderRadius: 2, p: 1 }}>
           <Stack textAlign="center" spacing={3} alignItems="center">
-            <Logo  />
+            <Logo width={170} height={75}/>
             <Box>
               <Image alt='illustration' src={illustration} style={{width:'100px',height:'auto'}}/>
             </Box>
-            <FormHead title="ورود به کوچی" description="دستیار هوش مصنوعی مهاجرت تحصیلی" />
+            <FormHead title="با ورود به پنل کوچی : " description={<Stack spacing={2}>
+              <Typography>🚀 چت‌بات با اطلاعات کامل داری</Typography>
+              <Typography> 🎓 کوچ‌یار هم‌رشته‌ت کنارته</Typography>
+              <Typography>🎯 بعلاوه سرویس‌هایی برای انتخاب دانشگاه، پذیرش و بورسیه</Typography>
+            </Stack>} />
           </Stack>
           {children}
         </Box>

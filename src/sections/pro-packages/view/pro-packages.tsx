@@ -100,7 +100,7 @@ export const ProPackages = () => {
                               <Typography
                                 variant="body2"
                                 sx={{
-                                  textDecoration: Number(priceItem?.sale)!==0?'line-through':'none',
+                                  textDecoration:priceItem?.sale && Number(priceItem?.sale)!==0?'line-through':'none',
                                   color: theme.palette.grey[500],
                                 }}
                               >
@@ -111,7 +111,7 @@ export const ProPackages = () => {
                               </Typography>
                             </Stack>
                           )}
-                          {Number(priceItem?.sale)!==0&&<Stack direction='row' alignItems='center' justifyContent='center'>
+                          {priceItem?.sale&&Number(priceItem?.sale)!==0&&<Stack direction='row' alignItems='center' justifyContent='center'>
                             <Typography fontWeight="bold" variant="h6">
                               {toPersianNumber(Number(priceItem?.sale).toLocaleString())}
                             </Typography>

@@ -17,10 +17,12 @@ import { CONFIG } from '../../global-config';
 export type LogoProps = LinkProps & {
   isSingle?: boolean;
   disabled?: boolean;
+  width?:number;
+  height?:number;
 };
 
 export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
-  const { className, href = '/', isSingle = true, disabled, sx, ...other } = props;
+  const { className, href = '/', isSingle = true, disabled,width=100,height=45, sx, ...other } = props;
 
   const theme = useTheme();
 
@@ -28,8 +30,8 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
     <Image
       alt="Single logo"
       src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-png.png' : '/logo/logo-full.png'}`}
-      width={100}
-      height={45}
+      width={width}
+      height={height}
     />
   );
 
@@ -37,8 +39,8 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
     <Image
       alt="Full logo"
       src={`${CONFIG.assetsDir}${theme.palette.mode === 'dark' ? '/logo/logo-png.png' : '/logo/logo-full.png'}`}
-      width={100}
-      height={45}
+      width={width}
+      height={height}
     />
   );
 
@@ -52,9 +54,9 @@ export const Logo = forwardRef<HTMLAnchorElement, LogoProps>((props, ref) => {
       className={mergeClasses([logoClasses.root, className])}
       sx={[
         () => ({
-          width: 100,
-          height: 45,
-          ...(!isSingle && { width: 102, height: 36 }),
+          width: width,
+          height: height,
+          ...(!isSingle && { width: width, height: height }),
           ...(disabled && { pointerEvents: 'none' }),
         }),
         ...(Array.isArray(sx) ? sx : [sx]),

@@ -2,6 +2,7 @@
 
 import type {UseBooleanReturn} from 'minimal-shared';
 
+import {toast} from "sonner";
 import Image from 'next/image';
 import {ChangeEvent, useState} from 'react';
 import {useMutation} from "@tanstack/react-query";
@@ -10,8 +11,10 @@ import Stack from '@mui/material/Stack';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import MenuItem from "@mui/material/MenuItem";
 import Typography from '@mui/material/Typography';
 import LoadingButton from "@mui/lab/LoadingButton";
+import FormControl from "@mui/material/FormControl";
 import {
   DialogActions,
   DialogContent,
@@ -27,8 +30,6 @@ import {toPersianNumber} from "../../utils/persian-number";
 import {IApiPaymentRequest, IPaymentRequest, IService} from "../../types/services";
 
 import zarinLogo from '/public/assets/images/zarin-logo.png';
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 
 // -------------------------------------------------------------------------------------------
 type choice = {
@@ -38,7 +39,7 @@ type choice = {
 }
 const ProPackagesPeyment = ({dialog,isTicketService=false, data}: { dialog: UseBooleanReturn,isTicketService?:boolean, data: IService|any }) => {
   const [peymentBank, setPeymentBank] = useState<string>('zarin');
-  const [tedencyId, setTedencyId] = useState<string>('');
+  const [tedencyId, setTedencyId] = useState<string>("");
 
   const {mutateAsync, isPending} = useMutation({
     mutationKey: ['payment-request'],
@@ -105,8 +106,8 @@ const ProPackagesPeyment = ({dialog,isTicketService=false, data}: { dialog: UseB
             try {
              const response = await mutateAsync(payload);
              window.location.href=response?.paymentUrl;
-            } catch (e) {
-              console.log(e)
+            } catch (e:any) {
+              toast.error(e?.message||"مشکلی بوجود آمده");
             }
           }}
           color="primary"

@@ -63,7 +63,6 @@ export async function EditCreateRequest<APIBodyType, APIResponseType = any>(
   if (response.status !== 200) {
     throw new Error('Error add/edit');
   }
-
   return response.data;
 }
 // -------------------------- Delete Request ---------------------------------------
