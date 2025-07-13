@@ -23,7 +23,7 @@ const ChatView = () => {
         { page, limit: 10 },
         {},
         'post',
-        { baseURL: 'https://koochichatdev.liara.run' }
+        { baseURL: 'https://koochichat.liara.run' }
       ),
   });
   useEffect(() => {
@@ -35,7 +35,6 @@ const ChatView = () => {
       setDeactiveMoreMessageButton(!data.pagination?.hasNextPage);
     }
   }, [data?.chats]);
-  console.log(data)
   const handleAddMoreMessage = () => {
     if (!data?.pagination?.hasNextPage) return;
     setPage(prev => prev + 1);
