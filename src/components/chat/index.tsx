@@ -29,6 +29,7 @@ import type {
   AgentType,
   IApiCreateTicket,
   ICreateTicketFormData,
+  ITicketFormData,
   ITicketResponse
 } from "../../types/tickets";
 
@@ -39,13 +40,11 @@ type ChatType = {
   IsTicket?: boolean,
   assignmentInfo?: AgentType,
   refetch?:any,
-  isProService?:boolean,
-  handleAddMoreMeesage?:()=>void,
-  deactiveMoreMessageButton?:boolean
+  isProService?:boolean
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title,deactiveMoreMessageButton,isProService,handleAddMoreMeesage, assignmentInfo,refetch, messages, IsTicket = false}: ChatType) {
+export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTicket = false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -116,7 +115,7 @@ export function Chat({title,deactiveMoreMessageButton,isProService,handleAddMore
     mutationFn: (data: IChatFormData) => EditCreateRequest<IChatFormData, IApiChat>(endpoints.CHAT.CHAT, data, {}, 'post', {baseURL: 'https://koochichat.liara.run'})
   });
   const HandleChatResponse = async (message = "") => {
-    const maxRetries = 5;
+    const maxRetries = 10;
     let retryCount = 0;
 
     const response = await AddChatResponse({ message: message || chatMessage });
@@ -147,6 +146,7 @@ export function Chat({title,deactiveMoreMessageButton,isProService,handleAddMore
             setResendButtonStatus(true);
           }
         } catch (error) {
+          console.error("Error fetching chat history", error);
           clearInterval(interval);
           setIsChatLoading(false);
           setResendButtonStatus(true);
@@ -168,8 +168,6 @@ export function Chat({title,deactiveMoreMessageButton,isProService,handleAddMore
                                  main: (
                                    <>
                                      <ChatMessageList
-                                       deactiveMoreMessageButton={deactiveMoreMessageButton}
-                                       handleAddMoreMessages={handleAddMoreMeesage}
                                        handleSendChatResponse={HandleChatResponse}
                                        resendButtonStatus={resendButtonStatus}
                                        isChatLoading={isChatLoading}
@@ -213,7 +211,6 @@ export function Chat({title,deactiveMoreMessageButton,isProService,handleAddMore
             <>
               {messages?.length > 0 && (
                 <ChatMessageList
-                  handleAddMoreMessages={handleAddMoreMeesage}
                   handleSendChatResponse={HandleChatResponse}
                   resendButtonStatus={resendButtonStatus}
                   isChatLoading={isChatLoading}

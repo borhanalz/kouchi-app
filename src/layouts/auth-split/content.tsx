@@ -63,13 +63,13 @@ export function AuthSplitContent({
         <Box sx={{ borderRadius: 2, p: 1 }}>
           <Stack textAlign="center" spacing={3} alignItems="center">
             <Logo width={170} height={75} />
-            <Box>
-              <Image
-                alt="illustration"
-                src={illustration}
-                style={{ width: '100px', height: 'auto' }}
-              />
-            </Box>
+            {/*<Box>*/}
+            {/*  <Image*/}
+            {/*    alt="illustration"*/}
+            {/*    src={illustration}*/}
+            {/*    style={{ width: '100px', height: 'auto' }}*/}
+            {/*  />*/}
+            {/*</Box>*/}
 
             <FormHead
               title="با ورود به پنل کوچی :"
