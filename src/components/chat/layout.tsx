@@ -20,7 +20,7 @@ export function ChatLayout({ slots, sx, ...other }: ChatLayoutProps) {
       <LayoutNav>{slots.nav}</LayoutNav>
 
       <LayoutContainer>
-        <LayoutHeader>{slots.header}</LayoutHeader>
+        {/*<LayoutHeader>{slots.header}</LayoutHeader>*/}
 
         <LayoutContent>
           <LayoutMain>{slots.main}</LayoutMain>

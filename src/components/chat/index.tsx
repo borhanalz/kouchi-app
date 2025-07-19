@@ -112,7 +112,7 @@ export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTi
   // chat send response request
   const {mutateAsync: AddChatResponse, isPending: addChatResponsePending} = useMutation({
     mutationKey: ['add-chat-response'],
-    mutationFn: (data: IChatFormData) => EditCreateRequest<IChatFormData, IApiChat>(endpoints.CHAT.CHAT, data, {}, 'post', {baseURL: 'https://koochichat.liara.run'})
+    mutationFn: (data: IChatFormData) => EditCreateRequest<IChatFormData, IApiChat>(endpoints.CHAT.CHAT, data, {}, 'post', {baseURL: 'https://chat.koochi.app'})
   });
   const HandleChatResponse = async (message = "") => {
     const maxRetries = 10;
@@ -160,10 +160,7 @@ export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTi
     <>
       {!IsTicket ? <ChatLayout sx={{mb: 2}}
                                slots={{
-                                 header: <Stack mx={2} direction='row' spacing={2} alignItems='center'><Iconify
-                                   icon='CHATBOT' sx={{color: theme.palette.secondary.main}}/><Typography
-                                   fontWeight='bold'
-                                   variant='h6'>گفتگو با کوچی‌بات</Typography></Stack>,
+                                 header:null,
                                  nav: null,
                                  main: (
                                    <>

@@ -15,7 +15,7 @@ import LgAnimateLoading from "../../../components/loading-screen/animate";
 const ChatView = () => {
   const {data, isPending,refetch} = useQuery({
     queryKey: ['get-chat-history'],
-    queryFn: () => EditCreateRequest<any,IApiChatHistory>(endpoints.CHAT.CHAT_HISTORY,null,{},'post',{baseURL:'https://koochichat.liara.run'}),
+    queryFn: () => EditCreateRequest<any,IApiChatHistory>(endpoints.CHAT.CHAT_HISTORY,null,{},'post',{baseURL:'https://chat.koochi.app'}),
     refetchInterval:6000});
   return (<>
       {isPending ? <ChatSkeleton/> :

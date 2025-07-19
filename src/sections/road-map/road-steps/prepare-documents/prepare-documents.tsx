@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import type { FC} from 'react';
+import { useState } from 'react';
 import { useBoolean } from 'minimal-shared/hooks';
 import italyImg from 'public/assets/images/ITALY.png';
 import canadaImg from 'public/assets/images/canadaFlag.jpg';
