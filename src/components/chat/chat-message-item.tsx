@@ -1,4 +1,4 @@
-import {ReactNode} from "react";
+import React from "react";
 import remarkGfm from "remark-gfm";
 import {format} from 'date-fns-jalali';
 import {useSelector} from "react-redux";
@@ -49,12 +49,13 @@ const markdownComponents = {
       }}
     />
   ),
-  a: ({href, children}:{href:string, children:ReactNode|string}) => (
+  a: ({ href = '#', children, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <Link
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      sx={{color: 'secondary.main', textDecoration: 'underline'}}
+      sx={{ color: 'secondary.main', textDecoration: 'underline' }}
+      {...rest}
     >
       {children}
     </Link>
@@ -77,7 +78,7 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
 
   const isTicket = isTicketResponse(message);
   const isUser = isTicket ? message.responderType === 'user' : message.role === "user";
-  console.log(message)
+
   const renderInfo = () => (
     <Typography
       noWrap
@@ -124,11 +125,11 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
           </Box>
         </Stack>
       ) : (
-        <span component="div" style={{fontSize:'15px',color:'#fff',fontFamily:'Vazir'}} color="#fff" lineHeight={1.8}>
+       <div style={{fontSize:'15px',color:'#fff',fontFamily:'Vazir',lineHeight:1.8}} color="#fff">
            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} components={markdownComponents}>
                    {(message as IChat).content || ''}
            </ReactMarkdown>
-        </span>
+        </div>
       )}
       <Typography variant="subtitle2" fontSize={12} mt={1.5} color={theme.palette.grey[200]}>
         {toPersianNumber(format(isTicket ? message?.createdAt : message?.timestamp, 'HH:mm'))} ,{' '}
