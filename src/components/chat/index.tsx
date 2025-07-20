@@ -44,7 +44,7 @@ type ChatType = {
 }
 
 // -------------------------------------------------------------------------------
-export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTicket = false}: ChatType) {
+export function Chat({title,isProService, assignmentInfo, messages, IsTicket = false}: ChatType) {
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -86,7 +86,6 @@ export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTi
   });
   const {handleSubmit, setValue} = methods;
 
-  // ticket request
   const {mutateAsync: CreateTicket, isPending: createTicketPending} = useMutation({
     mutationKey: ['create-ticket'],
     mutationFn: (data: ICreateTicketFormData) => EditCreateRequest<ICreateTicketFormData, IApiCreateTicket>(endpoints.TICKETS.CREATE, data, {"Content-Type": "multipart/form-data"})
@@ -115,43 +114,53 @@ export function Chat({title,isProService, assignmentInfo,refetch, messages, IsTi
     mutationFn: (data: IChatFormData) => EditCreateRequest<IChatFormData, IApiChat>(endpoints.CHAT.CHAT, data, {}, 'post', {baseURL: 'https://chat.koochi.app'})
   });
   const HandleChatResponse = async (message = "") => {
-    const maxRetries = 10;
-    let retryCount = 0;
+    try {
+      const response = await AddChatResponse({ message: message || chatMessage });
 
-    const response = await AddChatResponse({ message: message || chatMessage });
-    if (response.status === "ok") {
-      await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
-      setIsChatLoading(true);
-      setChatMessage("");
-      setResendButtonStatus(false);
+      if (response?.status === "upgrade_required") {
+        await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
+      }
 
-      const interval = setInterval(async () => {
-        try {
-          retryCount++;
+      if (response.status === "ok") {
+        // invalidate to show user message immediately
+        await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
+        setIsChatLoading(true);
+        setChatMessage("");
+        setResendButtonStatus(false);
 
-          const updatedMessages: any = await queryClient.fetchQuery<IChat[]>({
-            queryKey: ["get-chat-history"],
-            staleTime: 0,
-          });
+        const maxTime = 5 * 60 * 1000;
+        const startTime = Date.now();
 
+        const pollAssistantReply = async () => {
+          const elapsed = Date.now() - startTime;
+
+          const updatedMessages: any = queryClient.getQueryData(["get-chat-history"]);
           const chats = updatedMessages?.chats ?? updatedMessages;
-          const lastMessage = chats[chats.length - 1];
+          const lastMessage = chats?.[chats.length - 1];
 
           if (lastMessage?.role === "assistant") {
-            clearInterval(interval);
             setIsChatLoading(false);
-          } else if (retryCount >= maxRetries) {
-            clearInterval(interval);
+            return;
+          }
+
+          if (elapsed >= maxTime) {
             setIsChatLoading(false);
             setResendButtonStatus(true);
+            return;
           }
-        } catch (error) {
-          console.error("Error fetching chat history", error);
-          clearInterval(interval);
-          setIsChatLoading(false);
-          setResendButtonStatus(true);
-        }
-      }, 4000);
+
+          await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
+
+          const nextDelay = elapsed < 2 * 60 * 1000 ? 30 * 1000 : 15 * 1000;
+          setTimeout(pollAssistantReply, nextDelay);
+        };
+
+        setTimeout(pollAssistantReply, 0);
+      }
+    } catch (error) {
+      console.error("خطا در ارسال پیام:", error);
+      setIsChatLoading(false);
+      setResendButtonStatus(true);
     }
   };
 

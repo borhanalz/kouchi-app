@@ -1,4 +1,9 @@
+import Image from "next/image";
+import illustration from 'public/assets/images/ilustration-map.png'
+
 import Stack from '@mui/material/Stack';
+import {useTheme} from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
 import LinearProgress from '@mui/material/LinearProgress';
 
@@ -12,10 +17,6 @@ import {useMessagesScroll} from './hooks/use-messages-scroll';
 
 import type {IChat} from '../../types/chat';
 import type {ITicketResponse} from '../../types/tickets';
-import Image from "next/image";
-import illustration from 'public/assets/images/ilustration-map.png'
-import Typography from "@mui/material/Typography";
-import {useTheme} from "@mui/material/styles";
 // -----------------------------------------------------------------
 type Props = {
   loading?: boolean;
@@ -92,7 +93,7 @@ export function ChatMessageList({
           <ChatMessageItem handleSendChatResponse={handleSendChatResponse} key={message?.id} message={message}/>
         ))}
         {isChatLoading && <Stack direction='row' justifyContent='right'>
-          <LgAnimateLoading/>
+          <LgAnimateLoading isChatLoading/>
         </Stack>}
         <Stack>
           {resendButtonStatus && <LoadingButton startIcon={<Iconify icon='return' sx={{width: 15}}/>} fullWidth={false}
