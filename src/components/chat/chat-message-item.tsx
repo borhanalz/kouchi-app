@@ -9,13 +9,13 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import {useTheme} from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 import {toPersianNumber} from "../../utils/persian-number";
 
 import type {IChat} from '../../types/chat';
-import type {RootState} from "../../lib/redux/store";
 import type {ITicketResponse} from '../../types/tickets';
 
 // ----------------------------------------------------------------------------
@@ -35,7 +35,7 @@ const markdownComponents = {
       style={{
         border: '1px solid #ccc',
         padding: '8px',
-        backgroundColor: '#757474',
+        backgroundColor: '#fff',
         textAlign: 'center',
       }}
     />
@@ -74,7 +74,6 @@ function isTicketResponse(message: ITicketResponse | IChat): message is ITicketR
 
 export function ChatMessageItem({message, handleSendChatResponse}: Props) {
   const theme = useTheme();
-  const userName = useSelector((state: RootState) => state?.userReducer?.info?.name);
 
   const isTicket = isTicketResponse(message);
   const isUser = isTicket ? message.responderType === 'user' : message.role === "user";
@@ -85,7 +84,7 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
       variant="caption"
       sx={{mb: 1, color: 'text.disabled', ...(isUser && {mr: 'auto'})}}
     >
-      {isUser ? userName : "کوچی"}
+       کوچی
     </Typography>
   );
 
@@ -93,11 +92,18 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
     <Stack
       sx={{
         p: 2,
-        minWidth: 300,
-        maxWidth: 500,
+        ...(isTicket
+          ? {
+            minWidth: 300,
+            maxWidth: 500,
+          }
+          : {
+            width: '100%',
+          }),
         borderRadius: 1,
-        bgcolor: theme.vars.palette.secondary.light,
-        ...(!isUser && {color: 'grey.800', bgcolor: 'primary.lighter'}),
+        ...(isTicket&&{
+        bgcolor: theme.vars.palette.secondary.light}),
+        ...(isUser && {color: 'grey.800', bgcolor: theme.palette.primary.main}),
       }}
     >
       {isTicket && message.attachments?.length > 0 ? (
@@ -125,16 +131,16 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
           </Box>
         </Stack>
       ) : (
-       <div style={{fontSize:'15px',color:'#fff',fontFamily:'Vazir',lineHeight:1.8}} color="#fff">
+       <div style={{fontSize:'13px',color:isUser?'#fff':theme.palette.mode==="dark"?"#fff":'#000',fontFamily:'Vazir',lineHeight:1.8}} color="#fff">
            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} components={markdownComponents}>
                    {(message as IChat).content || ''}
            </ReactMarkdown>
         </div>
       )}
-      <Typography variant="subtitle2" fontSize={12} mt={1.5} color={theme.palette.grey[200]}>
+      {isTicket&&<Typography variant="subtitle2" fontSize={12} mt={1.5} color={theme.palette.grey[200]}>
         {toPersianNumber(format(isTicket ? message?.createdAt : message?.timestamp, 'HH:mm'))} ,{' '}
         {toPersianNumber(format(isTicket ? message?.createdAt : message?.timestamp, 'yyyy-MM-dd'))}
-      </Typography>
+      </Typography>}
     </Stack>
   );
 
@@ -143,15 +149,18 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
   }
 
   return (
+  <Stack>
+    {!isTicket&&!isUser&&<Divider sx={{mb:2,backgroundColor:theme.palette.grey[600],borderStyle:'dashed'}}/>}
+
     <Box
       sx={{
-        mb: 5,
-        display: 'flex',
+        mb: 1.5,
+        display: isUser?'flex':'unset',
         justifyContent: isUser ? 'unset' : 'flex-end',
       }}
     >
-      <Stack alignItems={isUser ? 'flex-end' : 'flex-start'}>
-        {renderInfo()}
+      <Stack alignItems={isTicket?isUser ? 'flex-end' : 'flex-start':'unset'}>
+        {!isUser&&renderInfo()}
         <Box
           sx={{
             display: 'flex',
@@ -169,7 +178,7 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
             <Button
               onClick={(e) => handleSendChatResponse(e?.currentTarget?.textContent as string)}
               fullWidth
-              color="secondary"
+              color="primary"
               variant="outlined"
               key={option}
             >
@@ -179,5 +188,6 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
         </Stack>
       </Stack>
     </Box>
+  </Stack>
   );
 }

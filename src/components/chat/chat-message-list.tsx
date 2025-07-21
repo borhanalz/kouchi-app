@@ -17,6 +17,7 @@ import {useMessagesScroll} from './hooks/use-messages-scroll';
 
 import type {IChat} from '../../types/chat';
 import type {ITicketResponse} from '../../types/tickets';
+import Divider from "@mui/material/Divider";
 // -----------------------------------------------------------------
 type Props = {
   loading?: boolean;
@@ -28,6 +29,7 @@ type Props = {
 };
 
 // ------------------------------------------------------------------
+
 export function ChatMessageList({
                                   isTicket,
                                   handleSendChatResponse,
@@ -90,7 +92,7 @@ export function ChatMessageList({
           </Typography>
         </Stack>}
         {messages.map((message: any) => (
-          <ChatMessageItem handleSendChatResponse={handleSendChatResponse} key={message?.id} message={message}/>
+            <ChatMessageItem handleSendChatResponse={handleSendChatResponse} key={message?.id} message={message}/>
         ))}
         {isChatLoading && <Stack direction='row' justifyContent='right'>
           <LgAnimateLoading isChatLoading/>
