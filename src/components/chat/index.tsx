@@ -178,6 +178,7 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
                                        resendButtonStatus={resendButtonStatus}
                                        isChatLoading={isChatLoading}
                                        isTicket={IsTicket}
+                                       setIsChatLoading={setIsChatLoading}
                                        messages={messages ?? []}
                                      />
                                      <ChatMessageInput
@@ -194,7 +195,7 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
                                  ),
                                  details: hasConversation && null,
                                }}
-      /> : messages?.length > 0 ? <ChatLayout
+      /> : messages?.length > 0 ? <ChatLayout IsTicket={IsTicket}
         slots={{
           header: <Stack mx={2} my={2} mt={3} spacing={0.5} alignItems='center' sx={{width:'100%'}}>
             <Stack justifyContent='space-between' direction='row' sx={{width:'100%'}}>
@@ -217,6 +218,7 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
             <>
               {messages?.length > 0 && (
                 <ChatMessageList
+                  setIsChatLoading={setIsChatLoading}
                   handleSendChatResponse={HandleChatResponse}
                   resendButtonStatus={resendButtonStatus}
                   isChatLoading={isChatLoading}

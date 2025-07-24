@@ -6,30 +6,26 @@ export type UseMessagesScrollReturn = {
   messagesEndRef: React.RefObject<HTMLDivElement>;
 };
 
-export function useMessagesScroll(messages: any): UseMessagesScrollReturn {
+/**
+ * @param messages - لیست پیام‌ها
+ * @param shouldAutoScroll - فقط اگر true باشد اسکرول به پایین انجام می‌شود (برای تیکت‌ها فعال باشد، برای چت غیرفعال)
+ */
+export function useMessagesScroll(messages: any, shouldAutoScroll: boolean = true): UseMessagesScrollReturn {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
-    if (!messages) {
-      return;
-    }
+    if (shouldAutoScroll) return;
 
-    if (!messagesEndRef.current) {
-      return;
-    }
+    if (!messages) return;
 
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
-    }
-  }, [messages]);
+    if (!messagesEndRef.current) return;
 
-  useEffect(
-    () => {
-      scrollToBottom();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [messages]
-  );
+    messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+  }, [messages, shouldAutoScroll]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
 
   return { messagesEndRef };
 }

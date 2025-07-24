@@ -21,13 +21,16 @@ import type {ITicketResponse} from '../../types/tickets';
 // ----------------------------------------------------------------------------
 const markdownComponents = {
   table: (props: React.HTMLAttributes<HTMLTableElement>) => (
-    <table
-      {...props}
-      style={{
-        borderCollapse: 'collapse',
-        width: '100%',
-      }}
-    />
+    <Box sx={{ overflowX: 'auto' }}>
+      <table
+        {...props}
+        style={{
+          borderCollapse: 'collapse',
+          width: '100%',
+          minWidth: '500px', // Ensures table scrolls on small screens
+        }}
+      />
+    </Box>
   ),
   th: (props: React.ThHTMLAttributes<HTMLTableCellElement>) => (
     <th
@@ -37,6 +40,8 @@ const markdownComponents = {
         padding: '8px',
         backgroundColor: '#fff',
         textAlign: 'center',
+        wordBreak: 'break-word',
+        whiteSpace: 'normal',
       }}
     />
   ),
@@ -46,6 +51,8 @@ const markdownComponents = {
       style={{
         border: '1px solid #ccc',
         padding: '8px',
+        wordBreak: 'break-word',
+        whiteSpace: 'normal',
       }}
     />
   ),
@@ -62,13 +69,14 @@ const markdownComponents = {
   ),
 };
 
+
 //--------------------------------------------------------------------------------------------------
 type Props = {
-  message: ITicketResponse | IChat;
+  message: ITicketResponse | IChat|any;
   handleSendChatResponse: (message?: string) => void;
 };
 
-function isTicketResponse(message: ITicketResponse | IChat): message is ITicketResponse {
+function isTicketResponse(message: ITicketResponse | IChat ): message is ITicketResponse {
   return 'responderType' in message;
 }
 
@@ -87,7 +95,6 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
        کوچی
     </Typography>
   );
-
   const renderBody = () => (
     <Stack
       sx={{
@@ -133,14 +140,22 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
       ) : (
        <div style={{fontSize:'13px',color:isUser?'#fff':theme.palette.mode==="dark"?"#fff":'#000',fontFamily:'Vazir',lineHeight:1.8}} color="#fff">
            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} components={markdownComponents}>
-                   {(message as IChat).content || ''}
+                   {(message as IChat).content ||(message as ITicketResponse).text ||''}
            </ReactMarkdown>
         </div>
       )}
-      {isTicket&&<Typography variant="subtitle2" fontSize={12} mt={1.5} color={theme.palette.grey[200]}>
-        {toPersianNumber(format(isTicket ? message?.createdAt : message?.timestamp, 'HH:mm'))} ,{' '}
-        {toPersianNumber(format(isTicket ? message?.createdAt : message?.timestamp, 'yyyy-MM-dd'))}
-      </Typography>}
+      {isTicket && (() => {
+        const dateValue = isTicket
+          ? (message as ITicketResponse).createdAt
+          : (message as IChat).timestamp;
+
+        return (
+          <Typography variant="subtitle2" fontSize={12} mt={1.5} color={theme.palette.grey[200]}>
+            {toPersianNumber(format(dateValue, 'HH:mm'))} ,{' '}
+            {toPersianNumber(format(dateValue, 'yyyy-MM-dd'))}
+          </Typography>
+        );
+      })()}
     </Stack>
   );
 
@@ -174,7 +189,7 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
           {renderBody()}
         </Box>
         <Stack spacing={2} mt={1.5} sx={{width: '100%'}}>
-          {!isTicket && message.options && message.options.map((option) => (
+          {!isTicket && message.options && message.options.map((option:any) => (
             <Button
               onClick={(e) => handleSendChatResponse(e?.currentTarget?.textContent as string)}
               fullWidth
