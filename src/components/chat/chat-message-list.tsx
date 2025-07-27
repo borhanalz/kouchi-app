@@ -32,7 +32,7 @@ type Props = {
 
 // Type Guard
 function isChatMessage(message: IChat | ITicketResponse): message is IChat {
-  return (message as IChat).role !== undefined;
+  return (message as IChat)?.role !== undefined;
 }
 
 // ------------------------------------------------------------------
@@ -50,7 +50,7 @@ export function ChatMessageList({
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
-    if (!isTicket && isChatMessage(lastMessage) && lastMessage.role === "assistant") {
+    if (!isTicket && isChatMessage(lastMessage) && lastMessage?.role === "assistant") {
       setIsChatLoading(false);
     }
   }, [messages, setIsChatLoading, isTicket]);
