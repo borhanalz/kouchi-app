@@ -72,51 +72,8 @@ export function AuthSplitContent({
             {/*</Box>*/}
 
             <FormHead
-              title="با ورود به پنل کوچی :"
-              description={
-                <Box
-                  sx={{
-                    width: 400,
-                    height: 60,
-                    overflow: 'hidden',
-                    mx: 'auto',
-                  }}
-                >
-                  <Swiper
-                    modules={[Autoplay]}
-                    autoplay={{ delay: 2200, disableOnInteraction: false }}
-                    loop
-                    slidesPerView={1}
-                    speed={500}
-                    allowTouchMove={false}
-                    style={{ width: '100%', height: '100%' }}
-                  >
-                    {[
-                      '🚀 چت‌بات با اطلاعات کامل داری',
-                      '🎓 کوچ‌یار هم‌رشته‌ت کنارته',
-                      '🎯 سرویس‌هایی برای انتخاب دانشگاه، پذیرش و بورسیه',
-                    ].map((text, index) => (
-                      <SwiperSlide key={index}>
-                        <Box
-                          sx={{
-                            backgroundColor: '#e0e0e0',
-                            borderRadius: 2,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: '100%',
-                            px: 2,
-                          }}
-                        >
-                          <Typography variant="subtitle2" textAlign="center">
-                            {text}
-                          </Typography>
-                        </Box>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </Box>
-              }
+              title="ابزار هوش مصنوعی مهاجرت"
+              description={'جستجوگر هوشمندِ منابع رسمی و به‌روز'}
             />
           </Stack>
 

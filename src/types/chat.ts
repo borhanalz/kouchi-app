@@ -2,6 +2,7 @@ export interface IChat {
   "key": number,
   "role": string,
   "content": string,
+  "showPlans"?:boolean,
   "status": string,
   "timestamp": string,
   "flow": {},

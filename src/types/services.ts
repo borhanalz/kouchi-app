@@ -2,6 +2,8 @@ export interface IService {
   "id": string,
   "title": string,
   "subtitle": string,
+  countDown:string,
+  hide:boolean,
   "features": string[],
   choices?:{
     _id:string,

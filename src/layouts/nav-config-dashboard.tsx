@@ -70,7 +70,7 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.tickets,
       },
       {
-        title: 'اطلاعات کاربری',
+        title: 'مشخصات کوچنده',
         path: paths.dashboard.profile.root,
         icon: ICONS.userInfo,
       },
@@ -80,15 +80,15 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.services,
         children:[
           {
-            title: 'سرویس‌های کوچی',
+            title: 'خرید اشتراک',
             path: paths.dashboard.services.proServices,
             icon: ICONS.proServices,
           },
-          {
-            title: 'سرویس‌های من',
-            path: paths.dashboard.services.userServices,
-            icon: ICONS.myServices,
-          },
+          // {
+          //   title: 'سرویس‌های من',
+          //   path: paths.dashboard.services.userServices,
+          //   icon: ICONS.myServices,
+          // },
         ]
       },
       // { title: 'Two', path: paths.app.two, icon: ICONS.ecommerce },

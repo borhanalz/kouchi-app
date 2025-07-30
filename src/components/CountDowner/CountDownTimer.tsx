@@ -1,0 +1,67 @@
+'use client'
+
+
+import {useEffect, useState} from "react";
+import dayjs from "dayjs";
+import {toPersianNumber} from "../../utils/persian-number";
+import Typography from "@mui/material/Typography";
+import {Iconify} from "../iconify";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+
+const CountDownTimer = ({ target }: { target: string }) => {
+
+  const [remaining, setRemaining] = useState('');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = dayjs();
+      const end = dayjs(target);
+
+      if (end.isBefore(now)) {
+        setRemaining('پایان یافته');
+        clearInterval(interval);
+        return;
+      }
+
+      const diff = dayjs.duration(end.diff(now));
+      const hours = diff.hours().toString().padStart(2, '0');
+      const minutes = diff.minutes().toString().padStart(2, '0');
+      const seconds = diff.seconds().toString().padStart(2, '0');
+
+      setRemaining(`${toPersianNumber(hours)}:${toPersianNumber(minutes)}:${toPersianNumber(seconds)}`);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [target]);
+
+  return (
+    <Stack sx={{backgroundColor: 'error.main',borderRadius:'8px',py:2,px:0}} alignItems='center' spacing={0.5} justifyContent='center'>
+      <Typography
+        variant='body2'
+        sx={{
+          color: '#fff',
+          fontSize: '17px',
+          textAlign: 'center',
+        }}
+      >
+        فرصت باقی مانده
+      </Typography>
+      <Stack direction='row' alignItems='center' spacing={0.5} justifyContent='center'>
+        <Iconify icon='timer' sx={{color:'#fff'}}/>
+        <Typography
+          variant='h5'
+          sx={{
+            fontWeight: 'bold',
+            color: '#fff',
+            fontSize: '40px',
+            textAlign: 'center',
+          }}
+        >
+          {remaining}
+        </Typography>
+      </Stack>
+    </Stack>
+  );
+};
+export default CountDownTimer;

@@ -122,8 +122,8 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
       }
 
       if (response.status === "ok") {
-        // invalidate to show user message immediately
         await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
+
         setIsChatLoading(true);
         setChatMessage("");
         setResendButtonStatus(false);
@@ -131,13 +131,15 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
         const maxTime = 5 * 60 * 1000;
         const startTime = Date.now();
 
+        const pollingSchedule = [12_000, 40_000, 60_000, 70_000];
+        let pollingIndex = 0;
+
         const pollAssistantReply = async () => {
           const elapsed = Date.now() - startTime;
 
           const updatedMessages: any = queryClient.getQueryData(["get-chat-history"]);
           const chats = updatedMessages?.chats ?? updatedMessages;
           const lastMessage = chats?.[chats.length - 1];
-
           if (lastMessage?.role === "assistant") {
             setIsChatLoading(false);
             return;
@@ -151,11 +153,22 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
 
           await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
 
-          const nextDelay = elapsed < 2 * 60 * 1000 ? 30 * 1000 : 15 * 1000;
-          setTimeout(pollAssistantReply, nextDelay);
+          let nextDelay;
+          if (pollingIndex < pollingSchedule.length) {
+            nextDelay = pollingSchedule[pollingIndex] - elapsed;
+            pollingIndex += 1;
+          } else {
+            nextDelay = 10_000;
+          }
+
+          if (nextDelay > 0) {
+            setTimeout(pollAssistantReply, nextDelay);
+          } else {
+            pollAssistantReply();
+          }
         };
 
-        setTimeout(pollAssistantReply, 0);
+        setTimeout(pollAssistantReply, 12_000);
       }
     } catch (error) {
       console.error("خطا در ارسال پیام:", error);
@@ -165,6 +178,7 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
   };
 
   const hasConversation = messages?.length > 0;
+
   return (
     <>
       {!IsTicket ? <ChatLayout sx={{mb: 2}}
