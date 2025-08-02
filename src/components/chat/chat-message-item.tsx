@@ -18,58 +18,6 @@ import {toPersianNumber} from "../../utils/persian-number";
 import type {IChat} from '../../types/chat';
 import type {ITicketResponse} from '../../types/tickets';
 
-// ----------------------------------------------------------------------------
-const markdownComponents = {
-  table: (props: React.HTMLAttributes<HTMLTableElement>) => (
-    <Box sx={{ overflowX: 'auto' }}>
-      <table
-        {...props}
-        style={{
-          borderCollapse: 'collapse',
-          width: '100%',
-          minWidth: '500px', // Ensures table scrolls on small screens
-        }}
-      />
-    </Box>
-  ),
-  th: (props: React.ThHTMLAttributes<HTMLTableCellElement>) => (
-    <th
-      {...props}
-      style={{
-        border: '1px solid #ccc',
-        padding: '8px',
-        backgroundColor: '#fff',
-        textAlign: 'center',
-        wordBreak: 'break-word',
-        whiteSpace: 'normal',
-      }}
-    />
-  ),
-  td: (props: React.TdHTMLAttributes<HTMLTableCellElement>) => (
-    <td
-      {...props}
-      style={{
-        border: '1px solid #ccc',
-        padding: '8px',
-        wordBreak: 'break-word',
-        whiteSpace: 'normal',
-      }}
-    />
-  ),
-  a: ({ href = '#', children, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <Link
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      sx={{ color: 'secondary.main', textDecoration: 'underline' }}
-      {...rest}
-    >
-      {children}
-    </Link>
-  ),
-};
-
-
 //--------------------------------------------------------------------------------------------------
 type Props = {
   message: ITicketResponse | IChat|any;
@@ -82,6 +30,123 @@ function isTicketResponse(message: ITicketResponse | IChat ): message is ITicket
 
 export function ChatMessageItem({message, handleSendChatResponse}: Props) {
   const theme = useTheme();
+
+  const markdownComponents = {
+    h1: ({ node, ...props }: any) => (
+      <Typography variant="h5" gutterBottom fontWeight="bold" {...props} />
+    ),
+    h2: ({ node, ...props }: any) => (
+      <Typography variant="h6" gutterBottom fontWeight="bold" {...props} />
+    ),
+    h3: ({ node, ...props }: any) => (
+      <Typography variant="subtitle1" gutterBottom fontWeight="bold" {...props} />
+    ),
+    h4: ({ node, ...props }: any) => (
+      <Typography variant="subtitle2" gutterBottom fontWeight="bold" {...props} />
+    ),
+    h5: ({ node, ...props }: any) => (
+      <Typography variant="body1" gutterBottom fontWeight="bold" {...props} />
+    ),
+    h6: ({ node, ...props }: any) => (
+      <Typography variant="body2" gutterBottom fontWeight="bold" {...props} />
+    ),
+    p: ({ node, ...props }: any) => (
+      <Typography variant="body2" sx={{ lineHeight: 1.8, fontFamily: 'Vazir' }} {...props} />
+    ),
+    strong: ({ node, ...props }: any) => (
+      <Typography component="strong" fontWeight="bold" {...props} />
+    ),
+    em: ({ node, ...props }: any) => (
+      <Typography component="em" fontStyle="italic" {...props} />
+    ),
+    ul: ({ node, ...props }: any) => (
+      <ul style={{ paddingLeft: '1.2rem', marginBottom: '1rem' }} {...props} />
+    ),
+    ol: ({ node, ...props }: any) => (
+      <ol style={{ paddingLeft: '1.2rem', marginBottom: '1rem' }} {...props} />
+    ),
+    li: ({ node, ...props }: any) => (
+      <li style={{ marginBottom: '0.5rem' }} {...props} />
+    ),
+    blockquote: ({ node, ...props }: any) => (
+      <Box
+        component="blockquote"
+        sx={{
+          pl: 2,
+          borderLeft: `4px solid ${theme.palette.divider}`,
+          color: theme.palette.text.secondary,
+          fontStyle: 'italic',
+          my: 2,
+        }}
+        {...props}
+      />
+    ),
+    code: ({ node, inline, className, children, ...props }: any) => (
+      <Box
+        component="code"
+        sx={{
+          fontFamily: 'monospace',
+          backgroundColor: theme.palette.mode === 'dark' ? '#2d2d2d' : '#f4f4f4',
+          px: 0.6,
+          py: 0.3,
+          borderRadius: 1,
+          fontSize: '0.85rem',
+          color: theme.palette.text.secondary,
+        }}
+        {...props}
+      >
+        {children}
+      </Box>
+    ),
+    a: ({ href = '#', children, ...rest }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+      <Link
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        sx={{ color: 'secondary.main', textDecoration: 'underline' }}
+        {...rest}
+      >
+        {children}
+      </Link>
+    ),
+    table: (props: React.HTMLAttributes<HTMLTableElement>) => (
+      <Box sx={{ overflowX: 'auto' }}>
+        <table
+          {...props}
+          style={{
+            borderCollapse: 'collapse',
+            width: '100%',
+            minWidth: '500px',
+          }}
+        />
+      </Box>
+    ),
+    th: (props: React.ThHTMLAttributes<HTMLTableCellElement>) => (
+      <th
+        {...props}
+        style={{
+          border: '1px solid #ccc',
+          padding: '8px',
+          backgroundColor: theme.palette.mode === 'dark' ? theme.palette.primary.main : '#fff',
+          textAlign: 'center',
+          wordBreak: 'break-word',
+          whiteSpace: 'normal',
+        }}
+      />
+    ),
+    td: (props: React.TdHTMLAttributes<HTMLTableCellElement>) => (
+      <td
+        {...props}
+        style={{
+          border: '1px solid #ccc',
+          padding: '8px',
+          wordBreak: 'break-word',
+          whiteSpace: 'normal',
+        }}
+      />
+    ),
+  };
+
 
   const isTicket = isTicketResponse(message);
   const isUser = isTicket ? message.responderType === 'user' : message.role === "user";
@@ -192,6 +257,7 @@ export function ChatMessageItem({message, handleSendChatResponse}: Props) {
           {!isTicket && message.options && message.options.map((option:any) => (
             <Button
               onClick={(e) => handleSendChatResponse(e?.currentTarget?.textContent as string)}
+              sx={{borderColor:theme.palette.primary.main}}
               fullWidth
               color="primary"
               variant="outlined"

@@ -52,7 +52,7 @@
     "date-fns-jalali": "^4.1.0-0",
     "dayjs": "^1.11.13",
     "es-toolkit": "^1.29.0",
-    "framer-motion": "^11.13.1",
+    "framer-motion": "^12.23.12",
     "lottie-react": "^2.4.1",
     "minimal-shared": "^1.0.3",
     "mui-one-time-password-input": "^3.0.2",

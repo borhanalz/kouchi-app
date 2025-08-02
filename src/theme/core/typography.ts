@@ -38,8 +38,8 @@ function responsiveFontSizes(obj: ResponsiveFontSizesInput): ResponsiveFontSizes
 // ----------------------------------------------------------------------
 
 export const typography: TypographyOptions & FontStyleExtend = {
-  fontFamily: "'Kalameh', 'Helvetica', 'Arial', sans-serif",
-  fontSecondaryFamily: "'Kalameh', 'Helvetica', 'Arial', sans-serif",
+  fontFamily: "'Vazir', 'Helvetica', 'Arial', sans-serif",
+  fontSecondaryFamily: "'Vazir', 'Helvetica', 'Arial', sans-serif",
   fontWeightLight: 300,
   fontWeightRegular: 400,
   fontWeightMedium: 500,

@@ -36,11 +36,11 @@ const CountDownTimer = ({ target }: { target: string }) => {
   }, [target]);
 
   return (
-    <Stack sx={{backgroundColor: 'error.main',borderRadius:'8px',py:2,px:0}} alignItems='center' spacing={0.5} justifyContent='center'>
+    <Stack sx={{border:1,borderColor: 'error.main',borderRadius:'8px',py:2,px:0}} alignItems='center' spacing={0.5} justifyContent='center'>
       <Typography
         variant='body2'
         sx={{
-          color: '#fff',
+          color: 'error.main',
           fontSize: '17px',
           textAlign: 'center',
         }}
@@ -48,12 +48,12 @@ const CountDownTimer = ({ target }: { target: string }) => {
         فرصت باقی مانده
       </Typography>
       <Stack direction='row' alignItems='center' spacing={0.5} justifyContent='center'>
-        <Iconify icon='timer' sx={{color:'#fff'}}/>
+        <Iconify icon='timer' sx={{color:'error.main'}}/>
         <Typography
           variant='h5'
           sx={{
             fontWeight: 'bold',
-            color: '#fff',
+            color: 'error.main',
             fontSize: '40px',
             textAlign: 'center',
           }}

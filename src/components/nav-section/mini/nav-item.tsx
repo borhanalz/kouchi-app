@@ -132,6 +132,7 @@ const ItemRoot = styled(ButtonBase, { shouldForwardProp })<StyledState>(({
     flexDirection: 'column',
     minHeight: 'var(--nav-item-root-height)',
     padding: 'var(--nav-item-root-padding)',
+    '&:hover': { color: theme.palette?.secondary?.main },
     ...(open && {
       color: 'var(--nav-item-root-open-color)',
       backgroundColor: 'var(--nav-item-root-open-bg)',
@@ -139,9 +140,9 @@ const ItemRoot = styled(ButtonBase, { shouldForwardProp })<StyledState>(({
     ...(active && {
       color: 'var(--nav-item-root-active-color)',
       backgroundColor: 'var(--nav-item-root-active-bg)',
-      '&:hover': { backgroundColor: 'var(--nav-item-root-active-hover-bg)' },
+      '&:hover': { backgroundColor: 'var(--nav-item-root-active-hover-bg)',color: theme.palette?.secondary?.main },
       ...theme.applyStyles('dark', {
-        color: 'var(--nav-item-root-active-color-on-dark)',
+        color: theme.palette?.secondary?.main,
       }),
     }),
   };

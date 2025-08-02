@@ -97,13 +97,13 @@ const LgAnimateLoading = ({ isChatLoading = false }: { isChatLoading?: boolean }
             value={progress}
             sx={{ height: 6, borderRadius: 4, width: '100%' }}
           />
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ textAlign: "center" }}
-          >
-            {`${Math.round(progress)}٪`}
-          </Typography>
+          {/*<Typography*/}
+          {/*  variant="caption"*/}
+          {/*  color="text.secondary"*/}
+          {/*  sx={{ textAlign: "center" }}*/}
+          {/*>*/}
+          {/*  {`${Math.round(progress)}٪`}*/}
+          {/*</Typography>*/}
         </Stack>
       )}
 

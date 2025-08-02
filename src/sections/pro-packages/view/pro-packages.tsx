@@ -35,7 +35,7 @@ export const ProPackages = () => {
     queryKey: ['services-list'],
     queryFn: () => GetRequest<IApiServices>(endpoints.SERVICES.LIST)
   })
-  console.log(ServicesList)
+
   return (
     <DashboardContent
         maxWidth={false}
@@ -86,7 +86,7 @@ export const ProPackages = () => {
                         </Typography>
                       </Stack>
                       <Iconify
-                        icon={item?.id}
+                        icon="CHATBOT"
                         sx={{color: theme.vars.palette.secondary.main, width: 35, height: 35}}
                       />
                     </Stack>
@@ -94,25 +94,26 @@ export const ProPackages = () => {
                     <Stack spacing={4}>
                       {item?.prices?.map((priceItem, i) => (
                         <Stack key={i} alignItems="center" direction="row" justifyContent="space-between">
-                          <Typography color={theme?.palette?.grey[600]}>
+                          <Typography color={theme?.palette?.grey[500]} variant='caption' fontWeight='bold'>
                             {priceItem?.text}
                           </Typography>
                           <Stack direction="column" alignItems="center" spacing={1}>
                             {priceItem?.price && (
                               <Stack direction="row" alignItems="center" spacing={0.5}>
                                 <Typography
-                                  variant="body2"
+                                  variant="h6"
+                                  fontWeight='bold'
                                   sx={{
                                     textDecoration:
                                       priceItem?.sale && Number(priceItem?.sale) !== 0
                                         ? 'line-through'
                                         : 'none',
-                                    color: theme.palette.grey[500],
+                                    color: priceItem?.sale && Number(priceItem?.sale) !== 0?"secondary.main":"#000"
                                   }}
                                 >
                                   {toPersianNumber(Number(priceItem.price).toLocaleString())}
                                 </Typography>
-                                <Typography variant="caption" color="text.secondary" sx={{mt: 0.3}}>
+                                <Typography variant="caption" color={priceItem?.sale && Number(priceItem?.sale) !== 0 ? "secondary.main" : "#000"} sx={{mt: 0.3}}>
                                   تومان
                                 </Typography>
                               </Stack>

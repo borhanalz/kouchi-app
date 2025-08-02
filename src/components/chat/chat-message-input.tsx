@@ -159,7 +159,7 @@ export function ChatMessageInput({
           value={isTicket ? message : chatMessage}
           onChange={handleChangeMessage}
           onKeyDown={handleKeyDown}
-          disabled={isChatLoading || disableInput}
+          disabled={isChatLoading}
           placeholder="سوالت رو اینجا بنویس..."
           InputProps={{
             disableUnderline: true,

@@ -1,7 +1,7 @@
 'use client';
 
 import type { SettingsState } from 'src/components/settings';
-import type { Theme, Components, Palette } from '@mui/material/styles';
+import type {Theme, Components, Palette} from '@mui/material/styles';
 
 import { createTheme as createMuiTheme } from '@mui/material/styles';
 
@@ -31,28 +31,10 @@ export const baseTheme: ThemeOptions = {
         primary: {
           ...palette.dark!.primary,
           main: themeConfig.palette.secondary.main, // ✅ override only `main`
-        } as Palette['primary'],
+        }as Palette['primary'],
       },
       shadows: shadows.dark,
       customShadows: customShadows.dark,
-
-      // ✅ Add dark mode specific component overrides here
-      components: {
-        // MuiButton: {
-        //   styleOverrides: {
-        //     root: {
-        //       color: , // ✅ Set button text color to black in dark mode
-        //     },
-        //   },
-        // },
-        MuiTypography: {
-          styleOverrides: {
-            root: {
-              color: '#fff',
-            },
-          },
-        },
-      },
     },
   },
   mixins,

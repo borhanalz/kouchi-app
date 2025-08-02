@@ -36,8 +36,8 @@ export const themeConfig: ThemeConfig = {
    * Typography
    *************************************** */
   fontFamily: {
-    primary: 'Dana',
-    secondary: 'Dana',
+    primary: 'Vazir',
+    secondary: 'Vazir',
   },
   /** **************************************
    * Palette

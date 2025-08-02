@@ -29,7 +29,6 @@ type Props = {
   setIsChatLoading: (value: boolean) => void;
 };
 
-// Type Guard
 function isChatMessage(message: IChat | ITicketResponse): message is IChat {
   return (message as IChat)?.role !== undefined;
 }
@@ -53,7 +52,7 @@ export function ChatMessageList({
       setIsChatLoading(false);
     }
   }, [messages, setIsChatLoading, isTicket]);
-
+  console.log(messages)
   const slides = isTicket
     ? (messages as ITicketResponse[])
       .filter((message) => message.contentType === 'image')

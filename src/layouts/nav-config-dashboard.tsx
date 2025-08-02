@@ -3,7 +3,6 @@ import type { NavSectionProps } from 'src/components/nav-section';
 import { paths } from 'src/routes/paths';
 
 import { Label } from 'src/components/label';
-import { SvgColor } from 'src/components/svg-color';
 
 import { Iconify } from '../components/iconify';
 
@@ -34,16 +33,21 @@ export const navData: NavSectionProps['data'] = [
   {
     items: [
       {
-        title: 'گفتگو با کوچی‌بات',
+        title: 'کوچی‌بات',
         path: paths.dashboard.root,
         icon: ICONS.send,
         info: <Label>دستیار</Label>,
       },
       {
-        title: 'نقشه راه',
-        path: paths.dashboard.roadMap.root,
-        icon: ICONS.map,
+        title: 'مشخصات من',
+        path: paths.dashboard.profile.root,
+        icon: ICONS.userInfo,
       },
+      // {
+      //   title: 'نقشه راه',
+      //   path: paths.dashboard.roadMap.root,
+      //   icon: ICONS.map,
+      // },
       // {
       //   title: 'لیست مدارک',
       //   path: paths.dashboard.documents.root,
@@ -70,27 +74,23 @@ export const navData: NavSectionProps['data'] = [
         icon: ICONS.tickets,
       },
       {
-        title: 'مشخصات کوچنده',
-        path: paths.dashboard.profile.root,
-        icon: ICONS.userInfo,
+        title: 'خرید اشتراک',
+        path: paths.dashboard.services.proServices,
+        icon: ICONS.proServices,
       },
-      {
-        title: 'سرویس ها',
-        path: paths.dashboard.services.root,
-        icon: ICONS.services,
-        children:[
-          {
-            title: 'خرید اشتراک',
-            path: paths.dashboard.services.proServices,
-            icon: ICONS.proServices,
-          },
+        // children:[
+        //   {
+        //     title: 'خرید اشتراک',
+        //     path: paths.dashboard.services.proServices,
+        //     icon: ICONS.proServices,
+        //   },
           // {
           //   title: 'سرویس‌های من',
           //   path: paths.dashboard.services.userServices,
           //   icon: ICONS.myServices,
           // },
-        ]
-      },
+      //   ]
+      // },
       // { title: 'Two', path: paths.app.two, icon: ICONS.ecommerce },
       // { title: 'Three', path: paths.app.three, icon: ICONS.analytics },
     ],
