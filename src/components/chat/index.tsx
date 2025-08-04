@@ -48,6 +48,7 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [resendButtonStatus, setResendButtonStatus] = useState(false);
   const [chatMessage, setChatMessage] = useState<string>('');
+  const [lastMessage, setLastMessage] = useState<string>("");
 
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -108,14 +109,15 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
     }
   });
 
-  // chat send response request
   const {mutateAsync: AddChatResponse, isPending: addChatResponsePending} = useMutation({
     mutationKey: ['add-chat-response'],
     mutationFn: (data: IChatFormData) => EditCreateRequest<IChatFormData, IApiChat>(endpoints.CHAT.CHAT, data, {}, 'post', {baseURL: 'https://chat.koochi.app'})
   });
   const HandleChatResponse = async (message = "") => {
     try {
-      const response = await AddChatResponse({ message: message || chatMessage });
+      setLastMessage(chatMessage)
+      console.log(lastMessage)
+      const response = await AddChatResponse({ message: message || chatMessage||lastMessage });
 
       if (response?.status === "upgrade_required") {
         await queryClient.invalidateQueries({ queryKey: ["get-chat-history"] });
