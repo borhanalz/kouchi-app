@@ -13,10 +13,10 @@ import { Form, Field } from 'src/components/hook-form';
 import OtpTimer from 'src/components/hook-form/otp-timer';
 
 import { useAuthContext } from '../hooks';
-import {IApiLogin} from "../../types/auth";
+import {type IApiCheckUser, IApiLogin} from "../../types/auth";
 import { setSession } from '../context/jwt';
 import { endpoints } from '../../hooks/endPoints';
-import { EditCreateRequest } from '../../lib/axios';
+import {EditCreateRequest, GetRequest} from '../../lib/axios';
 import {FormReturnLink} from "../components/form-return-link";
 import {useURLSearchParams} from "../../hooks/use-search-params";
 // -----------------------------------------------------------------
@@ -61,7 +61,6 @@ const RegisterStep = ({onClose}:{onClose?:()=>void}) => {
   });
   const { handleSubmit } = methods;
 
-  const handleTimeReset = () => {};
   const handleTimeOut = () => {};
 
   const HandleSubmit = handleSubmit(async (data: IRegisterFormData) => {
@@ -73,7 +72,20 @@ const RegisterStep = ({onClose}:{onClose?:()=>void}) => {
       toast.error(error.message);
     }
   });
-
+  const {mutateAsync:ResendOtp, isPending:resendOtpPending} = useMutation({
+    mutationKey: ['resend-check-user-signup-status'],
+    mutationFn: () =>
+      GetRequest<IApiCheckUser>(
+        endpoints.AUTH.CHECK_USER_SIGNUP_STATUS,undefined,{mobileNumber}
+      ),
+  });
+  const handleTimeReset = async () => {
+    try {
+      await ResendOtp();
+    } catch (e: any) {
+      toast?.error(e?.message);
+    }
+  };
   return (
     <Form methods={methods} onSubmit={HandleSubmit}>
       <Stack spacing={2}>

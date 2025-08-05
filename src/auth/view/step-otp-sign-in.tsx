@@ -50,7 +50,7 @@ const OtpSignInStep = ({onClose}: { onClose: () => void }) => {
   });
 
   const {mutateAsync:ResendOtp, isPending:resendOtpPending} = useMutation({
-    mutationKey: ['resend-check-user-signup-status'],
+    mutationKey: ['resend-check-user-signin-status'],
     mutationFn: () =>
       GetRequest<IApiCheckUser>(
         endpoints.AUTH.CHECK_USER_SIGNUP_STATUS,undefined,{mobileNumber}
