@@ -45,14 +45,14 @@ const profileEditInfoSchema = zod.object({
     (a) => a === "" || a === null ? null : Number(a),
     zod.number().nullable().optional()
   ),
-  gender: zod.string(),
+  // gender: zod.string(),
   married: zod.preprocess(
     (val) => val === null || val === undefined ? undefined : (val === 'true' || val === true),
     zod.boolean().optional()
   ),
-  militaryStatus: zod.string()
-    .nullable()
-    .optional(),
+  // militaryStatus: zod.string()
+  //   .nullable()
+  //   .optional(),
   graduations: zod.array(
     zod.object({
       university: zod.string().min(1, "دانشگاه الزامی است").optional(),
@@ -106,9 +106,7 @@ const ProfileEditInfo = () => {
     resolver: zodResolver(profileEditInfoSchema),
     defaultValues: {
       age: null,
-      gender: "male",
       married: false,
-      militaryStatus: "",
       graduations: [],
       languageCertificates: [],
     },
@@ -203,20 +201,20 @@ const ProfileEditInfo = () => {
               icon="profile"
             />
             <Field.Text type="number" name="age" label="سن" />
-            <Field.RadioGroup
-              row
-              name="gender"
-              label="جنسیت"
-              onChange={(e) => {
-                const value = e.target.value as "male" | "female";
-                setValue("gender", value);
-              }}
-              options={[
-                { label: "مرد", value: "male" },
-                { label: "زن", value: "female" },
-              ]}
-            />
-            <Field.Text name="militaryStatus" label="وضعیت معافیت" disabled={methods.watch("gender") === "female"} />
+            {/*<Field.RadioGroup*/}
+            {/*  row*/}
+            {/*  name="gender"*/}
+            {/*  label="جنسیت"*/}
+            {/*  onChange={(e) => {*/}
+            {/*    const value = e.target.value as "male" | "female";*/}
+            {/*    setValue("gender", value);*/}
+            {/*  }}*/}
+            {/*  options={[*/}
+            {/*    { label: "مرد", value: "male" },*/}
+            {/*    { label: "زن", value: "female" },*/}
+            {/*  ]}*/}
+            {/*/>*/}
+            {/*<Field.Text name="militaryStatus" label="وضعیت معافیت" disabled={methods.watch("gender") === "female"} />*/}
             <Field.RadioGroup
               row
               name="married"

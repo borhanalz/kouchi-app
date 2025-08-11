@@ -183,20 +183,20 @@ export function Chat({title,isProService, assignmentInfo, messages, IsTicket = f
 
   return (
     <>
-      {!IsTicket ? <ChatLayout sx={{mb: 2}}
+      {!IsTicket ? <ChatLayout sx={{mb: 2,px:{md:32}}}
                                slots={{
                                  header:null,
                                  nav: null,
                                  main: (
                                    <>
-                                     <ChatMessageList
-                                       handleSendChatResponse={HandleChatResponse}
-                                       resendButtonStatus={resendButtonStatus}
-                                       isChatLoading={isChatLoading}
-                                       isTicket={IsTicket}
-                                       setIsChatLoading={setIsChatLoading}
-                                       messages={messages ?? []}
-                                     />
+                                       <ChatMessageList
+                                         handleSendChatResponse={HandleChatResponse}
+                                         resendButtonStatus={resendButtonStatus}
+                                         isChatLoading={isChatLoading}
+                                         isTicket={IsTicket}
+                                         setIsChatLoading={setIsChatLoading}
+                                         messages={messages ?? []}
+                                       />
                                      <ChatMessageInput
                                        chatMessage={chatMessage}
                                        setChatMessage={setChatMessage}

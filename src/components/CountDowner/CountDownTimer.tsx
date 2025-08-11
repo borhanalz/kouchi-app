@@ -12,7 +12,7 @@ import Stack from "@mui/material/Stack";
 const CountDownTimer = ({ target }: { target: string }) => {
 
   const [remaining, setRemaining] = useState('');
-
+const [day, setday] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
       const now = dayjs();
@@ -25,10 +25,12 @@ const CountDownTimer = ({ target }: { target: string }) => {
       }
 
       const diff = dayjs.duration(end.diff(now));
+      const days = diff.days();
       const hours = diff.hours().toString().padStart(2, '0');
       const minutes = diff.minutes().toString().padStart(2, '0');
       const seconds = diff.seconds().toString().padStart(2, '0');
 
+      setday(days as number);
       setRemaining(`${toPersianNumber(hours)}:${toPersianNumber(minutes)}:${toPersianNumber(seconds)}`);
     }, 1000);
 
@@ -45,7 +47,7 @@ const CountDownTimer = ({ target }: { target: string }) => {
           textAlign: 'center',
         }}
       >
-        فرصت باقی مانده
+        {day>0?`فرصت باقی مانده ${day} روز`:`فرصت باقی مانده`}
       </Typography>
       <Stack direction='row' alignItems='center' spacing={0.5} justifyContent='center'>
         <Iconify icon='timer' sx={{color:'error.main'}}/>
